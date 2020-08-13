@@ -20,6 +20,7 @@ public class CellularDecomposition extends Basic implements ActionListener {
 	private MainFrame _frame; 
 	private int _actualRow;
 	private int _actualCol;
+	private enum ScanDirection{LEFT, BACK, RIGHT};
 
 	public CellularDecomposition(MainFrame frame)
 	{
@@ -51,23 +52,31 @@ public class CellularDecomposition extends Basic implements ActionListener {
 		
 		if(unaccesableField)
 		{
-			StartAlgorithm._timer.stop();
-			Robot.getMovement().turnRight();
-			StartAlgorithm._timer.start();
+			if(!freeDirection(getScannedArea(_actualRow, _actualCol), ScanDirection.LEFT)
+					&& !freeDirection(getScannedArea(_actualRow, _actualCol), ScanDirection.BACK)
+					&& !freeDirection(getScannedArea(_actualRow, _actualCol), ScanDirection.RIGHT))
+			{
+				StartAlgorithm._timer.stop();
+				Robot.getMovement().turnRight();
+				Robot.getMovement().turnRight();
+				StartAlgorithm._timer.start();				
+
+				while(!isObstaceOrEndOfMap(_actualRow, _actualCol))
+				{
+					Robot.getMovement().moveForward();
+					_frame.repaint();
+				}
+			} else {
+				StartAlgorithm._timer.stop();
+				Robot.getMovement().turnRight();
+				StartAlgorithm._timer.start();
+			}
 		} else {
-			if(leftFree(getScannedArea(_actualRow, _actualCol)))
+			if(freeDirection(getScannedArea(_actualRow, _actualCol), ScanDirection.LEFT))
 			{
 				Robot.getMovement().turnLeft();
 			}
 			Robot.getMovement().moveForward();
-		}
-		
-		if(Movement._listOfMovements.size() > 3)
-		{
-			if(reachedStoppingCriteria())
-			{
-				StartAlgorithm._timer.stop();
-			}
 		}
 
 		_frame.repaint();
@@ -76,44 +85,72 @@ public class CellularDecomposition extends Basic implements ActionListener {
 	
 	
 	
-	private boolean leftFree(Coordinates2D[] scannedArea) {
+	private boolean freeDirection(Coordinates2D[] scannedArea, ScanDirection direction) {
 		
 		Coordinates2D[] left = new Coordinates2D[4];
+		Coordinates2D[] right = new Coordinates2D[4];
+		Coordinates2D[] back = new Coordinates2D[4];
+
 		
 		switch(Movement._dir) {
 		case UP: 
 			for(int i = 0; i < 4; i++)
 			{
 				left[i] = scannedArea[i+4];
+				back[i] = scannedArea[i+8];
+				right[i] = scannedArea[i+12];
 			}
 			break;
 		case LEFT:
 			for(int i = 0; i < 4; i++)
 			{
 				left[i] = scannedArea[i+8];
+				back[i] = scannedArea[i+12];
+				right[i] = scannedArea[i];
 			}
 			break;
 		case DOWN:
 			for(int i = 0; i < 4; i++)
 			{
 				left[i] = scannedArea[i+12];
+				back[i] = scannedArea[i];
+				right[i] = scannedArea[i+4];
 			}
 			break;
 		case RIGHT:
 			for(int i = 0; i < 4; i++)
 			{
 				left[i] = scannedArea[i];
+				back[i] = scannedArea[i+4];
+				right[i] = scannedArea[i+8];
 			}
 			break;
 		}
 		
-		for(int i = 0; i < left.length; i++)
+		Coordinates2D[] scanArea = new Coordinates2D[4];
+		switch(direction)
+		{
+		case LEFT: scanArea = left;
+			break;
+		case BACK: scanArea = back;
+			break;
+		case RIGHT: scanArea = right;
+			break;
+		}
+		
+		for(int i = 0; i < scanArea.length; i++)
 		{
 			try {
-				if(Table.getMarkedObstacles(left[i].getRow(), left[i].getCol()))
+				if(Table.getMarkedObstacles(scanArea[i].getRow(), scanArea[i].getCol()))
 				{
 					return false;
 				}
+				
+				if(Table._markedPath[scanArea[i].getRow()][scanArea[i].getCol()])
+				{
+					return false;
+				}
+				
 			} catch(ArrayIndexOutOfBoundsException e)
 			{
 				e.getStackTrace();
@@ -127,17 +164,46 @@ public class CellularDecomposition extends Basic implements ActionListener {
 	boolean getSensorData(int row, int col)
 	{
 		Coordinates2D[] scannedArea = getScannedArea(row, col);
-		Coordinates2D[] fronOfRobot = getFrontOfRobot(scannedArea);
+		Coordinates2D[] frontOfRobot = getFrontOfRobot(scannedArea);
 
 		boolean unaccesable = false;
 		
-		for(int i = 0; i < fronOfRobot.length; i++)
+		for(int i = 0; i < frontOfRobot.length; i++)
 		try {
 
-			if(Table.getMarkedObstacles(fronOfRobot[i].getRow(), fronOfRobot[i].getCol()))
+			if(Table.getMarkedObstacles(frontOfRobot[i].getRow(), frontOfRobot[i].getCol()))
 			{
 				unaccesable = true;
-			} 
+			}
+			
+			if(Table._markedPath[frontOfRobot[i].getRow()][frontOfRobot[i].getCol()])
+			{
+				unaccesable = true;
+			}
+			
+		} catch(ArrayIndexOutOfBoundsException e)
+		{
+			e.getStackTrace();
+			unaccesable = true;
+		}
+		
+		return unaccesable;
+	}
+	
+	private boolean isObstaceOrEndOfMap(int row, int col)
+	{
+		Coordinates2D[] scannedArea = getScannedArea(row, col);
+		Coordinates2D[] frontOfRobot = getFrontOfRobot(scannedArea);
+
+		boolean unaccesable = false;
+		
+		for(int i = 0; i < frontOfRobot.length; i++)
+		try {
+
+			if(Table.getMarkedObstacles(frontOfRobot[i].getRow(), frontOfRobot[i].getCol()))
+			{
+				unaccesable = true;
+			}
 			
 		} catch(ArrayIndexOutOfBoundsException e)
 		{
