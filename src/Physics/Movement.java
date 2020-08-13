@@ -1,0 +1,128 @@
+package Physics;
+
+import java.util.ArrayList;
+
+import java.util.List;
+
+import enums.Direction;
+
+public class Movement {
+	
+	public static int _i = 0;
+	public static int _x = 0;
+	public static int _y = 0;
+	
+	//Ausrichtung nach oben
+	public static double _ang;
+	
+	public static Direction _dir;
+	
+	public enum LastMove{FORWARD, RIGHT, LEFT};
+	
+	public static List<LastMove> _listOfMovements = new ArrayList<LastMove>();
+
+	
+	public Movement()
+	{
+		_dir = Direction.UP;
+	}
+	
+	public void moveForward() {
+		if(Math.cos(Math.toRadians(_ang)) < 0.01 && Math.cos(Math.toRadians(_ang)) > -0.01)
+		{
+			_x += 0;
+		} else {
+			_x += 10 * Math.cos(Math.toRadians(_ang));
+		}
+		
+		if(Math.sin(Math.toRadians(_ang)) < 0.01 && Math.sin(Math.toRadians(_ang)) > -0.01)
+		{
+			_y += 0;
+
+		} else {
+			_y += 10 * Math.sin(Math.toRadians(_ang));	
+		}
+		
+		_listOfMovements.add(LastMove.FORWARD);
+	}
+	
+	public void turnByDegrees(int ang) 
+	{
+		_ang = _ang + ang;
+		
+	}
+	
+	public void turnRight()
+	{
+		_ang += 90;
+		
+		switch(_dir) {
+			case UP: _dir = Direction.RIGHT;
+		break;
+			case RIGHT: _dir = Direction.DOWN;
+		break;
+			case DOWN: _dir = Direction.LEFT;
+		break;
+			case LEFT: _dir = Direction.UP;
+		break;
+		}
+		
+		_listOfMovements.add(LastMove.RIGHT);
+	}
+	
+	public void turnLeft()
+	{
+		_ang -= 90;
+		
+		switch(_dir) {
+			case UP: _dir = Direction.LEFT;
+		break;
+			case RIGHT: _dir = Direction.UP;
+		break;
+			case DOWN: _dir = Direction.RIGHT;
+		break;
+			case LEFT: _dir = Direction.DOWN;
+		break;
+		}
+		
+		_listOfMovements.add(LastMove.LEFT);
+	}
+	
+	public static void setX(int x)
+	{
+		_x = x;
+	}
+	
+	public static void setY(int y)
+	{
+		_y = y;
+	}
+	
+	public int getX()
+	{
+		return _x;
+	}
+	
+	public int getY()
+	{
+		return _y;
+	}
+	
+	public static void setAng(double ang)
+	{
+		_ang = ang;
+	}
+	
+	public static double getAng()
+	{
+		return _ang;
+	}
+	
+	public void setStartingPosition(int rows)
+	{
+		_x = 100;
+		_y = 100 + 10 * rows;
+		_ang = 270;
+	}
+
+}
