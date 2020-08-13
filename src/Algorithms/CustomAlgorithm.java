@@ -18,6 +18,7 @@ public class CustomAlgorithm implements ActionListener{
 	public boolean _distanceExceeded = false;
 	private int _actualRow;
 	private int _actualCol;
+
 	
 	
 	public CustomAlgorithm(MainFrame frame) {
@@ -42,6 +43,7 @@ public class CustomAlgorithm implements ActionListener{
 			StartAlgorithm._timer.start();
 		} else {
 			Robot.getMovement().moveForward();
+
 		}
 		
 		if(Movement._listOfMovements.size() > 3)
@@ -71,11 +73,7 @@ public class CustomAlgorithm implements ActionListener{
 				unaccesable = true;
 			} 
 			
-			if(Table._markedPath[scannedArea[i].getRow()][scannedArea[i].getCol()])
-			{
-				unaccesable = true;
-			}
-			
+	
 		} catch(ArrayIndexOutOfBoundsException e)
 		{
 			e.getStackTrace();

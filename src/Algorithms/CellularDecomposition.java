@@ -20,7 +20,6 @@ public class CellularDecomposition extends Basic implements ActionListener {
 	private MainFrame _frame; 
 	private int _actualRow;
 	private int _actualCol;
-	private Coordinates2D[] _scannedArea;
 
 	public CellularDecomposition(MainFrame frame)
 	{
@@ -30,26 +29,167 @@ public class CellularDecomposition extends Basic implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 
+//		_actualCol = Robot.getXasCol();
+//		_actualRow = Robot.getYasRow();
+//		
+//		Coordinates2D[] scannedCircleArea = getScannedArea(_actualCol, _actualRow);
+//		if(hitWall(scannedCircleArea)) {
+//			followWall(scannedCircleArea);
+//		}
+//		//TODO: Quitting Criteria
+//		reachedStoppingCriteria();
+//
+//		_frame.repaint();		
+		
 		_actualCol = Robot.getXasCol();
 		_actualRow = Robot.getYasRow();
 		
-		Coordinates2D[] scannedCircleArea = getScannedArea(_actualCol, _actualRow);
-		if(hitWall(scannedCircleArea)) {
-			followWall(scannedCircleArea);
+		
+		boolean unaccesableField;
+
+		unaccesableField = getSensorData(_actualRow, _actualCol);
+		
+		if(unaccesableField)
+		{
+			StartAlgorithm._timer.stop();
+			Robot.getMovement().turnRight();
+			StartAlgorithm._timer.start();
+		} else {
+			if(leftFree(getScannedArea(_actualRow, _actualCol)))
+			{
+				Robot.getMovement().turnLeft();
+			}
+			Robot.getMovement().moveForward();
 		}
-		//TODO: Quitting Criteria
-		reachedStoppingCriteria();
+		
+		if(Movement._listOfMovements.size() > 3)
+		{
+			if(reachedStoppingCriteria())
+			{
+				StartAlgorithm._timer.stop();
+			}
+		}
 
-		_frame.repaint();		
+		_frame.repaint();
+	}	
+	
+	
+	
+	
+	private boolean leftFree(Coordinates2D[] scannedArea) {
+		
+		Coordinates2D[] left = new Coordinates2D[4];
+		
+		switch(Movement._dir) {
+		case UP: 
+			for(int i = 0; i < 4; i++)
+			{
+				left[i] = scannedArea[i+4];
+			}
+			break;
+		case LEFT:
+			for(int i = 0; i < 4; i++)
+			{
+				left[i] = scannedArea[i+8];
+			}
+			break;
+		case DOWN:
+			for(int i = 0; i < 4; i++)
+			{
+				left[i] = scannedArea[i+12];
+			}
+			break;
+		case RIGHT:
+			for(int i = 0; i < 4; i++)
+			{
+				left[i] = scannedArea[i];
+			}
+			break;
+		}
+		
+		for(int i = 0; i < left.length; i++)
+		{
+			try {
+				if(Table.getMarkedObstacles(left[i].getRow(), left[i].getCol()))
+				{
+					return false;
+				}
+			} catch(ArrayIndexOutOfBoundsException e)
+			{
+				e.getStackTrace();
+				return false;
+			}
+		}
+		return true;
+	}
 
+	@Override 
+	boolean getSensorData(int row, int col)
+	{
+		Coordinates2D[] scannedArea = getScannedArea(row, col);
+		Coordinates2D[] fronOfRobot = getFrontOfRobot(scannedArea);
+
+		boolean unaccesable = false;
+		
+		for(int i = 0; i < fronOfRobot.length; i++)
+		try {
+
+			if(Table.getMarkedObstacles(fronOfRobot[i].getRow(), fronOfRobot[i].getCol()))
+			{
+				unaccesable = true;
+			} 
+			
+		} catch(ArrayIndexOutOfBoundsException e)
+		{
+			e.getStackTrace();
+			unaccesable = true;
+		}
+		
+		return unaccesable;
 	}
 	
+	
+	private Coordinates2D[] getFrontOfRobot(Coordinates2D[] scannedCircleArea) 
+	{
+		Coordinates2D[] frontOfRobot = new Coordinates2D[4];
 
+		switch(Movement._dir) {
+		case UP:
+			for(int i = 0; i < 4; i++)
+			{
+				frontOfRobot[i] = scannedCircleArea[i];
+			};
+		break;
+		case LEFT:
+			for(int i = 0; i < 4; i++)
+			{
+				frontOfRobot[i] = scannedCircleArea[i+4];
+			};
+			break;
+		case DOWN:
+			for(int i = 0; i < 4; i++)
+			{
+				frontOfRobot[i] = scannedCircleArea[i+8];
+			};
+			break;
+		case RIGHT:
+			for(int i = 0; i < 4; i++)
+			{
+				frontOfRobot[i] = scannedCircleArea[i+12];
+			};
+			break;
+		default:
+			break;
+		}
+		
+		return frontOfRobot;
+	}
+	
 	@Override
 	Coordinates2D[] getScannedArea(int row, int col) 
 	{
 		//Get scanned area in front of the robot
-		_scannedArea = super.getScannedArea(row, col);
+		Coordinates2D[] scannedArea = super.getScannedArea(row, col);
 		
 		Coordinates2D[] circledArea = new Coordinates2D[16];
 		
@@ -58,31 +198,31 @@ public class CellularDecomposition extends Basic implements ActionListener {
 		if(ang % 90 == 0)
 		{
 			switch(Movement._dir) {
-			case DOWN: circledArea = getAreaIfDown(_scannedArea);
+			case DOWN: circledArea = getAreaIfDown(scannedArea);
 			System.out.println("DOWN: ");
 			for(int i = 0; i < 16; i++) {
-					System.out.println(getAreaIfDown(_scannedArea)[i].getRow()+", " +getAreaIfDown(_scannedArea)[i].getCol());
+					System.out.println(getAreaIfDown(scannedArea)[i].getRow()+", " +getAreaIfDown(scannedArea)[i].getCol());
 			}
 			System.out.println("\n");
 				break;
-			case LEFT: circledArea = getAreaIfLeft(_scannedArea);
+			case LEFT: circledArea = getAreaIfLeft(scannedArea);
 			System.out.println("Left: ");
 			for(int i = 0; i < 16; i++) {
-					System.out.println(getAreaIfLeft(_scannedArea)[i].getRow()+", " +getAreaIfLeft(_scannedArea)[i].getCol());
+					System.out.println(getAreaIfLeft(scannedArea)[i].getRow()+", " +getAreaIfLeft(scannedArea)[i].getCol());
 			}
 			System.out.println("\n");
 				break;
-			case RIGHT: circledArea = getAreaIfRight(_scannedArea);
+			case RIGHT: circledArea = getAreaIfRight(scannedArea);
 			System.out.println("Right: ");
 			for(int i = 0; i < 16; i++) {
-					System.out.println(getAreaIfRight(_scannedArea)[i].getRow()+", " +getAreaIfRight(_scannedArea)[i].getCol());
+					System.out.println(getAreaIfRight(scannedArea)[i].getRow()+", " +getAreaIfRight(scannedArea)[i].getCol());
 			}
 			System.out.println("\n");
 				break;
-			case UP: circledArea = getAreaIfUp(_scannedArea);
+			case UP: circledArea = getAreaIfUp(scannedArea);
 			System.out.println("UP: ");
 			for(int i = 0; i < 16; i++) {
-					System.out.println(getAreaIfUp(_scannedArea)[i].getRow()+", " +getAreaIfUp(_scannedArea)[i].getCol());
+					System.out.println(getAreaIfUp(scannedArea)[i].getRow()+", " +getAreaIfUp(scannedArea)[i].getCol());
 			}
 			System.out.println("\n");
 				break;
@@ -270,66 +410,7 @@ public class CellularDecomposition extends Basic implements ActionListener {
 
 		return leftSide;
     }
-	
-	private boolean hitWall(Coordinates2D[] scannedCircleArea) 
-	{
-		for(int i = 0; i < scannedCircleArea.length; i++)
-		{
-			if(checkIfObstacleOrWallIsAround(scannedCircleArea[i]))
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	private boolean checkIfObstacleOrWallIsAround(Coordinates2D scannedUnit)
-	{
-		if(Table.getMarkedObstacles(scannedUnit.getRow(), scannedUnit.getCol())
-				|| scannedUnit.getRow() < 0 || scannedUnit.getRow() >= Table._rows
-				|| scannedUnit.getCol() < 0 || scannedUnit.getCol() >= Table._cols)
-		{
-			return true;
-		}
-		
-		return false;
-	}
-	
-	private void followWall(Coordinates2D[] scannedCircleArea) 
-	{
-		Coordinates2D[] upside = new Coordinates2D[4];
-		Coordinates2D[] leftside = new Coordinates2D[4];
-		Coordinates2D[] bottomside = new Coordinates2D[4];
-		Coordinates2D[] rightside = new Coordinates2D[4];
 
-		for(int i = 0; i < 4; i++)
-		{
-			upside[i] = scannedCircleArea[i];
-			leftside[i] = scannedCircleArea[i+4];
-			bottomside[i] = scannedCircleArea[i+8];
-			rightside[i] = scannedCircleArea[i+12];
-		}
-		
-		//Move along the wall if there is a wall scanned left or right from the robot
-		for(int i = 0; i < leftside.length; i++)
-		{
-			if(Table.getMarkedObstacles(leftside[i].getRow(), leftside[i].getCol()) || Table.getMarkedObstacles(rightside[i].getRow(), rightside[i].getCol()))
-			{		
-				switch(Movement._dir) {
-				case DOWN: Robot.getMovement().moveForward();
-					break;
-				case UP: Robot.getMovement().moveForward();
-					break;
-				case LEFT: Robot.getMovement().turnRight();
-					break;
-				case RIGHT: Robot.getMovement().turnRight();
-					break;
-				default:
-					break;		
-				}
-			}
-		}
-	}
     
 	
 	private boolean reachedStoppingCriteria() {
