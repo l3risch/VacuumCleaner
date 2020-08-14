@@ -57,7 +57,7 @@ public class MainFrame extends JFrame{
 	
 	public MainFrame()
 	{		
-		SCREEN_SIZE = new Dimension(200 + 10 * Table._rows, 250 + 10 * Table._cols );
+		SCREEN_SIZE = new Dimension(200 + 10 * 64, 250 + 10 * Table._cols );
 		setSize(SCREEN_SIZE);
 		setTitle(TITLE);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -120,6 +120,7 @@ public class MainFrame extends JFrame{
 			}
 			new MapGenerator();
 			Robot.setStartingPos();
+			System.out.println(Table._listObs.size());
 
 			_contentPane.repaint();
 			}
