@@ -19,6 +19,7 @@ import javax.swing.SwingUtilities;
 
 import Listener.StartAlgorithm;
 import Listener.StopAlgorithm;
+import MapGeneration.MapGenerator;
 import Objects.Robot;
 import Objects.Table;
 import Rendering.Renderer1;
@@ -54,12 +55,6 @@ public class MainFrame extends JFrame{
 		});
 	}
 	
-//	public static void main(String[] args) {
-//		
-//		MainFrame main = new MainFrame();
-//		new Thread(main).start();
-//	}
-//	
 	public MainFrame()
 	{		
 		SCREEN_SIZE = new Dimension(200 + 10 * Table._rows, 250 + 10 * Table._cols );
@@ -81,7 +76,7 @@ public class MainFrame extends JFrame{
 		menu.add(mapLabel, c);
 		
 		/**
-		 * Wähle Karte
+		 * Choose Map
 		 */
 		String mapList[] = {"1", "2", "3", "4", "5"};
 		JComboBox<String> comboBox_2 = new JComboBox<String>(mapList);
@@ -91,11 +86,18 @@ public class MainFrame extends JFrame{
 		c.gridy = 0;	
 		menu.add(comboBox_2, c);
 		
-
+		
+	    JButton randomButton;
+	    randomButton = new JButton("Random Map");
+		c.insets = new Insets(0,10,10,0); 
+		c.gridx = 4;
+		c.gridy = 0;
+		menu.add(randomButton, c);
+		
 		new Table();
         new Robot();
 		
-        // Setze Karte
+        //Set preselected Map
 		comboBox_2.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
@@ -107,6 +109,23 @@ public class MainFrame extends JFrame{
 			}
 		});
 		
+		//Set random Map
+		randomButton.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				
+			if(Table._listObs != null)
+			{
+				Table._listObs.clear();
+			}
+			new MapGenerator();
+			Robot.setStartingPos();
+
+			_contentPane.repaint();
+			}
+		});
+		
+		
 		
 	    JLabel algLabel;
 	    algLabel = new JLabel("Select Algorithm:");
@@ -115,7 +134,7 @@ public class MainFrame extends JFrame{
 		menu.add(algLabel, c);
 		
 		/**
-		 * Wähle Algorihtmus
+		 * Choose Algorithm
 		 */
 		String algList[] = {"Test", "Custom", "Random Walk", "Cellular Decomposition"};
 		_comboBox_1 = new JComboBox<String>(algList);

@@ -175,6 +175,22 @@ public class Table {
 		markObstacles();
 	}
 	
+	public static void setRandomMap(List<Obstacle> listObs)
+	{
+		 _rows = 64;
+		 _cols = 64;
+		 _markedPath = new boolean[_rows][_cols];
+		_markedObstacles = new boolean[_rows][_cols];
+		_listObs = new ArrayList<Obstacle>();
+		
+		for(Obstacle obs: listObs)
+		{
+			_listObs.add(obs);
+		}
+		
+		markObstacles();
+		 
+	}
 	public static void markPath(int row, int col)
 	{
 		for(int i = row; i > row - 4; i--)

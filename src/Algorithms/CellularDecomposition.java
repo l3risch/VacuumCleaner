@@ -28,19 +28,7 @@ public class CellularDecomposition extends Basic implements ActionListener {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
-
-//		_actualCol = Robot.getXasCol();
-//		_actualRow = Robot.getYasRow();
-//		
-//		Coordinates2D[] scannedCircleArea = getScannedArea(_actualCol, _actualRow);
-//		if(hitWall(scannedCircleArea)) {
-//			followWall(scannedCircleArea);
-//		}
-//		//TODO: Quitting Criteria
-//		reachedStoppingCriteria();
-//
-//		_frame.repaint();		
+	public void actionPerformed(ActionEvent arg0) {		
 		
 		_actualCol = Robot.getXasCol();
 		_actualRow = Robot.getYasRow();
@@ -61,7 +49,7 @@ public class CellularDecomposition extends Basic implements ActionListener {
 				Robot.getMovement().turnRight();
 				StartAlgorithm._timer.start();				
 
-				while(!isObstaceOrEndOfMap(_actualRow, _actualCol))
+				while(!isObstacleOrEndOfMap(_actualRow, _actualCol))
 				{
 					Robot.getMovement().moveForward();
 					_frame.repaint();
@@ -190,7 +178,7 @@ public class CellularDecomposition extends Basic implements ActionListener {
 		return unaccesable;
 	}
 	
-	private boolean isObstaceOrEndOfMap(int row, int col)
+	private boolean isObstacleOrEndOfMap(int row, int col)
 	{
 		Coordinates2D[] scannedArea = getScannedArea(row, col);
 		Coordinates2D[] frontOfRobot = getFrontOfRobot(scannedArea);
