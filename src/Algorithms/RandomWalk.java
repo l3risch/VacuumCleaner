@@ -18,10 +18,12 @@ public class RandomWalk extends Basic implements ActionListener{
 	public boolean _distanceExceeded = false;
 	private int _actualRow;
 	private int _actualCol;
+	public Table _table;
 	
 	
-	public RandomWalk(MainFrame frame) {
+	public RandomWalk(MainFrame frame, Table table) {
 		_frame = frame;
+		_table = table;
 	}
 
 	@Override

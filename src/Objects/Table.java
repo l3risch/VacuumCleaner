@@ -11,27 +11,29 @@ import Rendering.Renderer1;
 
 public class Table {
 
-	public static int _rows = 64;
-	public static int _cols = 64;
-	public static List<Obstacle> _listObs = null;
+	public int _rows = 64;
+	public int _cols = 64;
+	public List<Obstacle> _listObs = null;
 	
-	public static boolean[][] _markedPath;
-	public static boolean[][] _markedObstacles;
+	public boolean[][] _markedPath;
+	public boolean[][] _markedObstacles;
 
 		
-	public Table()
+	public Table(int rows, int cols, String type)
 	{
 		/**
 		 * Set configuration for Type1
 		 */
-		_rows = 64;
-		_cols = 64;
+		_rows = rows;
+		_cols = cols;
 		_markedPath = new boolean[_rows][_cols];
 		_markedObstacles = new boolean[_rows][_cols];
+		
+		setType(type);
 	}
 
 
-	public static void setType(String type)
+	public void setType(String type)
 	{	
 		switch(type) {
 		case "1": setType1();
@@ -49,7 +51,7 @@ public class Table {
 		}
 	}
 
-	private static void setType1() {
+	private void setType1() {
 		_rows = 64;
 		_cols = 64;
 		_markedPath = new boolean[_rows][_cols];
@@ -57,7 +59,7 @@ public class Table {
 		_listObs = null;
 	}
 
-	private static void setType2() {
+	private void setType2() {
 		_rows = 64;
 		_cols = 64;
 		_markedPath = new boolean[_rows][_cols];
@@ -84,7 +86,7 @@ public class Table {
 		markObstacles();
 	}
 	
-	private static void setType3() {
+	private void setType3() {
 		_rows = 64;
 		_cols = 64;
 		_markedPath = new boolean[_rows][_cols];
@@ -118,7 +120,7 @@ public class Table {
 
 	}
 	
-	private static void setType4() {
+	private void setType4() {
 		_rows = 64;
 		_cols = 52;
 		_markedPath = new boolean[_rows][_cols];
@@ -147,7 +149,7 @@ public class Table {
 	}
 	
 
-	private static void setType5() {
+	private void setType5() {
 		_rows = 64;
 		_cols = 64;
 		_markedPath = new boolean[_rows][_cols];
@@ -161,7 +163,7 @@ public class Table {
 		markObstacles();
 	}
 	
-	private static void setType6() {
+	private void setType6() {
 		_rows = 64;
 		_cols = 64;
 		_markedPath = new boolean[_rows][_cols];
@@ -175,7 +177,7 @@ public class Table {
 		markObstacles();
 	}
 	
-	public static void setRandomMap(List<Obstacle> listObs)
+	public void setRandomMap(List<Obstacle> listObs)
 	{
 		 _rows = 64;
 		 _cols = 64;
@@ -191,7 +193,7 @@ public class Table {
 		markObstacles();
 		 
 	}
-	public static void markPath(int row, int col)
+	public void markPath(int row, int col)
 	{
 		for(int i = row; i > row - 4; i--)
 		{
@@ -202,7 +204,7 @@ public class Table {
 		}
 	}
 	
-	public static boolean getPath(int row, int col)
+	public boolean getPath(int row, int col)
 	{
 		return _markedPath[row][col];
 	}
@@ -214,7 +216,7 @@ public class Table {
 	}
 	
 
-	private static void markObstacles() {
+	private void markObstacles() {
 
 		for(Obstacle obs: _listObs)
 		{
@@ -222,7 +224,7 @@ public class Table {
 		}
 	}
 	
-	private static void checkCoordinates(Obstacle obs) {
+	private void checkCoordinates(Obstacle obs) {
 		
 		int x;
 		int y;
@@ -242,10 +244,29 @@ public class Table {
 		}
 	}
 	
-	public static boolean getMarkedObstacles(int row, int col)
+	public boolean getMarkedObstacles(int row, int col)
 	{
 		return _markedObstacles[row][col];
 	}
+	
+	public int getRows()
+	{
+		return _rows;
+	}
+	
+	public int getCols()
+	{
+		return _cols;
+	}
+	
+	public boolean[][] getMarkedPath()
+	{
+		return _markedPath;
+	}
 
+	public boolean[][] getMarkedObstacles()
+	{
+		return _markedObstacles;
+	}
 }
 

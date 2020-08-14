@@ -14,15 +14,15 @@ public class Robot {
 	
 
 	
-	public Robot() 
+	public Robot(int rows) 
 	{
-		setStartingPos();
+		setStartingPos(rows);
 	}
 
-	public static void setStartingPos()
+	public static void setStartingPos(int rows)
 	{
 		_move = new Movement();
-		_move.setStartingPosition(Table._rows);
+		_move.setStartingPosition(rows);
 		_x = _move.getX();
 		_initX = _move.getX();
 		_y = _move.getY();

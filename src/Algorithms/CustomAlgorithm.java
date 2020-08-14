@@ -18,11 +18,12 @@ public class CustomAlgorithm implements ActionListener{
 	public boolean _distanceExceeded = false;
 	private int _actualRow;
 	private int _actualCol;
-
+	public Table _table;
 	
 	
-	public CustomAlgorithm(MainFrame frame) {
+	public CustomAlgorithm(MainFrame frame, Table table) {
 		_frame = frame;
+		_table = table;
 	}
 
 	@Override
@@ -68,7 +69,7 @@ public class CustomAlgorithm implements ActionListener{
 		for(int i = 0; i < scannedArea.length; i++)
 		try {
 
-			if(Table.getMarkedObstacles(scannedArea[i].getRow(), scannedArea[i].getCol()))
+			if(_table.getMarkedObstacles(scannedArea[i].getRow(), scannedArea[i].getCol()))
 			{
 				unaccesable = true;
 			} 

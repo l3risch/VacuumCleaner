@@ -21,10 +21,12 @@ public class CellularDecomposition extends Basic implements ActionListener {
 	private int _actualRow;
 	private int _actualCol;
 	private enum ScanDirection{LEFT, BACK, RIGHT};
+	public Table _table;
 
-	public CellularDecomposition(MainFrame frame)
+	public CellularDecomposition(MainFrame frame, Table table)
 	{
 		_frame = frame;
+		_table = table;
 	}
 
 	@Override
@@ -129,12 +131,12 @@ public class CellularDecomposition extends Basic implements ActionListener {
 		for(int i = 0; i < scanArea.length; i++)
 		{
 			try {
-				if(Table.getMarkedObstacles(scanArea[i].getRow(), scanArea[i].getCol()))
+				if(_table.getMarkedObstacles(scanArea[i].getRow(), scanArea[i].getCol()))
 				{
 					return false;
 				}
 				
-				if(Table._markedPath[scanArea[i].getRow()][scanArea[i].getCol()])
+				if(_table._markedPath[scanArea[i].getRow()][scanArea[i].getCol()])
 				{
 					return false;
 				}
@@ -159,12 +161,12 @@ public class CellularDecomposition extends Basic implements ActionListener {
 		for(int i = 0; i < frontOfRobot.length; i++)
 		try {
 
-			if(Table.getMarkedObstacles(frontOfRobot[i].getRow(), frontOfRobot[i].getCol()))
+			if(_table.getMarkedObstacles(frontOfRobot[i].getRow(), frontOfRobot[i].getCol()))
 			{
 				unaccesable = true;
 			}
 			
-			if(Table._markedPath[frontOfRobot[i].getRow()][frontOfRobot[i].getCol()])
+			if(_table._markedPath[frontOfRobot[i].getRow()][frontOfRobot[i].getCol()])
 			{
 				unaccesable = true;
 			}
@@ -188,7 +190,7 @@ public class CellularDecomposition extends Basic implements ActionListener {
 		for(int i = 0; i < frontOfRobot.length; i++)
 		try {
 
-			if(Table.getMarkedObstacles(frontOfRobot[i].getRow(), frontOfRobot[i].getCol()))
+			if(_table.getMarkedObstacles(frontOfRobot[i].getRow(), frontOfRobot[i].getCol()))
 			{
 				unaccesable = true;
 			}

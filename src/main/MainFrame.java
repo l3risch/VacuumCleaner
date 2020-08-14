@@ -57,7 +57,7 @@ public class MainFrame extends JFrame{
 	
 	public MainFrame()
 	{		
-		SCREEN_SIZE = new Dimension(200 + 10 * Table._rows, 250 + 10 * Table._cols );
+		SCREEN_SIZE = new Dimension(200 + 10 * 64, 250 + 10 * 64 );
 		setSize(SCREEN_SIZE);
 		setTitle(TITLE);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -94,16 +94,15 @@ public class MainFrame extends JFrame{
 		c.gridy = 0;
 		menu.add(randomButton, c);
 		
-		new Table();
-        new Robot();
+        new Robot(64);
 		
         //Set preselected Map
 		comboBox_2.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
 				
-			Table.setType(comboBox_2.getSelectedItem().toString());
-			Robot.setStartingPos();
+			_table = new Table(64, 64, comboBox_2.getSelectedItem().toString());
+			Robot.setStartingPos(64);
 
 			_contentPane.repaint();
 			}
@@ -114,12 +113,9 @@ public class MainFrame extends JFrame{
 			
 			public void actionPerformed(ActionEvent e) {
 				
-			if(Table._listObs != null)
-			{
-				Table._listObs.clear();
-			}
-			new MapGenerator();
-			Robot.setStartingPos();
+
+			new MapGenerator(_table);
+			Robot.setStartingPos(_table.getRows());
 
 			_contentPane.repaint();
 			}
@@ -136,13 +132,13 @@ public class MainFrame extends JFrame{
 		/**
 		 * Choose Algorithm
 		 */
-		String algList[] = {"Test", "Custom", "Random Walk", "Cellular Decomposition"};
+		String algList[] = {"Custom", "Random Walk", "Cellular Decomposition"};
 		_comboBox_1 = new JComboBox<String>(algList);
 		_comboBox_1.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
 				
-				Robot.setStartingPos();
+				Robot.setStartingPos(64);
 
 			_contentPane.repaint();
 			}
@@ -166,7 +162,7 @@ public class MainFrame extends JFrame{
 		c.insets = new Insets(0,10,10,10); 
 		menu.add(startButton, c);
 		//Setze Algorithmus
-		startButton.addActionListener(new StartAlgorithm(this));
+		startButton.addActionListener(new StartAlgorithm(this, _table));
 		
 		JButton stopButton = new JButton("Stop");
 		c.gridx = 4;
@@ -174,7 +170,7 @@ public class MainFrame extends JFrame{
 		menu.add(stopButton, c);
 		stopButton.addActionListener(new StopAlgorithm());
 		
-		_render = new Renderer1();
+		_render = new Renderer1(_table);
 
 		_contentPane = getContentPane();
 		_contentPane.add(menu);

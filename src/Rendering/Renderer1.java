@@ -29,11 +29,17 @@ import Physics.Sweeper;
 public class Renderer1 extends JPanel{
 			
 	private static Graphics _g;
+	private Table _table;
+	private int _rows;
+	private int _cols;
 
-	private int[][] _opacity = new int[Table._rows][Table._cols];
+	private int[][] _opacity = new int[_rows][_cols];
 	
-	public Renderer1()
+	public Renderer1(Table table)
 	{
+		_table = table;
+		_rows = _table.getRows();
+		_cols = _table.getCols();
 		setLayout(null);
 		validate();
 	}
@@ -65,12 +71,12 @@ public class Renderer1 extends JPanel{
 	
 	private void renderTable()
 	{		
-		_g.drawRect(100, 100, 10 * Table._cols, 10 * Table._rows + 40);
-		drawGrid(Table._rows, Table._cols);
+		_g.drawRect(100, 100, 10 * _cols, 10 * _rows + 40);
+		drawGrid(_rows, _cols);
 		
-		if(Table._listObs != null)
+		if(_table._listObs != null)
 		{
-			for(Obstacle obs: Table._listObs)
+			for(Obstacle obs: _table._listObs)
 			{
 				getObstacle(obs);
 			}
@@ -82,7 +88,7 @@ public class Renderer1 extends JPanel{
 
 	private void colorFloor()
 	{
-		Table.markPath(Robot.getYasRow(), Robot.getXasCol());
+		_table.markPath(Robot.getYasRow(), Robot.getXasCol());
 		Coordinates2D[][] coordinates = Robot.getCoordinates(Robot.getYasRow(), Robot.getXasCol());
 		for(int i = 0; i < 4; i++)
 		{
@@ -156,11 +162,11 @@ public class Renderer1 extends JPanel{
 
 	private void colorPath() 
 	{		
-		for(int row = 0; row < Table._rows; row++)
+		for(int row = 0; row < _rows; row++)
 		{
-			for(int col = 0; col < Table._cols; col++)
+			for(int col = 0; col < _cols; col++)
 			{
-				if(Table.getPath(row, col))
+				if(_table.getPath(row, col))
 				{
 					Color color = new Color(55, 235, 52, _opacity[row][col]);
 					_g.setColor(color);
@@ -219,12 +225,12 @@ public class Renderer1 extends JPanel{
 	
 //	public static void paintCells()
 //	{
-//		Sweeper.setRows(Table._rows);
-//		Sweeper.setCols(Table._cols);
+//		Sweeper.setRows(_rows);
+//		Sweeper.setCols(_cols);
 //
-//		for(int row = 0; row < Table._rows; row++)
+//		for(int row = 0; row < _rows; row++)
 //		{
-//			for(int col = 0; col < Table._cols; col++)
+//			for(int col = 0; col < _cols; col++)
 //			{
 //				int red = Sweeper.getCells()[row][col] * 40;
 //				Color color = new Color(55 + red, 235, 52);

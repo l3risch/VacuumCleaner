@@ -13,17 +13,15 @@ import main.MainFrame;
 public class MapGenerator{
 
 	public static List<Obstacle> _listObs = new ArrayList<Obstacle>();
-
+	private Table _table;
 	
-	public MapGenerator() {
+	public MapGenerator(Table table) {
+		_table = table;
 		createRandomObstacles();
 	}
 
 	public void createRandomObstacles() 
-	{		
-		Table._markedPath = new boolean[64][64];
-		Table._markedObstacles = new boolean[64][64];
-		
+	{				
 		//Randomize number of obstacles for this map from one to ten
 		int numberObs = (int) (Math.random() * 10) ;
 		
@@ -32,7 +30,7 @@ public class MapGenerator{
 			_listObs.add(createRandomObstacle());
 		}
 		
-		Table.setRandomMap(_listObs);
+		_table.setRandomMap(_listObs);
 	}
 
 	private Obstacle createRandomObstacle() {

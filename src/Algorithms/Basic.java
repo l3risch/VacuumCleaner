@@ -7,6 +7,12 @@ import Physics.Movement;
 
 public class Basic {
 	
+	private Table _table;
+	
+	public Basic(Table table)
+	{
+		_table = table;
+	}
 	boolean getSensorData(int row, int col) {
 
 		Coordinates2D[] scannedArea = getScannedArea(row, col);
@@ -16,7 +22,7 @@ public class Basic {
 		for(int i = 0; i < scannedArea.length; i++)
 		try {
 
-			if(Table.getMarkedObstacles(scannedArea[i].getRow(), scannedArea[i].getCol()))
+			if(_table.getMarkedObstacles(scannedArea[i].getRow(), scannedArea[i].getCol()))
 			{
 				unaccesable = true;
 			} 
