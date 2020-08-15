@@ -103,7 +103,7 @@ public class MainFrame extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				
 			Table.setType(comboBox_2.getSelectedItem().toString());
-			Robot.setStartingPos();
+			Robot.setStartingPos(1, 60);
 
 			_contentPane.repaint();
 			}
@@ -119,7 +119,7 @@ public class MainFrame extends JFrame{
 				Table._listObs.clear();
 			}
 			new MapGenerator();
-			Robot.setStartingPos();
+			Robot.setRandomStartingPos();
 			System.out.println(Table._listObs.size());
 
 			_contentPane.repaint();
@@ -143,8 +143,6 @@ public class MainFrame extends JFrame{
 			
 			public void actionPerformed(ActionEvent e) {
 				
-				Robot.setStartingPos();
-
 			_contentPane.repaint();
 			}
 		});

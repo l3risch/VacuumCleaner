@@ -16,13 +16,13 @@ public class Robot {
 	
 	public Robot() 
 	{
-		setStartingPos();
+		setRandomStartingPos();
 	}
 
-	public static void setStartingPos()
+	public static void setStartingPos(int row, int col)
 	{
 		_move = new Movement();
-		_move.setStartingPosition(Table._rows);
+		_move.setStartingPosition(row, col);
 		_x = _move.getX();
 		_initX = _move.getX();
 		_y = _move.getY();
@@ -30,6 +30,16 @@ public class Robot {
 
 	}
 	
+	public static void setRandomStartingPos()
+	{
+		_move = new Movement();
+		_move.setRandomStartingPosition();
+		_x = _move.getX();
+		_initX = _move.getX();
+		_y = _move.getY();
+		_initY = _move.getY();
+
+	}
 	public static Movement getMovement()
 	{
 		return _move;

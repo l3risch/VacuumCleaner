@@ -118,9 +118,16 @@ public class Movement {
 		return _ang;
 	}
 	
-	public void setStartingPosition(int rows)
+	public void setRandomStartingPosition()
 	{
-		_x = 100;
+		_x = 100 + 10 * (int) (Math.random() * 60);
+		_y = 140 + 10 * (int) (Math.random() * 60);
+		_ang = 270;
+	}
+
+	public void setStartingPosition(int rows, int cols)
+	{
+		_x = 100 + 10 * cols;
 		_y = 100 + 10 * rows;
 		_ang = 270;
 	}
