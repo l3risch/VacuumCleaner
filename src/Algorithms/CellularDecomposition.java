@@ -253,34 +253,12 @@ public class CellularDecomposition extends Basic implements ActionListener {
 		{
 			switch(Movement._dir) {
 			case DOWN: circledArea = getAreaIfDown(scannedArea);
-			System.out.println("DOWN: ");
-			for(int i = 0; i < 16; i++) {
-					System.out.println(getAreaIfDown(scannedArea)[i].getRow()+", " +getAreaIfDown(scannedArea)[i].getCol());
-			}
-			System.out.println("\n");
 				break;
 			case LEFT: circledArea = getAreaIfLeft(scannedArea);
-			System.out.println("Left: ");
-			for(int i = 0; i < 16; i++) {
-					System.out.println(getAreaIfLeft(scannedArea)[i].getRow()+", " +getAreaIfLeft(scannedArea)[i].getCol());
-			}
-			System.out.println("\n");
 				break;
 			case RIGHT: circledArea = getAreaIfRight(scannedArea);
-			System.out.println("Right: ");
-			for(int i = 0; i < 16; i++) {
-					System.out.println(getAreaIfRight(scannedArea)[i].getRow()+", " +getAreaIfRight(scannedArea)[i].getCol());
-			}
-			System.out.println("\n");
 				break;
 			case UP: circledArea = getAreaIfUp(scannedArea);
-			System.out.println("UP: ");
-			for(int i = 0; i < 16; i++) {
-					System.out.println(getAreaIfUp(scannedArea)[i].getRow()+", " +getAreaIfUp(scannedArea)[i].getCol());
-			}
-			System.out.println("\n");
-				break;
-			default:
 				break;
 			}
 		}

@@ -118,9 +118,9 @@ public class MainFrame extends JFrame{
 			{
 				Table._listObs.clear();
 			}
-			new MapGenerator();
+			
 			Robot.setRandomStartingPos();
-			System.out.println(Table._listObs.size());
+			new MapGenerator();
 
 			_contentPane.repaint();
 			}

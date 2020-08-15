@@ -1,5 +1,6 @@
 package MapGeneration;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -85,27 +86,33 @@ public class MapGenerator{
 		{
 			for(int j = 0; j < robotLength; j++)
 			{
-				robotPos[i][j] = new Coordinates2D(Robot.getYasRow(), Robot.getXasCol());
+				robotPos[i][j] = new Coordinates2D((Robot.getY() + j*10), (Robot.getX() + j*10));
 			}
 		}
 		
+//		System.out.println("Min X: " + obs.getX() + ", Min Y: " +  obs.getY() + ", Max X: " + (obs.getX() + obs.getWidth()) + ", Max Y: " + (obs.getY()+ obs.getHeight()));
+//		System.out.println("\nRobot: " + Robot.getY() +", " +Robot.getX() + " bzw. " + Robot.getYasRow() + ", " +Robot.getXasCol() );
+//		System.out.println((Robot.getYasRow()*10 +140) + ", "+ (Robot.getXasCol()*10 +100));
+//		System.out.println("X: " + Robot.getX() + ", Y:" + Robot.getY());
 		
+		//If random obstacle is overlapping with robot set obstacle to 0
 		for(int i = 0; i < robotWidth; i++)
 		{
 			for(int j = 0; j < robotLength; j++)
 			{
 				if(robotPos[i][j].getCol() >= obs.getX() && robotPos[i][j].getCol() <= (obs.getX() + obs.getWidth()))
 				{
-					obs = null;
+					if(robotPos[i][j].getRow() <= obs.getY() + obs.getHeight() && robotPos[i][j].getRow() >= obs.getY())
+					{
+						System.out.println("Set 0");
+						obs = new Obstacle(0, 0, 0, 0, Shape.RECTANGLE);
+					}				
 				}
-				
-				if(robotPos[i][j].getRow() >= obs.getY() && robotPos[i][j].getRow() <= (obs.getY() + obs.getHeight()))
-				{
-					obs = null;
-				}
+
 			}
 			
 		}
+
 		
 		return obs;
 
