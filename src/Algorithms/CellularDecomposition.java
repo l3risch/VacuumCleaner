@@ -40,20 +40,43 @@ public class CellularDecomposition extends Basic implements ActionListener {
 		
 		if(unaccesableField)
 		{
+			
+			//Check if dead end
 			if(!freeDirection(getScannedArea(_actualRow, _actualCol), ScanDirection.LEFT)
 					&& !freeDirection(getScannedArea(_actualRow, _actualCol), ScanDirection.BACK)
 					&& !freeDirection(getScannedArea(_actualRow, _actualCol), ScanDirection.RIGHT))
 			{
-				StartAlgorithm._timer.stop();
-				Robot.getMovement().turnRight();
-				Robot.getMovement().turnRight();
-				StartAlgorithm._timer.start();				
-
-				while(!isObstacleOrEndOfMap(_actualRow, _actualCol))
+				//Check if front of robot is covered path
+				if(coveredPathInFront(_actualRow, _actualCol))
 				{
 					Robot.getMovement().moveForward();
-					_frame.repaint();
+					
+					//Check if area left of robot is partially covered and free to access
+					if(partiallyFreeDirection(getScannedArea(_actualRow, _actualCol), ScanDirection.LEFT))
+					{
+						StartAlgorithm._timer.stop();
+						Robot.getMovement().turnLeft();
+						StartAlgorithm._timer.start();	
+						Robot.getMovement().moveForward();
+					}
+					
+					//Check if area left of robot is partially covered and free to access
+					if(partiallyFreeDirection(getScannedArea(_actualRow, _actualCol), ScanDirection.RIGHT))
+					{
+						StartAlgorithm._timer.stop();
+						Robot.getMovement().turnRight();
+						StartAlgorithm._timer.start();	
+						Robot.getMovement().moveForward();
+					}
+					
+				} else {
+					//Turn around
+					StartAlgorithm._timer.stop();
+					Robot.getMovement().turnRight();
+					Robot.getMovement().turnRight();
+					StartAlgorithm._timer.start();		
 				}
+				
 			} else {
 				StartAlgorithm._timer.stop();
 				Robot.getMovement().turnRight();
@@ -71,9 +94,95 @@ public class CellularDecomposition extends Basic implements ActionListener {
 	}	
 	
 	
+	private boolean coveredPathInFront(int row, int col)
+	{
+		Coordinates2D[] scannedArea = getScannedArea(row, col);
+		Coordinates2D[] frontOfRobot = getFrontOfRobot(scannedArea);
+
+		boolean pathCovered = false;
+		
+		for(int i = 0; i < frontOfRobot.length; i++)
+		{
+			try {
+				if(Table.getMarkedObstacles(frontOfRobot[i].getRow(), frontOfRobot[i].getCol()))
+				{
+					return false;
+				} else if(Table.getPath(frontOfRobot[i].getRow(), frontOfRobot[i].getCol()))
+				{
+					pathCovered = true;
+				}
+			} catch(ArrayIndexOutOfBoundsException e)
+			{
+				e.getStackTrace();
+				pathCovered = false;
+			}
+		}
+		return pathCovered;
+			
+	}
 	
+	private boolean partiallyFreeDirection(Coordinates2D[] scannedArea, ScanDirection direction) {
+		
+		Coordinates2D[] scanArea = determineScanDirections(scannedArea, direction);
+		
+		int pixels = 0;
+
+		for(int i = 0; i < scanArea.length; i++)
+		{
+			try {
+				if(Table.getMarkedObstacles(scanArea[i].getRow(), scanArea[i].getCol()))
+				{
+					return false;
+				}
+				
+				if(Table.getPath(scanArea[i].getRow(), scanArea[i].getCol()))
+				{
+					pixels += 1;
+				}
+				
+			} catch(ArrayIndexOutOfBoundsException e)
+			{
+				e.getStackTrace();
+				return false;
+			}
+		}
+		
+		if(pixels > 3)
+		{
+			return false;
+		} else {
+			return true;
+		}
+		
+	}
 	
 	private boolean freeDirection(Coordinates2D[] scannedArea, ScanDirection direction) {
+		
+		Coordinates2D[] scanArea = determineScanDirections(scannedArea, direction);
+		
+		for(int i = 0; i < scanArea.length; i++)
+		{
+			try {
+				if(Table.getMarkedObstacles(scanArea[i].getRow(), scanArea[i].getCol()))
+				{
+					return false;
+				}
+				
+				if(Table.getPath(scanArea[i].getRow(), scanArea[i].getCol()))
+				{
+					return false;
+				}
+				
+			} catch(ArrayIndexOutOfBoundsException e)
+			{
+				e.getStackTrace();
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	private Coordinates2D[] determineScanDirections(Coordinates2D[] scannedArea, ScanDirection direction) {
 		
 		Coordinates2D[] left = new Coordinates2D[4];
 		Coordinates2D[] right = new Coordinates2D[4];
@@ -124,28 +233,9 @@ public class CellularDecomposition extends Basic implements ActionListener {
 			break;
 		case RIGHT: scanArea = right;
 			break;
-		}
+		}		
 		
-		for(int i = 0; i < scanArea.length; i++)
-		{
-			try {
-				if(Table.getMarkedObstacles(scanArea[i].getRow(), scanArea[i].getCol()))
-				{
-					return false;
-				}
-				
-				if(Table._markedPath[scanArea[i].getRow()][scanArea[i].getCol()])
-				{
-					return false;
-				}
-				
-			} catch(ArrayIndexOutOfBoundsException e)
-			{
-				e.getStackTrace();
-				return false;
-			}
-		}
-		return true;
+		return scanArea;
 	}
 
 	@Override 

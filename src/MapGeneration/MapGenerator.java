@@ -90,11 +90,6 @@ public class MapGenerator{
 			}
 		}
 		
-//		System.out.println("Min X: " + obs.getX() + ", Min Y: " +  obs.getY() + ", Max X: " + (obs.getX() + obs.getWidth()) + ", Max Y: " + (obs.getY()+ obs.getHeight()));
-//		System.out.println("\nRobot: " + Robot.getY() +", " +Robot.getX() + " bzw. " + Robot.getYasRow() + ", " +Robot.getXasCol() );
-//		System.out.println((Robot.getYasRow()*10 +140) + ", "+ (Robot.getXasCol()*10 +100));
-//		System.out.println("X: " + Robot.getX() + ", Y:" + Robot.getY());
-		
 		//If random obstacle is overlapping with robot set obstacle to 0
 		for(int i = 0; i < robotWidth; i++)
 		{
@@ -104,7 +99,6 @@ public class MapGenerator{
 				{
 					if(robotPos[i][j].getRow() <= obs.getY() + obs.getHeight() && robotPos[i][j].getRow() >= obs.getY())
 					{
-						System.out.println("Set 0");
 						obs = new Obstacle(0, 0, 0, 0, Shape.RECTANGLE);
 					}				
 				}
