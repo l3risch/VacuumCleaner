@@ -28,7 +28,7 @@ public class MapGenerator{
 		Table._markedObstacles = new boolean[64][64];
 		
 		//Randomize number of obstacles for this map from one to ten
-		int numberObs = (int) (Math.random() * 12) ;
+		int numberObs = 1 + (int) (Math.random() * 22) ;
 		
 		if(_listObs != null)
 		{
@@ -102,14 +102,64 @@ public class MapGenerator{
 						obs = new Obstacle(0, 0, 0, 0, Shape.RECTANGLE);
 					}				
 				}
-
 			}
 			
-		}
+		}	
+		
+		//If random obstacle blocks some part of the room set obstacle to 0
+		return checkIfBlock(obs);		
+		
 
+	}
+
+	private Obstacle checkIfBlock(Obstacle obs) {
+		
+		if(obs.getX() > 100 && obs.getX() < 140)
+		{
+			obs = new Obstacle(0, 0, 0, 0, Shape.RECTANGLE);
+		}
+		
+		if(obs.getY() > 140 && obs.getY() < 180)
+		{
+			obs = new Obstacle(0, 0, 0, 0, Shape.RECTANGLE);
+		}		
+		
+		if(obs.getX() + obs.getWidth() > 700 && obs.getX() + obs.getWidth() < 740)
+		{
+			obs = new Obstacle(0, 0, 0, 0, Shape.RECTANGLE);
+		}
+		
+		if(obs.getY() + obs.getHeight() > 740 && obs.getY() + obs.getHeight() < 780)
+		{
+			obs = new Obstacle(0, 0, 0, 0, Shape.RECTANGLE);
+		}
+		
+		for(Obstacle obstacle : _listObs)
+		{
+			if(obs.getX() > obstacle.getX() + obstacle.getWidth() && obs.getX() < obstacle.getX() + obstacle.getWidth() + 40)
+			{
+				obs = new Obstacle(0, 0, 0, 0, Shape.RECTANGLE);
+			}
+			
+			if(obs.getX() + obs.getWidth() < obstacle.getX() && obs.getX() + obs.getWidth() > obstacle.getX() - 40)
+			{
+				obs = new Obstacle(0, 0, 0, 0, Shape.RECTANGLE);
+			}		
+			
+			if(obs.getY() > obstacle.getY() + obstacle.getHeight() && obs.getY() < obstacle.getY() + obstacle.getHeight() + 40)
+			{
+				obs = new Obstacle(0, 0, 0, 0, Shape.RECTANGLE);
+			}
+			
+			if(obs.getY() + obs.getHeight() < obstacle.getY() && obs.getY() + obs.getHeight() > obstacle.getY() - 40)
+			{
+				obs = new Obstacle(0, 0, 0, 0, Shape.RECTANGLE);
+			}	
+			
+			
+		}
 		
 		return obs;
-
 	}
 
 	
