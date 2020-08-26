@@ -246,6 +246,11 @@ public class Table {
 	{
 		return _markedObstacles[row][col];
 	}
+	
+	public static void clearMarkedPath()
+	{
+		 _markedPath = new boolean[_rows][_cols];
+	}
 
 }
 

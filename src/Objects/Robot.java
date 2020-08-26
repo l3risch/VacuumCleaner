@@ -11,6 +11,7 @@ public class Robot {
 	public static int _initY;
 	public static int _y;
 	public static Movement _move;
+	public static Coordinates2D _startingPos;
 	
 
 	
@@ -38,6 +39,8 @@ public class Robot {
 		_initX = _move.getX();
 		_y = _move.getY();
 		_initY = _move.getY();
+		
+		_startingPos = new Coordinates2D(getYasRow(), getXasCol());
 
 	}
 	public static Movement getMovement()

@@ -217,6 +217,11 @@ public class Renderer1 extends JPanel{
 			return null;
 	}
 	
+	public void clearOpacity()
+	{
+		_opacity = new int[Table._rows][Table._cols];
+	}
+	
 //	public static void paintCells()
 //	{
 //		Sweeper.setRows(Table._rows);

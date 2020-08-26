@@ -1,9 +1,5 @@
-/Algorithms/
-/Listener/
-/MapGeneration/
-/Objects/
-/Physics/
-/Rendering/
-/enums/
-/main/
 /.recommenders/
+/main/
+/Objects/
+/Rendering/
+/Listener/
