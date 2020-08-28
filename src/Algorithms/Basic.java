@@ -1,5 +1,8 @@
 package Algorithms;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import Objects.Robot;
 import Objects.Table;
 import Physics.Coordinates2D;
@@ -9,7 +12,11 @@ import enums.Direction;
 public class Basic {
 	
 	public enum ScanDirection{FRONT, LEFT, BACK, RIGHT};
- 
+	
+	public enum CellState{FREE, VISITED, OCCUPIED};
+	
+	public Map<Coordinates2D[][], CellState> _mentalMap = new HashMap<Coordinates2D[][], CellState>();
+	
 	boolean isFrontAccesable(int row, int col)
 	{
 		Coordinates2D[] scannedArea = getScannedArea(row, col);
@@ -486,6 +493,14 @@ public class Basic {
 			}
 		}
 		return true;
+	}
+	
+	//Updates mental map
+	void updateMap(int row, int col)
+	{
+		Coordinates2D[][] robotCoordinates = Robot.getCoordinates(row, col);
+		_mentalMap.put(robotCoordinates, CellState.OCCUPIED);
+				
 	}
 
 }

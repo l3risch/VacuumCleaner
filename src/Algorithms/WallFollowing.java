@@ -49,7 +49,7 @@ public class WallFollowing extends Basic implements ActionListener{
 			_flag = true;
 		} 
 		
-		if(freeDirection(_scannedArea, ScanDirection.FRONT))
+		if(partiallyFreeDirection(_scannedArea, ScanDirection.FRONT))
 		{
 			Robot.getMovement().moveForward();	
 
@@ -60,7 +60,6 @@ public class WallFollowing extends Basic implements ActionListener{
 			StartAlgorithm._timer.start();	
 						
 		}  
-
 
 		_frame.repaint();		
 	}
