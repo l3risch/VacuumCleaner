@@ -31,11 +31,11 @@ public class RandomWalk extends Basic implements ActionListener{
 		_actualRow = Robot.getYasRow();
 		
 		
-		boolean unaccesableField;
+		boolean accesableField;
 
-		unaccesableField = getSensorData(_actualRow, _actualCol);
+		accesableField = isFrontAccesable(_actualRow, _actualCol);
 
-		if(unaccesableField)
+		if(!accesableField)
 		{
 			StartAlgorithm._timer.stop();
 			Robot.getMovement().turnByDegrees((int)(Math.random()*360));

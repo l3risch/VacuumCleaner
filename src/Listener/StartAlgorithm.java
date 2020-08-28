@@ -8,8 +8,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.Timer;
 
-import Algorithms.TestAlgorithm;
-import Algorithms.CellularDecomposition;
+import Algorithms.WallFollowing;
+import Algorithms.SpiralAlgorithm;
 import Algorithms.CustomAlgorithm;
 import Algorithms.RandomWalk;
 import main.MainFrame;
@@ -29,7 +29,7 @@ public class StartAlgorithm implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		
 		switch(_frame.getAlgorithm()) {
-		case "Test": TestAlgorithm test = new TestAlgorithm(_frame);
+		case "Wall Following": WallFollowing test = new WallFollowing(_frame);
 			_timer = new Timer(50, test);
 	        _timer.start();
 	        _timer.setRepeats(true);
@@ -44,7 +44,7 @@ public class StartAlgorithm implements ActionListener {
 	        _timer.start();
 	        _timer.setRepeats(true);
 		break;	
-		case "Cellular Decomposition": CellularDecomposition cellDec = new CellularDecomposition(_frame);
+		case "Spiral": SpiralAlgorithm cellDec = new SpiralAlgorithm(_frame);
 			_timer = new Timer(50, cellDec);
 	        _timer.start();
 	        _timer.setRepeats(true);
