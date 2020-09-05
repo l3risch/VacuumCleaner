@@ -18,6 +18,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import Algorithms.Basic;
+import Algorithms.Basic.CellState;
 import Objects.Obstacle;
 import Objects.Obstacle.Shape;
 import Objects.Robot;
@@ -46,7 +48,7 @@ public class Renderer1 extends JPanel{
         super.paintComponent(_g);
 		
         colorFloor();
-        //paintCells();
+        paintCells();
 		renderRobot(_g);
 		renderTable();	
 	}
@@ -222,22 +224,17 @@ public class Renderer1 extends JPanel{
 		_opacity = new int[Table._rows][Table._cols];
 	}
 	
-//	public static void paintCells()
-//	{
-//		Sweeper.setRows(Table._rows);
-//		Sweeper.setCols(Table._cols);
-//
-//		for(int row = 0; row < Table._rows; row++)
-//		{
-//			for(int col = 0; col < Table._cols; col++)
-//			{
-//				int red = Sweeper.getCells()[row][col] * 40;
-//				Color color = new Color(55 + red, 235, 52);
-//				_g.setColor(color);
-//				_g.fillRect(col * 10 + 100, row * 10 + 140, 10, 10);
-//				_g.setColor(Color.BLACK);
-//				
-//			}
-//		}
-//	}
+	public static void paintCells()
+	{
+		for(String key : Basic._mentalMap.keySet())
+ 		{
+			int row = Integer.parseInt(key.substring(0, 2));
+			int col = Integer.parseInt(key.substring(2, 4));
+
+
+			if(Basic._mentalMap.get(key).equals(CellState.FREE))
+ 			{					_g.setColor(Color.GRAY);					_g.fillRect(col * 10 + 100, row * 10 + 140, 10, 10);					_g.setColor(Color.BLACK); 			}	
+		
+ 		}
+	}
 }

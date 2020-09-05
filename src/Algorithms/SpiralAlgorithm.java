@@ -49,16 +49,6 @@ public class SpiralAlgorithm extends Basic implements ActionListener {
 					&& !totallyFreeDirection(_encircledArea, ScanDirection.RIGHT))
 			{
 				
-				//If robot gets to same Position turn left
-				if(getMentalMap().containsValue(Robot.getCoordinates(_actualRow, _actualCol)))
-				{
-					System.out.println("Es hat geklappt");
-					StartAlgorithm._timer.stop();
-					Robot.getMovement().turnLeft();
-					StartAlgorithm._timer.start();	
-					Robot.getMovement().moveForward();
-				}
-				
 				//Check if front of robot is covered path
 				if(coveredPathInDirection(_encircledArea, ScanDirection.FRONT))
 				{
@@ -82,6 +72,21 @@ public class SpiralAlgorithm extends Basic implements ActionListener {
 						Robot.getMovement().moveForward();
 					}
 					
+//					if(_actualRow >= 0 && _actualCol >= 0)
+//					{
+//						String mapKey = _actualRow + "" + _actualCol;
+//						int mapKeyInt = Integer.parseInt(mapKey);
+//						if(getMentalMap().containsKey(mapKeyInt))
+//						{
+//							System.out.println("Es hat geklappt");
+//							StartAlgorithm._timer.stop();
+//							Robot.getMovement().turnLeft();
+//							StartAlgorithm._timer.start();	
+//							Robot.getMovement().moveForward();
+//						}
+//					}
+					
+					
 				} else {
 					//Turn around
 					StartAlgorithm._timer.stop();
@@ -103,8 +108,10 @@ public class SpiralAlgorithm extends Basic implements ActionListener {
 			Robot.getMovement().moveForward();
 		}
 		
-		updateMap(_actualRow, _actualCol);
-
+		if(_actualRow >= 0 && _actualCol >= 0)
+		{
+			updateMap(_actualRow, _actualCol);
+		}
 		_frame.repaint();
 	}	
 	

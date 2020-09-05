@@ -1,6 +1,10 @@
+/.metadata/
 /.recommenders/
-/main/
-/Objects/
-/Rendering/
-/Listener/
 /Algorithms/
+/Listener/
+/MapGeneration/
+/Objects/
+/Physics/
+/Rendering/
+/enums/
+/main/

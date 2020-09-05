@@ -15,7 +15,7 @@ public class Basic {
 	
 	public enum CellState{FREE, VISITED, OCCUPIED};
 	
-	public Map<Coordinates2D[][], CellState> _mentalMap = new HashMap<Coordinates2D[][], CellState>();
+	public static Map<String, CellState> _mentalMap = new HashMap<String, CellState>();
 	
 	boolean isFrontAccesable(int row, int col)
 	{
@@ -114,7 +114,7 @@ public class Basic {
 		return false;
 	}
 	
-	Coordinates2D[] getEncircledScannedArea(int row, int col) 
+	public Coordinates2D[] getEncircledScannedArea(int row, int col) 
 	{
 		//Get scanned area in front of the robot
 		Coordinates2D[] scannedArea = getScannedArea(row, col);
@@ -381,7 +381,7 @@ public class Basic {
 	}
 	
 	
-	//Direction is covered, which means no obstacles, walls but complete coverage of the scanned area in this direction
+	//Direction is covered, which means no obstacles or walls but complete coverage of the scanned area in this direction
 	boolean coveredPathInDirection(Coordinates2D[] scannedArea, ScanDirection direction)
 	{
 		Coordinates2D[] scanArea = determineScanDirections(scannedArea, direction);
@@ -499,18 +499,92 @@ public class Basic {
 	void updateMap(int row, int col)
 	{
 		Coordinates2D[][] robotCoordinates = Robot.getCoordinates(row, col);
-		_mentalMap.put(robotCoordinates, CellState.OCCUPIED);
-		for(Coordinates2D[][] key : _mentalMap.keySet())
+		
+		//Update free and occupied cells
+		Coordinates2D[] encircledArea = getEncircledScannedArea(row, col);
+		for(int i = 0; i < encircledArea.length; i++)
 		{
-			for(int i = 0; i < 4; i++)
-				for(int j = 0; j < 4; j++)
-					System.out.println(key[i][j].getRow() + ", " + key[i][j].getCol());
-			System.out.println("\n");
+			String mapKey = generateKey(encircledArea[i].getRow(), encircledArea[i].getCol());
+
+			try {
+				if(Table.getMarkedObstacles(encircledArea[i].getRow(), encircledArea[i].getCol()))
+				{
+					_mentalMap.put(mapKey, CellState.OCCUPIED);
+				} else if(Table.getPath(encircledArea[i].getRow(), encircledArea[i].getCol()))
+				{
+					_mentalMap.put(mapKey, CellState.VISITED);
+				} else {
+					_mentalMap.put(mapKey, CellState.FREE);
+				}
+			} catch(ArrayIndexOutOfBoundsException e)
+			{
+				e.getStackTrace();
+			}
 		}
+		
+		//Update already visited cells
+		for(int i = 0; i < 4; i++)
+		{
+			for(int j = 0; j < 4; j++)
+			{
 				
-	}
+				String mapKey = generateKey(robotCoordinates[i][j].getRow(), robotCoordinates[i][j].getCol());
+				_mentalMap.put(mapKey, CellState.VISITED);
 	
-	Map<Coordinates2D[][], CellState> getMentalMap()
+			}
+		}
+		
+		int free = 0;
+		int occupied = 0;
+		int visited = 0;
+		
+ 		for(String key : _mentalMap.keySet())
+ 		{
+ 			if(_mentalMap.get(key).equals(CellState.FREE))
+ 			{
+ 				free++;
+ 			}
+ 			if(_mentalMap.get(key).equals(CellState.OCCUPIED))
+ 			{
+ 				occupied++;
+ 			}
+ 			if(_mentalMap.get(key).equals(CellState.VISITED))
+ 			{
+ 				visited++;
+ 			}
+ 		}
+//		System.out.println("Free cells: " + free);
+//		System.out.println("Occ cells: " + occupied);
+//		System.out.println("Visited cells: " + visited);
+
+
+
+	}
+
+	
+	private String generateKey(int row, int col) 
+	{
+		String rowStr;
+		if((row) < 10)
+		{
+			rowStr = "0" + (row);
+		} else {
+			rowStr = "" + (row);
+		}
+		
+		String colStr;
+		if((col) < 10)
+		{
+			colStr = "0" + (col);
+		} else {
+			colStr = "" + (col);
+		}
+		
+		String key = rowStr + colStr;
+		return key;
+	}
+
+	Map<String, CellState> getMentalMap()
 	{
 		return _mentalMap;
 	}
