@@ -21,6 +21,8 @@ public class SpiralAlgorithm extends Basic implements ActionListener {
 	private MainFrame _frame; 
 	private int _actualRow;
 	private int _actualCol;
+	private Coordinates2D[] _encircledArea = new Coordinates2D[16];
+
 
 	public SpiralAlgorithm(MainFrame frame)
 	{
@@ -32,7 +34,7 @@ public class SpiralAlgorithm extends Basic implements ActionListener {
 		
 		_actualCol = Robot.getXasCol();
 		_actualRow = Robot.getYasRow();
-		
+		_encircledArea = getEncircledScannedArea(_actualRow, _actualCol);
 		
 		boolean accesableField;
 
@@ -42,17 +44,28 @@ public class SpiralAlgorithm extends Basic implements ActionListener {
 		{
 			
 			//Check if dead end
-			if(!totallyFreeDirection(getEncircledScannedArea(_actualRow, _actualCol), ScanDirection.LEFT)
-					&& !totallyFreeDirection(getEncircledScannedArea(_actualRow, _actualCol), ScanDirection.BACK)
-					&& !totallyFreeDirection(getEncircledScannedArea(_actualRow, _actualCol), ScanDirection.RIGHT))
+			if(!totallyFreeDirection(_encircledArea, ScanDirection.LEFT)
+					&& !totallyFreeDirection(_encircledArea, ScanDirection.BACK)
+					&& !totallyFreeDirection(_encircledArea, ScanDirection.RIGHT))
 			{
+				
+				//If robot gets to same Position turn left
+				if(getMentalMap().containsValue(Robot.getCoordinates(_actualRow, _actualCol)))
+				{
+					System.out.println("Es hat geklappt");
+					StartAlgorithm._timer.stop();
+					Robot.getMovement().turnLeft();
+					StartAlgorithm._timer.start();	
+					Robot.getMovement().moveForward();
+				}
+				
 				//Check if front of robot is covered path
-				if(coveredPathInDirection(getEncircledScannedArea(_actualRow, _actualCol), ScanDirection.FRONT))
+				if(coveredPathInDirection(_encircledArea, ScanDirection.FRONT))
 				{
 					Robot.getMovement().moveForward();
 					
 					//Check if area left of robot is partially covered and free to access
-					if(partiallyFreeDirection(getEncircledScannedArea(_actualRow, _actualCol), ScanDirection.LEFT))
+					if(partiallyFreeDirection(_encircledArea, ScanDirection.LEFT))
 					{
 						StartAlgorithm._timer.stop();
 						Robot.getMovement().turnLeft();
@@ -60,8 +73,8 @@ public class SpiralAlgorithm extends Basic implements ActionListener {
 						Robot.getMovement().moveForward();
 					}
 					
-					//Check if area left of robot is partially covered and free to access
-					if(partiallyFreeDirection(getEncircledScannedArea(_actualRow, _actualCol), ScanDirection.RIGHT))
+					//Check if area right of robot is partially covered and free to access
+					if(partiallyFreeDirection(_encircledArea, ScanDirection.RIGHT))
 					{
 						StartAlgorithm._timer.stop();
 						Robot.getMovement().turnRight();
@@ -83,12 +96,14 @@ public class SpiralAlgorithm extends Basic implements ActionListener {
 				StartAlgorithm._timer.start();
 			}
 		} else {
-			if(totallyFreeDirection(getEncircledScannedArea(_actualRow, _actualCol), ScanDirection.LEFT))
+			if(totallyFreeDirection(_encircledArea, ScanDirection.LEFT))
 			{
 				Robot.getMovement().turnLeft();
 			}
 			Robot.getMovement().moveForward();
 		}
+		
+		updateMap(_actualRow, _actualCol);
 
 		_frame.repaint();
 	}	

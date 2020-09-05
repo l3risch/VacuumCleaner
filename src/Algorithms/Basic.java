@@ -500,7 +500,19 @@ public class Basic {
 	{
 		Coordinates2D[][] robotCoordinates = Robot.getCoordinates(row, col);
 		_mentalMap.put(robotCoordinates, CellState.OCCUPIED);
+		for(Coordinates2D[][] key : _mentalMap.keySet())
+		{
+			for(int i = 0; i < 4; i++)
+				for(int j = 0; j < 4; j++)
+					System.out.println(key[i][j].getRow() + ", " + key[i][j].getCol());
+			System.out.println("\n");
+		}
 				
+	}
+	
+	Map<Coordinates2D[][], CellState> getMentalMap()
+	{
+		return _mentalMap;
 	}
 
 }
