@@ -20,6 +20,8 @@ import javax.swing.JPanel;
 
 import Algorithms.Basic;
 import Algorithms.Basic.CellState;
+import Algorithms.PathDeterminer;
+import Algorithms.SpiralAlgorithm;
 import Objects.Obstacle;
 import Objects.Obstacle.Shape;
 import Objects.Robot;
@@ -49,11 +51,12 @@ public class Renderer1 extends JPanel{
 		
         colorFloor();
         paintCells();
+        paintNearestCell();
 		renderRobot(_g);
 		renderTable();	
 	}
-	
-	
+
+
 	private void renderRobot(Graphics g)
 	{
 		ImageIcon round = createRoundImage(g);
@@ -237,4 +240,20 @@ public class Renderer1 extends JPanel{
 		
  		}
 	}
+	
+	
+	
+	private void paintNearestCell() 
+	{
+		if(SpiralAlgorithm.getPathDeterminer() != null)
+		{
+		PathDeterminer path = SpiralAlgorithm.getPathDeterminer();
+		Coordinates2D nn = path.getNearestNeighbour(Robot.getYasRow(), Robot.getXasCol());
+		_g.setColor(Color.BLUE);
+		_g.fillRect(nn.getCol() * 10 + 100, nn.getRow() * 10 + 140, 10, 10);
+		_g.setColor(Color.BLACK);
+		}
+		
+	}
+
 }

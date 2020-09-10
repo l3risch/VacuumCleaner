@@ -22,6 +22,8 @@ public class SpiralAlgorithm extends Basic implements ActionListener {
 	private int _actualRow;
 	private int _actualCol;
 	private Coordinates2D[] _encircledArea = new Coordinates2D[16];
+	private static PathDeterminer _pathDeterminer = new PathDeterminer();
+
 
 
 	public SpiralAlgorithm(MainFrame frame)
@@ -72,19 +74,15 @@ public class SpiralAlgorithm extends Basic implements ActionListener {
 						Robot.getMovement().moveForward();
 					}
 					
-//					if(_actualRow >= 0 && _actualCol >= 0)
-//					{
-//						String mapKey = _actualRow + "" + _actualCol;
-//						int mapKeyInt = Integer.parseInt(mapKey);
-//						if(getMentalMap().containsKey(mapKeyInt))
-//						{
-//							System.out.println("Es hat geklappt");
-//							StartAlgorithm._timer.stop();
-//							Robot.getMovement().turnLeft();
-//							StartAlgorithm._timer.start();	
-//							Robot.getMovement().moveForward();
-//						}
-//					}
+					//If every direction around the robot is covered got to nearest uncovered Cell
+					if(totallyCoveredDirection(_encircledArea, ScanDirection.FRONT) && 
+						totallyCoveredDirection(_encircledArea, ScanDirection.LEFT) &&
+						totallyCoveredDirection(_encircledArea, ScanDirection.RIGHT) &&
+						totallyCoveredDirection(_encircledArea, ScanDirection.BACK))
+					{
+						Coordinates2D nn = _pathDeterminer.getNearestNeighbour(_actualRow, _actualCol);
+						System.out.println(nn.getRow() + ", " +  nn.getCol());
+					}
 					
 					
 				} else {
@@ -149,5 +147,10 @@ public class SpiralAlgorithm extends Basic implements ActionListener {
 	
 	private boolean reachedStoppingCriteria() {
 		return false;
+	}
+	
+	public static PathDeterminer getPathDeterminer()
+	{
+		return _pathDeterminer;
 	}
 }

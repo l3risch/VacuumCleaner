@@ -381,7 +381,7 @@ public class Basic {
 	}
 	
 	
-	//Direction is covered, which means no obstacles or walls but complete coverage of the scanned area in this direction
+	//Direction is covered, which means no obstacles or walls but parts of the scanned area are covered in this direction
 	boolean coveredPathInDirection(Coordinates2D[] scannedArea, ScanDirection direction)
 	{
 		Coordinates2D[] scanArea = determineScanDirections(scannedArea, direction);
@@ -441,6 +441,42 @@ public class Basic {
 			return false;
 		} else {
 			return true;
+		}
+		
+	}
+	
+	//Direction is totally covered, which means no obstacles, walls but the scanned area is totally covered in this direction
+	boolean totallyCoveredDirection(Coordinates2D[] scannedArea, ScanDirection direction) {
+		
+		Coordinates2D[] scanArea = determineScanDirections(scannedArea, direction);
+		
+		int pixels = 0;
+
+		for(int i = 0; i < scanArea.length; i++)
+		{
+			try {
+				if(Table.getMarkedObstacles(scanArea[i].getRow(), scanArea[i].getCol()))
+				{
+					pixels += 1;
+				}
+				
+				if(Table.getPath(scanArea[i].getRow(), scanArea[i].getCol()))
+				{
+					pixels += 1;
+				}
+				
+			} catch(ArrayIndexOutOfBoundsException e)
+			{
+				e.getStackTrace();
+				return false;
+			}
+		}
+		
+		if(pixels > 3)
+		{
+			return true;
+		} else {
+			return false;
 		}
 		
 	}
