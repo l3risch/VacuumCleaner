@@ -80,8 +80,10 @@ public class SpiralAlgorithm extends Basic implements ActionListener {
 						totallyCoveredDirection(_encircledArea, ScanDirection.RIGHT) &&
 						totallyCoveredDirection(_encircledArea, ScanDirection.BACK))
 					{
-						Coordinates2D nn = _pathDeterminer.getNearestNeighbour(_actualRow, _actualCol);
-						System.out.println(nn.getRow() + ", " +  nn.getCol());
+						Coordinates2D nearestNeighbour = _pathDeterminer.getNearestNeighbour(_actualRow, _actualCol);
+						System.out.println(nearestNeighbour.getRow() + ", " +  nearestNeighbour.getCol());
+						_pathDeterminer.moveToNearestNeighbour(nearestNeighbour);
+						Robot.getMovement().moveForward();
 					}
 					
 					
