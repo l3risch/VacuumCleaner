@@ -50,7 +50,7 @@ public class Renderer1 extends JPanel{
         super.paintComponent(_g);
 		
         colorFloor();
-        paintCells();
+        paintFreeCells();
         paintNearestCell();
 		renderRobot(_g);
 		renderTable();	
@@ -227,7 +227,7 @@ public class Renderer1 extends JPanel{
 		_opacity = new int[Table._rows][Table._cols];
 	}
 	
-	public static void paintCells()
+	public static void paintFreeCells()
 	{
 		for(String key : Basic._mentalMap.keySet())
  		{

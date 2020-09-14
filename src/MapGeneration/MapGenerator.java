@@ -28,7 +28,7 @@ public class MapGenerator{
 		Table._markedObstacles = new boolean[64][64];
 		
 		//Randomize number of obstacles for this map from one to ten
-		int numberObs = 1 + (int) (Math.random() * 22) ;
+		int numberObs = 20 + (int) (Math.random() * 32) ;
 		
 		if(_listObs != null)
 		{

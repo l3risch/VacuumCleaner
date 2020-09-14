@@ -41,6 +41,8 @@ public class SpiralAlgorithm extends Basic implements ActionListener {
 		boolean accesableField;
 
 		accesableField = isFrontAccesable(_actualRow, _actualCol);
+		Coordinates2D nearestNeighbour = _pathDeterminer.getNearestNeighbour(_actualRow, _actualCol);
+		System.out.println(nearestNeighbour.getRow() + ", " +  nearestNeighbour.getCol());
 		
 		if(!accesableField)
 		{
@@ -52,7 +54,7 @@ public class SpiralAlgorithm extends Basic implements ActionListener {
 			{
 				
 				//Check if front of robot is covered path
-				if(coveredPathInDirection(_encircledArea, ScanDirection.FRONT))
+				if(partiallyCoveredPathInDircetion(_encircledArea, ScanDirection.FRONT))
 				{
 					Robot.getMovement().moveForward();
 					
@@ -75,15 +77,14 @@ public class SpiralAlgorithm extends Basic implements ActionListener {
 					}
 					
 					//If every direction around the robot is covered got to nearest uncovered Cell
-					if(totallyCoveredDirection(_encircledArea, ScanDirection.FRONT) && 
-						totallyCoveredDirection(_encircledArea, ScanDirection.LEFT) &&
-						totallyCoveredDirection(_encircledArea, ScanDirection.RIGHT) &&
-						totallyCoveredDirection(_encircledArea, ScanDirection.BACK))
+					if(totallyCovered(_encircledArea))
 					{
-						Coordinates2D nearestNeighbour = _pathDeterminer.getNearestNeighbour(_actualRow, _actualCol);
-						System.out.println(nearestNeighbour.getRow() + ", " +  nearestNeighbour.getCol());
-						_pathDeterminer.moveToNearestNeighbour(nearestNeighbour);
-						Robot.getMovement().moveForward();
+							StartAlgorithm._timer.stop();
+							_pathDeterminer.moveToNearestNeighbour(nearestNeighbour);
+							StartAlgorithm._timer.start();	
+						
+							Robot.getMovement().moveForward();
+
 					}
 					
 					
@@ -108,11 +109,12 @@ public class SpiralAlgorithm extends Basic implements ActionListener {
 			Robot.getMovement().moveForward();
 		}
 		
+		_frame.repaint();
+		
 		if(_actualRow >= 0 && _actualCol >= 0)
 		{
 			updateMap(_actualRow, _actualCol);
 		}
-		_frame.repaint();
 	}	
 	
 	@Override

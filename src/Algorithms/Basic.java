@@ -42,7 +42,7 @@ public class Basic {
 	}
 
 	Coordinates2D[] getScannedArea(int row, int col) {
-		
+				
 		Coordinates2D[][] oldArrayPosition = new Coordinates2D[4][4];
 		oldArrayPosition = Robot.getCoordinates(row, col);
 
@@ -53,6 +53,12 @@ public class Basic {
 		{
 			for(int j = 0; j <4; j++)
 			{
+				//Set visited path
+				int robotRow = Robot.getCoordinates(row, col)[i][j].getRow();
+				int robotCol = Robot.getCoordinates(row, col)[i][j].getCol();
+
+				Table.markPath(robotRow, robotCol);
+				
 				//Copy old array into new array
 				newArrayPosition[i][j] = Coordinates2D.copyOf(oldArrayPosition[i][j]);
 				
@@ -123,9 +129,9 @@ public class Basic {
 		Coordinates2D[] circledArea = new Coordinates2D[16];
 		
 		//Determine the scanned area encirceling the robot
-		double ang = Movement.getAng();
-		if(ang % 90 == 0)
-		{
+//		double ang = Movement.getAng();
+//		if(ang % 90 == 0)
+//		{
 			switch(Movement._dir) {
 			case DOWN: circledArea = getAreaIfDown(scannedArea);
 				break;
@@ -136,7 +142,7 @@ public class Basic {
 			case UP: circledArea = getAreaIfUp(scannedArea);
 				break;
 			}
-		}
+//		}
 		return circledArea;
 		
 	}
@@ -383,7 +389,7 @@ public class Basic {
 	
 	
 	//Direction is covered, which means no obstacles or walls but parts of the scanned area are covered in this direction
-	boolean coveredPathInDirection(Coordinates2D[] scannedArea, ScanDirection direction)
+	boolean partiallyCoveredPathInDircetion(Coordinates2D[] scannedArea, ScanDirection direction)
 	{
 		Coordinates2D[] scanArea = determineScanDirections(scannedArea, direction);
 
@@ -447,25 +453,28 @@ public class Basic {
 	}
 	
 	//Direction is totally covered, which means no obstacles, walls but the scanned area is totally covered in this direction
-	boolean totallyCoveredDirection(Coordinates2D[] scannedArea, ScanDirection direction) {
+	boolean totallyCovered(Coordinates2D[] scannedArea) {
 		
-		Coordinates2D[] scanArea = determineScanDirections(scannedArea, direction);
 		
 		int pixels = 0;
 
-		for(int i = 0; i < scanArea.length; i++)
+		for(int i = 0; i < scannedArea.length; i++)
 		{
 			try {
-				if(Table.getMarkedObstacles(scanArea[i].getRow(), scanArea[i].getCol()))
+				if(Table.getMarkedObstacles(scannedArea[i].getRow(), scannedArea[i].getCol()))
 				{
 					pixels += 1;
 				}
 				
-				if(Table.getPath(scanArea[i].getRow(), scanArea[i].getCol()))
+				if(Table.getPath(scannedArea[i].getRow(), scannedArea[i].getCol()))
 				{
 					pixels += 1;
 				}
 				
+				if(scannedArea[i].getRow() > 63 || scannedArea[i].getCol() > 63 || scannedArea[i].getRow() < 0 || scannedArea[i].getCol() < 0)
+				{
+					pixels += 1;
+				}
 			} catch(ArrayIndexOutOfBoundsException e)
 			{
 				e.getStackTrace();
@@ -473,7 +482,7 @@ public class Basic {
 			}
 		}
 		
-		if(pixels > 3)
+		if(pixels > 15)
 		{
 			return true;
 		} else {
@@ -599,7 +608,7 @@ public class Basic {
 	}
 
 	
-	private String generateKey(int row, int col) 
+	protected static String generateKey(int row, int col) 
 	{
 		String rowStr;
 		if((row) < 10)

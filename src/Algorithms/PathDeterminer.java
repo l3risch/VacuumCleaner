@@ -8,7 +8,6 @@ import java.util.Map;
 import Objects.Robot;
 import Physics.Coordinates2D;
 import Physics.Movement;
-import enums.Direction;
 
 public class PathDeterminer extends Basic{
 
@@ -68,22 +67,113 @@ public class PathDeterminer extends Basic{
 	public void moveToNearestNeighbour(Coordinates2D nearestNeighbour)
 	{
 		double hypotenuse = _distance;
-		double gegenkathete = nearestNeighbour.getRow() - _robotPos.getRow();
-		double radian = Math.asin(gegenkathete/hypotenuse);
-		double angle = radian/Math.PI * 180;
+		double gegenkathete;
+		double radian;
+		double angle = 0;
 		
-		Direction dir = Movement._dir;
-		switch(dir) {
-		case RIGHT:
-		break;
-		case DOWN: angle = angle + 270;
-		break;
-		case LEFT: angle = angle + 180;
-		break;
-		case UP: angle = angle + 90;
+		double currentAngle = Movement.getAng();
+		double normedAngle = currentAngle % 360;
+
+		if(normedAngle < 180)
+		{
+			gegenkathete = nearestNeighbour.getRow() - _robotPos.getRow();
+
+			//If target cell is right
+			if(nearestNeighbour.getCol() - _robotPos.getCol() > 0)
+			{
+				radian = Math.asin(gegenkathete/hypotenuse);
+				angle = radian/Math.PI * 180;
+				
+			//If target cell is left
+			} else 
+			{
+				radian = Math.asin(gegenkathete/hypotenuse);
+				angle = (radian/Math.PI * 180) + 180;
+			}	
+		} else if(normedAngle >= 180)
+		{
+			gegenkathete = _robotPos.getRow() - nearestNeighbour.getRow();
+
+			//If target cell is right
+			if(nearestNeighbour.getCol() - _robotPos.getCol() > 0)
+			{
+				radian = Math.asin(gegenkathete/hypotenuse);
+				angle = radian/Math.PI * 180;
+				
+			//If target cell is left
+			} else
+			{
+				radian = Math.asin(gegenkathete/hypotenuse);
+				angle = radian/Math.PI * 180;
+			}
 		}
-		System.out.println(angle);
+		
 		Movement.setAng(Movement.getAng() + angle);
+
+		
+//		//If target cell below and left
+//		if(nearestNeighbour.getCol() - _robotPos.getCol() < 0 && nearestNeighbour.getRow() - _robotPos.getRow() > 0)
+//		{
+//			Direction dir = Movement._dir;
+//			
+//			switch(dir) {
+//			case RIGHT: angle = angle * (-1) + 180;
+//			break;
+//			case DOWN: angle = angle * (-1) + 90;
+//			break;
+//			case LEFT: angle = angle * (-1);
+//			break;
+//			case UP: angle = angle * (-1) + 270;
+//			}
+//			
+//			//If target cell below and right
+//		} else if(nearestNeighbour.getCol() - _robotPos.getCol() > 0 && nearestNeighbour.getRow() - _robotPos.getRow() > 0)
+//		{
+//			Direction dir = Movement._dir;
+//			
+//			switch(dir) {
+//			case RIGHT:
+//			break;
+//			case DOWN: angle = angle + 270;
+//			break;
+//			case LEFT: angle = angle + 180;
+//			break;
+//			case UP: angle = angle + 90;
+//			}
+//		
+//			//If target cell above and right
+//		} else if(nearestNeighbour.getCol() - _robotPos.getCol() > 0 && nearestNeighbour.getRow() - _robotPos.getRow() < 0)
+//		{
+//			Direction dir = Movement._dir;
+//			
+//			switch(dir) {
+//			case RIGHT: angle = angle * (-1);
+//			break;
+//			case DOWN: angle = angle * (-1) + 270;
+//			break;
+//			case LEFT: angle = angle * (-1) + 180;
+//			break;
+//			case UP: angle = angle * (-1) + 90;
+//			}
+//			
+//			//If target cell above and left
+//		} else if(nearestNeighbour.getCol() - _robotPos.getCol() < 0 && nearestNeighbour.getRow() - _robotPos.getRow() < 0)
+//		{
+//			Direction dir = Movement._dir;
+//			
+//			switch(dir) {
+//			case RIGHT: angle = angle + 180;
+//			break;
+//			case DOWN: angle = angle + 90;
+//			break;
+//			case LEFT: 
+//			break;
+//			case UP: angle = angle + 270;
+//			}
+//			
+//		}
+//		System.out.println(angle);
+//		Movement.setAng(Movement.getAng() + angle);
 	}
 
 
