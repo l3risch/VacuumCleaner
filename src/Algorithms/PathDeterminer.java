@@ -73,42 +73,49 @@ public class PathDeterminer extends Basic{
 		
 		double currentAngle = Movement.getAng();
 		double normedAngle = getNormedAngle(currentAngle);
+		int rowDistance;
+		int colDistance;
 
-		if(normedAngle >= 270 || normedAngle < 90)
+		
+		rowDistance = _robotPos.getRow() - nearestNeighbour.getRow();
+		colDistance = nearestNeighbour.getCol() - _robotPos.getCol();
+
+		//If target cell is in 90 degree area above
+		if(rowDistance >= 0 && Math.abs(rowDistance) > Math.abs(colDistance))
 		{
 			gegenkathete = nearestNeighbour.getCol() - _robotPos.getCol();
 
-			//If target cell is right
-			if(gegenkathete > 0)
-			{
-				radian = Math.asin(gegenkathete/hypotenuse);
-				angle = radian/Math.PI * 180;
-				
-			//If target cell is left
-			} else 
-			{
-				radian = Math.asin(gegenkathete/hypotenuse);
-				angle = (radian/Math.PI * 180) + 180;
-			}	
-		} else if(normedAngle >= 90 && normedAngle < 270)
+			radian = Math.asin(gegenkathete/hypotenuse);
+			angle = 270 + radian/Math.PI * 180;
+			
+		//If target cell is in 90 degree area right
+		} else if(colDistance >= 0 && Math.abs(colDistance) > Math.abs(rowDistance))
 		{
-			gegenkathete = _robotPos.getCol() - nearestNeighbour.getCol();
+			gegenkathete =  nearestNeighbour.getRow() - _robotPos.getRow();
 
-			//If target cell is left
-			if(gegenkathete > 0)
-			{
-				radian = Math.asin(gegenkathete/hypotenuse);
-				angle = radian/Math.PI * 180;
+			radian = Math.asin(gegenkathete/hypotenuse);
+			angle = radian/Math.PI * 180 ;
 				
-			//If target cell is right
-			} else
-			{
-				radian = Math.asin(gegenkathete/hypotenuse);
-				angle = (radian/Math.PI * 180) + 180;
-			}
+		//If target cell is in 90 degree area below	
+		} else if(rowDistance < 0 && Math.abs(rowDistance) > Math.abs(colDistance))
+		{
+			gegenkathete =  _robotPos.getCol() - nearestNeighbour.getCol();
+
+			radian = Math.asin(gegenkathete/hypotenuse);
+			angle = 90 + radian/Math.PI * 180;
+			
+		//If target cell 90 is indegree area left	
+		} else if(colDistance < 0 && Math.abs(colDistance) > Math.abs(rowDistance))
+		{
+			gegenkathete =  _robotPos.getRow() - nearestNeighbour.getRow();
+
+			radian = Math.asin(gegenkathete/hypotenuse);
+			angle = 180 + radian/Math.PI * 180 ;
+				
 		}
+		
 	
-		Movement.setAng(Movement.getAng() + angle);
+		Movement.setAng(angle);
 
 		
 //		//If target cell below and left
