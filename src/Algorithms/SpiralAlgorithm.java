@@ -38,6 +38,7 @@ public class SpiralAlgorithm extends Basic implements ActionListener {
 		_actualRow = Robot.getYasRow();
 		_encircledArea = getEncircledScannedArea(_actualRow, _actualCol);
 		
+
 		boolean accesableField;
 
 		accesableField = isFrontAccesable(_actualRow, _actualCol);

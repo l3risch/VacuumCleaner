@@ -87,8 +87,9 @@ public class Renderer1 extends JPanel{
 
 	private void colorFloor()
 	{
-		Table.markPath(Robot.getYasRow(), Robot.getXasCol());
 		Coordinates2D[][] coordinates = Robot.getCoordinates(Robot.getYasRow(), Robot.getXasCol());
+		
+		//Reset opacity after each run
 		for(int i = 0; i < 4; i++)
 		{
 			for(int j = 0; j < 4; j++)

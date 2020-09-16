@@ -193,13 +193,7 @@ public class Table {
 	}
 	public static void markPath(int row, int col)
 	{
-		for(int i = row; i > row - 4; i--)
-		{
-			for(int j = col; j < col + 4; j++)
-			{
-				_markedPath[i][j] = true;
-			}
-		}
+		_markedPath[row][col] = true;
 	}
 	
 	public static boolean getPath(int row, int col)

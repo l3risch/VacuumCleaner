@@ -72,14 +72,14 @@ public class PathDeterminer extends Basic{
 		double angle = 0;
 		
 		double currentAngle = Movement.getAng();
-		double normedAngle = currentAngle % 360;
+		double normedAngle = getNormedAngle(currentAngle);
 
-		if(normedAngle < 180)
+		if(normedAngle >= 270 || normedAngle < 90)
 		{
-			gegenkathete = nearestNeighbour.getRow() - _robotPos.getRow();
+			gegenkathete = nearestNeighbour.getCol() - _robotPos.getCol();
 
 			//If target cell is right
-			if(nearestNeighbour.getCol() - _robotPos.getCol() > 0)
+			if(gegenkathete > 0)
 			{
 				radian = Math.asin(gegenkathete/hypotenuse);
 				angle = radian/Math.PI * 180;
@@ -90,24 +90,24 @@ public class PathDeterminer extends Basic{
 				radian = Math.asin(gegenkathete/hypotenuse);
 				angle = (radian/Math.PI * 180) + 180;
 			}	
-		} else if(normedAngle >= 180)
+		} else if(normedAngle >= 90 && normedAngle < 270)
 		{
-			gegenkathete = _robotPos.getRow() - nearestNeighbour.getRow();
+			gegenkathete = _robotPos.getCol() - nearestNeighbour.getCol();
 
-			//If target cell is right
-			if(nearestNeighbour.getCol() - _robotPos.getCol() > 0)
+			//If target cell is left
+			if(gegenkathete > 0)
 			{
 				radian = Math.asin(gegenkathete/hypotenuse);
 				angle = radian/Math.PI * 180;
 				
-			//If target cell is left
+			//If target cell is right
 			} else
 			{
 				radian = Math.asin(gegenkathete/hypotenuse);
-				angle = radian/Math.PI * 180;
+				angle = (radian/Math.PI * 180) + 180;
 			}
 		}
-		
+	
 		Movement.setAng(Movement.getAng() + angle);
 
 		
@@ -176,6 +176,17 @@ public class PathDeterminer extends Basic{
 //		Movement.setAng(Movement.getAng() + angle);
 	}
 
+
+	private double getNormedAngle(double currentAngle) 
+	{		
+		if(currentAngle < 0)
+		{
+			currentAngle = Math.abs(currentAngle);
+			currentAngle += 180;
+		}
+			
+		return currentAngle % 360;
+	}
 
 	private double calcDistance(Coordinates2D robotPos, Coordinates2D freeCell) 
 	{
