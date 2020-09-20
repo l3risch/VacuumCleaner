@@ -41,10 +41,22 @@ public class SpiralAlgorithm extends Basic implements ActionListener {
 
 		boolean accesableField;
 
-		accesableField = isFrontAccesable(_actualRow, _actualCol);
 		Coordinates2D nearestNeighbour = _pathDeterminer.getNearestNeighbour(_actualRow, _actualCol);
-		System.out.println(nearestNeighbour.getRow() + ", " +  nearestNeighbour.getCol());
 		
+		if(Movement.getAng()%90 != 0)
+		{
+			accesableField = super.isFrontAccesable(_actualRow, _actualCol);
+			if(!accesableField)
+			{
+				StartAlgorithm._timer.stop();
+				Movement.setAng(Movement.getAng() + Movement.getAng()%90);
+				StartAlgorithm._timer.start();	
+				
+			}
+		}
+		
+		accesableField = isFrontAccesable(_actualRow, _actualCol);
+
 		if(!accesableField)
 		{
 			
@@ -81,13 +93,12 @@ public class SpiralAlgorithm extends Basic implements ActionListener {
 					if(totallyCovered(_encircledArea))
 					{
 							StartAlgorithm._timer.stop();
+							System.out.println("Searching for Nearest Neighbour...");
 							_pathDeterminer.turnToNearestNeighbour(nearestNeighbour);
 							StartAlgorithm._timer.start();	
 							StartAlgorithm._timer.setDelay(100);	
 							Robot.getMovement().moveForward();
 							StartAlgorithm._timer.setDelay(50);	
-
-
 					}
 					
 					
@@ -108,12 +119,10 @@ public class SpiralAlgorithm extends Basic implements ActionListener {
 			if(totallyFreeDirection(_encircledArea, ScanDirection.LEFT))
 			{
 				Robot.getMovement().turnLeft();
-			} else if(totallyFreeDirection(_encircledArea, ScanDirection.RIGHT))
-			{
-				Robot.getMovement().turnRight();
 			} 
 			Robot.getMovement().moveForward();
 		}
+	
 		
 		_frame.repaint();
 		

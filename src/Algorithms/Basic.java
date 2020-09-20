@@ -451,38 +451,99 @@ public class Basic {
 		}
 		
 	}
+
 	
-	//Direction is totally covered, which means no obstacles, walls but the scanned area is totally covered in this direction
+	//Robot is completely surrounded by Obstacles and visited Cells
 	boolean totallyCovered(Coordinates2D[] scannedArea) {
 		
-		
-		int pixels = 0;
+		Coordinates2D[] up = new Coordinates2D[4];
+		Coordinates2D[] right = new Coordinates2D[4];
+		Coordinates2D[] down = new Coordinates2D[4];
+		Coordinates2D[] left = new Coordinates2D[4];
 
-		for(int i = 0; i < scannedArea.length; i++)
+		boolean upBlocked = false;
+		boolean rightBlocked = false;
+		boolean belowBlocked = false;
+		boolean leftBlocked = false;
+
+		int upFields = 0;
+		int rightFields = 0;
+		int belowFields = 0;
+		int leftFields = 0;
+
+
+		for(int i = 0; i < 4; i++)
 		{
-			try {
-				if(Table.getMarkedObstacles(scannedArea[i].getRow(), scannedArea[i].getCol()))
-				{
-					pixels += 1;
-				}
-				
-				if(Table.getPath(scannedArea[i].getRow(), scannedArea[i].getCol()))
-				{
-					pixels += 1;
-				}
-				
-				if(scannedArea[i].getRow() > 63 || scannedArea[i].getCol() > 63 || scannedArea[i].getRow() < 0 || scannedArea[i].getCol() < 0)
-				{
-					pixels += 1;
-				}
-			} catch(ArrayIndexOutOfBoundsException e)
+			up[i] = scannedArea[i];
+			right[i] = scannedArea[i+4];
+			down[i] = scannedArea[i+8];
+			left[i] = scannedArea[i+12];
+
+			if(up[i].getRow() > 63 || up[i].getCol() > 63 || up[i].getRow() < 0 || up[i].getCol() < 0)
 			{
-				e.getStackTrace();
-				return false;
+				upBlocked = true;
+			} else if(Table.getMarkedObstacles(up[i].getRow(), up[i].getCol()))
+			{
+				upBlocked = true;
+			} else if(Table.getPath(up[i].getRow(), up[i].getCol()))
+			{
+				upFields += 1;
+			}
+			if(upFields > 3)
+			{
+				upBlocked = true;
+			}
+			
+			
+			if(right[i].getRow() > 63 || right[i].getCol() > 63 || right[i].getRow() < 0 || right[i].getCol() < 0)
+			{
+				rightBlocked = true;
+			} else if(Table.getMarkedObstacles(right[i].getRow(), right[i].getCol()))
+			{
+				rightBlocked = true;
+			} else if(Table.getPath(right[i].getRow(), right[i].getCol()))
+			{
+				rightFields += 1;
+			}
+			if(rightFields > 3)
+			{
+				rightBlocked = true;
+			}
+			
+			
+			if(down[i].getRow() > 63 || down[i].getCol() > 63 || down[i].getRow() < 0 || down[i].getCol() < 0)
+			{
+				belowBlocked = true;
+			} else if(Table.getMarkedObstacles(down[i].getRow(), down[i].getCol()))
+			{
+				belowBlocked = true;
+			} else if(Table.getPath(down[i].getRow(), down[i].getCol()))
+			{
+				belowFields += 1;
+			}
+			if(belowFields > 3)
+			{
+				belowBlocked = true;
+			}
+			
+			
+			if(left[i].getRow() > 63 || left[i].getCol() > 63 || left[i].getRow() < 0 || left[i].getCol() < 0)
+			{
+				leftBlocked = true;
+			} else if(Table.getMarkedObstacles(left[i].getRow(), left[i].getCol()))
+			{
+				leftBlocked = true;
+			} else if(Table.getPath(left[i].getRow(), left[i].getCol()))
+			{
+				leftFields += 1;
+			}
+			if(leftFields > 3)
+			{
+				leftBlocked = true;
 			}
 		}
 		
-		if(pixels > 15)
+		if(upBlocked && leftBlocked && rightBlocked && belowBlocked)
 		{
 			return true;
 		} else {

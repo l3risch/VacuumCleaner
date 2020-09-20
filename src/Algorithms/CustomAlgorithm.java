@@ -1,152 +1,143 @@
 package Algorithms;
 
 import java.awt.event.ActionEvent;
+
 import java.awt.event.ActionListener;
 
+import Algorithms.Basic.ScanDirection;
 import Listener.StartAlgorithm;
 import Objects.Robot;
 import Objects.Table;
 import Physics.Coordinates2D;
 import Physics.Movement;
-import Physics.Movement.LastMove;
+import Physics.Sweeper;
+import Rendering.Renderer1;
 import main.MainFrame;
+import enums.Direction;
 
-public class CustomAlgorithm implements ActionListener{
 
-	
+public class CustomAlgorithm extends Basic implements ActionListener {
+
 	private MainFrame _frame; 
-	public boolean _distanceExceeded = false;
 	private int _actualRow;
 	private int _actualCol;
+	private Coordinates2D[] _encircledArea = new Coordinates2D[16];
+	private static PathDeterminer _pathDeterminer = new PathDeterminer();
 
-	
-	
-	public CustomAlgorithm(MainFrame frame) {
+
+
+	public CustomAlgorithm(MainFrame frame)
+	{
 		_frame = frame;
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
+	public void actionPerformed(ActionEvent arg0) {		
 		
 		_actualCol = Robot.getXasCol();
 		_actualRow = Robot.getYasRow();
+		_encircledArea = getEncircledScannedArea(_actualRow, _actualCol);
 		
-		
-		boolean unaccesableField;
 
-		unaccesableField = getSensorData(_actualRow, _actualCol);
+		boolean accesableField;
+
+		Coordinates2D nearestNeighbour = _pathDeterminer.getNearestNeighbour(_actualRow, _actualCol);
 		
-		if(unaccesableField)
+
+		accesableField = isFrontAccesable(_actualRow, _actualCol);
+
+
+		if(totallyFreeDirection(_encircledArea, ScanDirection.LEFT))
 		{
-			StartAlgorithm._timer.stop();
-			Robot.getMovement().turnRight();
-			StartAlgorithm._timer.start();
-		} else {
+			Robot.getMovement().turnLeft();
 			Robot.getMovement().moveForward();
-
-		}
-		
-		if(Movement._listOfMovements.size() > 3)
+		} else if(totallyFreeDirection(_encircledArea, ScanDirection.FRONT))
 		{
-			if(reachedStoppingCriteria())
+			Robot.getMovement().moveForward();
+		} else if(totallyFreeDirection(_encircledArea, ScanDirection.RIGHT))
+		{
+			Robot.getMovement().turnRight();
+			Robot.getMovement().moveForward();
+			
+			
+		} else if(partiallyFreeDirection(_encircledArea, ScanDirection.LEFT))
+		{
+			Robot.getMovement().turnLeft();
+			Robot.getMovement().moveForward();
+		} else if(partiallyFreeDirection(_encircledArea, ScanDirection.FRONT))
+		{
+			Robot.getMovement().moveForward();
+		} else if(partiallyFreeDirection(_encircledArea, ScanDirection.RIGHT))
+		{
+			Robot.getMovement().turnRight();
+			Robot.getMovement().moveForward();
+		} else if(totallyCovered(_encircledArea))
+		{
+			if(super.isFrontAccesable(_actualRow, _actualCol))
 			{
-				StartAlgorithm._timer.stop();
+//				System.out.println("Searching for Nearest Neighbour...");
+				_pathDeterminer.turnToNearestNeighbour(nearestNeighbour);
+				Robot.getMovement().moveForward();
+			} else 
+			{
+				if(Movement.getAng()%90 != 0)
+				{
+					Movement.setAng(Movement.getAng() + Movement.getAng()%90);
+				} else 
+				{
+					Robot.getMovement().turnRight();
+				}
 			}
+	
 		}
+	
+		
+		_frame.repaint();
+		
+		if(_actualRow >= 0 && _actualCol >= 0)
+		{
+			updateMap(_actualRow, _actualCol);
+		}
+	}	
+	
+	@Override
+	boolean isFrontAccesable(int row, int col)
+	{
+		Coordinates2D[] scannedArea = getEncircledScannedArea(row, col);
+		Coordinates2D[] frontOfRobot = determineScanDirections(scannedArea, ScanDirection.FRONT);
 
-		_frame.repaint();		
+		boolean accesable = true;
 		
-		
-	}
-
-	private boolean getSensorData(int row, int col) {
-
-		Coordinates2D[] scannedArea = getScannedArea(row, col);
-		
-		boolean unaccesable = false;
-		
-		for(int i = 0; i < scannedArea.length; i++)
+		for(int i = 0; i < frontOfRobot.length; i++)
 		try {
 
-			if(Table.getMarkedObstacles(scannedArea[i].getRow(), scannedArea[i].getCol()))
+			if(Table.getMarkedObstacles(frontOfRobot[i].getRow(), frontOfRobot[i].getCol()))
 			{
-				unaccesable = true;
-			} 
+				accesable = false;
+			}
 			
-	
+			if(Table._markedPath[frontOfRobot[i].getRow()][frontOfRobot[i].getCol()])
+			{
+				accesable = false;
+			}
+			
 		} catch(ArrayIndexOutOfBoundsException e)
 		{
 			e.getStackTrace();
-			unaccesable = true;
+			accesable = false;
 		}
 		
-		return unaccesable;
+		return accesable;
 	}
 
-	private Coordinates2D[] getScannedArea(int row, int col) {
-		
-		Coordinates2D[][] arrayPosition = new Coordinates2D[4][4];
-		arrayPosition = Robot.getCoordinates(row, col);
-
-		Coordinates2D[] scannedArea = new Coordinates2D[4];
-		switch(Movement._dir) {
-		case UP:
-			
-			for(int j = 0; j <4; j++)
-			{
-				arrayPosition[0][j].setRow(arrayPosition[0][j].getRow() + (int) Math.sin(Math.toRadians(Movement._ang)));
-				scannedArea[j] = arrayPosition[0][j];
-			}
-			
-		break;
-		case DOWN:
-			
-			for(int j = 0; j <4; j++)
-			{
-				arrayPosition[3][j].setRow(arrayPosition[3][j].getRow() + (int) Math.sin(Math.toRadians(Movement._ang)));
-				scannedArea[j] = arrayPosition[3][j];
-			}
-		break;
-		case RIGHT:
-			
-			for(int i = 0; i <4; i++)
-			{
-				arrayPosition[i][3].setCol(arrayPosition[i][3].getCol() + (int) Math.cos(Math.toRadians(Movement._ang)));
-				scannedArea[i] = arrayPosition[i][3];
-			}
-		break;
-		case LEFT:
-			
-			for(int i = 0; i <4; i++)
-			{
-				arrayPosition[i][0].setCol(arrayPosition[i][0].getCol() + (int) Math.cos(Math.toRadians(Movement._ang)));
-				scannedArea[i] = arrayPosition[i][0];
-			}
-		break;
-		
-		default:
-			System.out.println("Direction not defined!");
-			break;
-		}
-		
-		return scannedArea;
-	}
-
+    
+	
 	private boolean reachedStoppingCriteria() {
-		int count = 0;
-		
-		for(int i = 1; i <= 4; i++)
-		if(Movement._listOfMovements.get(Movement._listOfMovements.size()-i) == LastMove.RIGHT)
-		{
-			count += 1;
-		}
-		
-		if(count > 3)
-		{
-			return true;
-		} 
-		
 		return false;
 	}
 	
+	public static PathDeterminer getPathDeterminer()
+	{
+		return _pathDeterminer;
+	}
 }
