@@ -55,7 +55,7 @@ public class SpiralAlgorithm extends Basic implements ActionListener {
 			{
 				
 				//Check if front of robot is covered path
-				if(partiallyCoveredPathInDircetion(_encircledArea, ScanDirection.FRONT))
+				if(partiallyCoveredPathInDirection(_encircledArea, ScanDirection.FRONT))
 				{
 					Robot.getMovement().moveForward();
 					
@@ -81,10 +81,12 @@ public class SpiralAlgorithm extends Basic implements ActionListener {
 					if(totallyCovered(_encircledArea))
 					{
 							StartAlgorithm._timer.stop();
-							_pathDeterminer.moveToNearestNeighbour(nearestNeighbour);
+							_pathDeterminer.turnToNearestNeighbour(nearestNeighbour);
 							StartAlgorithm._timer.start();	
-						
+							StartAlgorithm._timer.setDelay(100);	
 							Robot.getMovement().moveForward();
+							StartAlgorithm._timer.setDelay(50);	
+
 
 					}
 					
@@ -106,7 +108,10 @@ public class SpiralAlgorithm extends Basic implements ActionListener {
 			if(totallyFreeDirection(_encircledArea, ScanDirection.LEFT))
 			{
 				Robot.getMovement().turnLeft();
-			}
+			} else if(totallyFreeDirection(_encircledArea, ScanDirection.RIGHT))
+			{
+				Robot.getMovement().turnRight();
+			} 
 			Robot.getMovement().moveForward();
 		}
 		

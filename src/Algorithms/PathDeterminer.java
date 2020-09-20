@@ -64,7 +64,7 @@ public class PathDeterminer extends Basic{
 		return nearestCell;
 	}
 	
-	public void moveToNearestNeighbour(Coordinates2D nearestNeighbour)
+	public void turnToNearestNeighbour(Coordinates2D nearestNeighbour)
 	{
 		double hypotenuse = _distance;
 		double gegenkathete;

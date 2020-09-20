@@ -389,7 +389,7 @@ public class Basic {
 	
 	
 	//Direction is covered, which means no obstacles or walls but parts of the scanned area are covered in this direction
-	boolean partiallyCoveredPathInDircetion(Coordinates2D[] scannedArea, ScanDirection direction)
+	boolean partiallyCoveredPathInDirection(Coordinates2D[] scannedArea, ScanDirection direction)
 	{
 		Coordinates2D[] scanArea = determineScanDirections(scannedArea, direction);
 
