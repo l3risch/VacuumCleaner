@@ -223,9 +223,36 @@ public class Renderer1 extends JPanel{
 			return null;
 	}
 	
-	public void clearOpacity()
+	public void clearMarks()
 	{
+		//Clear marked free cells
+		for(String key : Basic._mentalMap.keySet())
+ 		{
+			int row = Integer.parseInt(key.substring(0, 2));
+			int col = Integer.parseInt(key.substring(2, 4));
+
+
+			if(Basic._mentalMap.get(key).equals(CellState.FREE))
+ 			{
+					_g.setColor(new Color(0,0,0,0));
+					_g.fillRect(col * 10 + 100, row * 10 + 140, 10, 10);
+					_g.setColor(Color.BLACK);
+ 			}	
+		
+ 		}
+		
+		//Clear nearest free cell
+		if(SpiralAlgorithm.getPathDeterminer() != null)
+		{
+			PathDeterminer path = SpiralAlgorithm.getPathDeterminer();
+			Coordinates2D nn = path.getNearestNeighbour(Robot.getYasRow(), Robot.getXasCol());
+			_g.setColor(new Color(0,0,0,0));
+			_g.fillRect(nn.getCol() * 10 + 100, nn.getRow() * 10 + 140, 10, 10);
+			_g.setColor(Color.BLACK);
+		}
+		
 		_opacity = new int[Table._rows][Table._cols];
+		Basic._mentalMap.clear();
 	}
 	
 	public static void paintFreeCells()

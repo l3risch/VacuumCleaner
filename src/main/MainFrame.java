@@ -103,8 +103,7 @@ public class MainFrame extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				
 			Table.setType(comboBox_2.getSelectedItem().toString());
-			Robot.setStartingPos(1, 60);
-			_render.clearOpacity();
+			_render.clearMarks();
 
 			_contentPane.repaint();
 			}
@@ -121,7 +120,7 @@ public class MainFrame extends JFrame{
 			}
 			
 			Robot.setRandomStartingPos();
-			_render.clearOpacity();
+			_render.clearMarks();
 			new MapGenerator();
 
 			_contentPane.repaint();
@@ -146,7 +145,7 @@ public class MainFrame extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				
 			Table.clearMarkedPath();
-			_render.clearOpacity();
+			_render.clearMarks();
 			Robot.setStartingPos(Robot._startingPos.getRow(), Robot._startingPos.getCol());
 			_contentPane.repaint();
 			}

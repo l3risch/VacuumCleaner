@@ -44,12 +44,12 @@ public class Table {
 		break;
 		case "5": setType5();
 		break;
-		case "6": setType6();
-		break;
 		}
 	}
 
 	private static void setType1() {
+		Robot.setStartingPos(5, 5);
+
 		_rows = 64;
 		_cols = 64;
 		_markedPath = new boolean[_rows][_cols];
@@ -58,6 +58,8 @@ public class Table {
 	}
 
 	private static void setType2() {
+		Robot.setStartingPos(5, 5);
+
 		_rows = 64;
 		_cols = 64;
 		_markedPath = new boolean[_rows][_cols];
@@ -85,6 +87,8 @@ public class Table {
 	}
 	
 	private static void setType3() {
+		Robot.setStartingPos(5, 5);
+
 		_rows = 64;
 		_cols = 64;
 		_markedPath = new boolean[_rows][_cols];
@@ -119,6 +123,8 @@ public class Table {
 	}
 	
 	private static void setType4() {
+		Robot.setStartingPos(5, 5);
+
 		_rows = 64;
 		_cols = 52;
 		_markedPath = new boolean[_rows][_cols];
@@ -148,32 +154,24 @@ public class Table {
 	
 
 	private static void setType5() {
+		Robot.setStartingPos(27, 27);
 		_rows = 64;
 		_cols = 64;
 		_markedPath = new boolean[_rows][_cols];
 		_markedObstacles = new boolean[_rows][_cols];
 		_listObs = new ArrayList<Obstacle>();
 		
-		Obstacle obs1 = new Obstacle(220, 260, 400, 400, Shape.RECTANGLE);	
+		Obstacle obs1 = new Obstacle(420, 310, 170, 150, Shape.RECTANGLE);	
+		Obstacle obs2 = new Obstacle(700, 330, 40, 70, Shape.RECTANGLE);
 		
 		_listObs.add(obs1);
-		
+		_listObs.add(obs2);
+
 		markObstacles();
 	}
 	
-	private static void setType6() {
-		_rows = 64;
-		_cols = 64;
-		_markedPath = new boolean[_rows][_cols];
-		_markedObstacles = new boolean[_rows][_cols];
-		_listObs = new ArrayList<Obstacle>();
-		
-		Obstacle obs1 = new Obstacle(220, 260, 400, 400, Shape.OVAL);	
-		
-		_listObs.add(obs1);
-		
-		markObstacles();
-	}
+
+	
 	
 	public static void setRandomMap(List<Obstacle> listObs)
 	{

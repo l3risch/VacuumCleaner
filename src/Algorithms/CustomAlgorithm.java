@@ -78,11 +78,12 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 //				System.out.println("Searching for Nearest Neighbour...");
 				_pathDeterminer.turnToNearestNeighbour(nearestNeighbour);
 				Robot.getMovement().moveForward();
+				System.out.println(Movement.getAng());
 			} else 
 			{
 				if(Movement.getAng()%90 != 0)
 				{
-					Movement.setAng(Movement.getAng() + Movement.getAng()%90);
+					Movement.setAng(Movement.getAng() + (90 - (Movement.getAng()%90)));
 				} else 
 				{
 					Robot.getMovement().turnRight();
