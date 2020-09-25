@@ -72,16 +72,15 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 		{
 			Robot.getMovement().turnRight();
 			Robot.getMovement().moveForward();
-		} else if(totallyCovered(_actualRow, _actualCol, _encircledArea))
+		} else if(totallyCovered(_encircledArea))
 		{
 			if(super.isFrontAccesable(_actualRow, _actualCol))
 			{
-				System.out.println("NN: " + nearestNeighbour.getRow() +", " + nearestNeighbour.getCol() +"\nOld: " + _oldNearestNeighbour.getRow() + ", " + _oldNearestNeighbour.getCol() + "\n\n");
 				//Check if nearest neighbour has changed
 				if(nearestNeighbour.getRow() != _oldNearestNeighbour.getRow() && nearestNeighbour.getCol() != _oldNearestNeighbour.getCol())
 				{
 					_pathDeterminer.turnToNearestNeighbour(nearestNeighbour);
-					System.out.println(Movement.getAng());
+					//System.out.println(Movement.getAng());
 					_oldNearestNeighbour = nearestNeighbour;
 				}
 					Robot.getMovement().moveForward();
@@ -105,7 +104,35 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 		{
 			updateMap(_actualRow, _actualCol);
 		}
-
+		
+//		for(int i = 0; i < 4; i++)
+//		{
+//			for(int j = 0; j < 4; j++)
+//			{
+//				System.out.println(Robot.getCoordinates(_actualRow, _actualCol)[i][j].getRow() +", "+Robot.getCoordinates(_actualRow, _actualCol)[i][j].getCol());
+//			}
+//		}
+		
+//		Coordinates2D[] front = getScannedArea(_actualRow, _actualCol, ScanDirection.FRONT);
+//		for(int i = 0; i <4; i++)
+//		{
+//			System.out.println("front area("+i+"): "+front[i].getRow()+", "+ front[i].getCol());
+//		}
+//		Coordinates2D[] left = getScannedArea(_actualRow, _actualCol, ScanDirection.LEFT);
+//		for(int i = 0; i <4; i++)
+//		{
+//			System.out.println("left area("+i+"): "+left[i].getRow()+", "+ left[i].getCol());
+//		}
+//		Coordinates2D[] right = getScannedArea(_actualRow, _actualCol, ScanDirection.RIGHT);
+//		for(int i = 0; i <4; i++)
+//		{
+//			System.out.println("right area("+i+"): "+right[i].getRow()+", "+ right[i].getCol());
+//		}
+//		Coordinates2D[] back = getScannedArea(_actualRow, _actualCol, ScanDirection.BACK);
+//		for(int i = 0; i <4; i++)
+//		{
+//			System.out.println("back area("+i+"): "+back[i].getRow()+", "+ back[i].getCol());
+//		}
 	}	
 	
 	@Override
