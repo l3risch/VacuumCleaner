@@ -123,6 +123,7 @@ public class Movement {
 		_x = 100 + 10 * (int) (Math.random() * 60);
 		_y = 140 + 10 * (int) (Math.random() * 60);
 		_ang = 270;
+		//_ang = 90 * (int) (Math.random() * 4);
 	}
 
 	public void setStartingPosition(int rows, int cols)

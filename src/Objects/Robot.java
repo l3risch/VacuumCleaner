@@ -29,6 +29,7 @@ public class Robot {
 		_y = _move.getY();
 		_initY = _move.getY();
 
+		_startingPos = new Coordinates2D(getYasRow(), getXasCol());
 	}
 	
 	public static void setRandomStartingPos()

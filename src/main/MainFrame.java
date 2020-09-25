@@ -101,7 +101,7 @@ public class MainFrame extends JFrame{
 		comboBox_2.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
-				
+
 			Table.setType(comboBox_2.getSelectedItem().toString());
 			_render.clearMarks();
 

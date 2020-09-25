@@ -69,7 +69,7 @@ public class PathDeterminer extends Basic{
 		double hypotenuse = _distance;
 		double gegenkathete;
 		double radian;
-		double angle = 0;
+		double angle = Movement.getAng();
 		
 		double currentAngle = Movement.getAng();
 		double normedAngle = getNormedAngle(currentAngle);

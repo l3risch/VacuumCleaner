@@ -20,7 +20,7 @@ public class Basic {
 	
 	boolean isFrontAccesable(int row, int col)
 	{
-		Coordinates2D[] scannedArea = getScannedArea(row, col);
+		Coordinates2D[] scannedArea = getScannedFrontArea(row, col);
 
 		boolean accesable = true;
 		
@@ -41,7 +41,7 @@ public class Basic {
 		return accesable;
 	}
 
-	Coordinates2D[] getScannedArea(int row, int col) {
+	Coordinates2D[] getScannedFrontArea(int row, int col) {
 				
 		Coordinates2D[][] oldArrayPosition = new Coordinates2D[4][4];
 		oldArrayPosition = Robot.getCoordinates(row, col);
@@ -57,8 +57,10 @@ public class Basic {
 				int robotRow = Robot.getCoordinates(row, col)[i][j].getRow();
 				int robotCol = Robot.getCoordinates(row, col)[i][j].getCol();
 
-				Table.markPath(robotRow, robotCol);
-				
+				if(robotRow >= 0 && robotRow < 64 && robotCol >= 0 && robotCol < 64)
+				{
+					Table.markPath(robotRow, robotCol);
+				}
 				//Copy old array into new array
 				newArrayPosition[i][j] = Coordinates2D.copyOf(oldArrayPosition[i][j]);
 				
@@ -124,7 +126,7 @@ public class Basic {
 	public Coordinates2D[] getEncircledScannedArea(int row, int col) 
 	{
 		//Get scanned area in front of the robot
-		Coordinates2D[] scannedArea = getScannedArea(row, col);
+		Coordinates2D[] scannedArea = getScannedFrontArea(row, col);
 		
 		Coordinates2D[] circledArea = new Coordinates2D[16];
 		
@@ -454,7 +456,7 @@ public class Basic {
 
 	
 	//Robot is completely surrounded by Obstacles and visited Cells
-	boolean totallyCovered(Coordinates2D[] scannedArea) {
+	boolean totallyCovered(int row, int col, Coordinates2D[] scannedArea) {
 		
 		Coordinates2D[] up = new Coordinates2D[4];
 		Coordinates2D[] right = new Coordinates2D[4];
@@ -471,7 +473,14 @@ public class Basic {
 		int belowFields = 0;
 		int leftFields = 0;
 
-
+//		for(int i = 0; i < 4; i++)
+//		{
+//			for(int j = 0; j < 4; j++)
+//			{
+//				System.out.println(Robot.getCoordinates(row, col)[i][j].getRow() +", "+Robot.getCoordinates(row, col)[i][j].getCol());
+//			}
+//		}
+		
 		for(int i = 0; i < 4; i++)
 		{
 			up[i] = scannedArea[i];
@@ -479,6 +488,7 @@ public class Basic {
 			down[i] = scannedArea[i+8];
 			left[i] = scannedArea[i+12];
 
+			//System.out.println(up[i].getRow()+", "+ up[i].getCol()+" | " +right[i].getRow()+", "+ right[i].getCol()+" | " +down[i].getRow()+", "+ down[i].getCol()+" | " +left[i].getRow()+", "+ left[i].getCol()+"\n");
 			if(up[i].getRow() > 63 || up[i].getCol() > 63 || up[i].getRow() < 0 || up[i].getCol() < 0)
 			{
 				upBlocked = true;
@@ -672,7 +682,7 @@ public class Basic {
 	protected static String generateKey(int row, int col) 
 	{
 		String rowStr;
-		if((row) < 10)
+		if(row >= 0 && row < 10)
 		{
 			rowStr = "0" + (row);
 		} else {
@@ -680,7 +690,7 @@ public class Basic {
 		}
 		
 		String colStr;
-		if((col) < 10)
+		if(col >= 0 && col < 10)
 		{
 			colStr = "0" + (col);
 		} else {

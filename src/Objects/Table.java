@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import Objects.Obstacle.Shape;
+import Physics.Movement;
 import Physics.Sweeper;
 import Rendering.Renderer1;
 
@@ -155,6 +156,7 @@ public class Table {
 
 	private static void setType5() {
 		Robot.setStartingPos(27, 27);
+		Movement.setAng(270);
 		_rows = 64;
 		_cols = 64;
 		_markedPath = new boolean[_rows][_cols];
@@ -163,9 +165,24 @@ public class Table {
 		
 		Obstacle obs1 = new Obstacle(420, 310, 170, 150, Shape.RECTANGLE);	
 		Obstacle obs2 = new Obstacle(700, 330, 40, 70, Shape.RECTANGLE);
+		Obstacle obs3 = new Obstacle(140, 140, 70, 150, Shape.RECTANGLE);	
+		Obstacle obs4 = new Obstacle(100, 630, 120, 70, Shape.RECTANGLE);
+		Obstacle obs5 = new Obstacle(210, 240, 80, 50, Shape.RECTANGLE);	
+		Obstacle obs6 = new Obstacle(580, 360, 60, 70, Shape.RECTANGLE);
+		Obstacle obs7 = new Obstacle(140, 640, 50, 40, Shape.RECTANGLE);	
+		Obstacle obs8 = new Obstacle(480, 260, 110, 50, Shape.RECTANGLE);
+		Obstacle obs9 = new Obstacle(100, 410, 230, 20, Shape.RECTANGLE);	
 		
 		_listObs.add(obs1);
 		_listObs.add(obs2);
+		_listObs.add(obs3);
+		_listObs.add(obs4);
+		_listObs.add(obs5);
+		_listObs.add(obs6);
+		_listObs.add(obs7);
+		_listObs.add(obs8);
+		_listObs.add(obs9);
+
 
 		markObstacles();
 	}

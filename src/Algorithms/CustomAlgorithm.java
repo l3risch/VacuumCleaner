@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 
 import java.awt.event.ActionListener;
 
+import Algorithms.Basic.CellState;
 import Algorithms.Basic.ScanDirection;
 import Listener.StartAlgorithm;
 import Objects.Robot;
@@ -23,6 +24,7 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 	private int _actualCol;
 	private Coordinates2D[] _encircledArea = new Coordinates2D[16];
 	private static PathDeterminer _pathDeterminer = new PathDeterminer();
+	private Coordinates2D _oldNearestNeighbour = new Coordinates2D(0, 0);
 
 
 
@@ -38,14 +40,13 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 		_actualRow = Robot.getYasRow();
 		_encircledArea = getEncircledScannedArea(_actualRow, _actualCol);
 		
-
-		boolean accesableField;
-
 		Coordinates2D nearestNeighbour = _pathDeterminer.getNearestNeighbour(_actualRow, _actualCol);
 		
-
-		accesableField = isFrontAccesable(_actualRow, _actualCol);
-
+		
+		if(reachedStoppingCriteria())
+		{
+			StartAlgorithm._timer.stop();
+		}
 
 		if(totallyFreeDirection(_encircledArea, ScanDirection.LEFT))
 		{
@@ -71,14 +72,19 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 		{
 			Robot.getMovement().turnRight();
 			Robot.getMovement().moveForward();
-		} else if(totallyCovered(_encircledArea))
+		} else if(totallyCovered(_actualRow, _actualCol, _encircledArea))
 		{
 			if(super.isFrontAccesable(_actualRow, _actualCol))
 			{
-//				System.out.println("Searching for Nearest Neighbour...");
-				_pathDeterminer.turnToNearestNeighbour(nearestNeighbour);
-				Robot.getMovement().moveForward();
-				System.out.println(Movement.getAng());
+				System.out.println("NN: " + nearestNeighbour.getRow() +", " + nearestNeighbour.getCol() +"\nOld: " + _oldNearestNeighbour.getRow() + ", " + _oldNearestNeighbour.getCol() + "\n\n");
+				//Check if nearest neighbour has changed
+				if(nearestNeighbour.getRow() != _oldNearestNeighbour.getRow() && nearestNeighbour.getCol() != _oldNearestNeighbour.getCol())
+				{
+					_pathDeterminer.turnToNearestNeighbour(nearestNeighbour);
+					System.out.println(Movement.getAng());
+					_oldNearestNeighbour = nearestNeighbour;
+				}
+					Robot.getMovement().moveForward();
 			} else 
 			{
 				if(Movement.getAng()%90 != 0)
@@ -99,6 +105,7 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 		{
 			updateMap(_actualRow, _actualCol);
 		}
+
 	}	
 	
 	@Override
@@ -133,8 +140,19 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 
     
 	
-	private boolean reachedStoppingCriteria() {
-		return false;
+	private boolean reachedStoppingCriteria() 
+	{
+		for(int i = 0; i < Table._rows; i++)
+		{
+			for(int j = 0; j < Table._cols; j++)
+			{
+				if(Table.getPath(i, j) == true)
+				{
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 	
 	public static PathDeterminer getPathDeterminer()
