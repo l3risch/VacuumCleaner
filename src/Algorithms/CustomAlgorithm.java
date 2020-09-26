@@ -25,6 +25,8 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 	private Coordinates2D[] _encircledArea = new Coordinates2D[16];
 	private static PathDeterminer _pathDeterminer = new PathDeterminer();
 	private Coordinates2D _oldNearestNeighbour = new Coordinates2D(0, 0);
+	
+	int _flag = 0;
 
 
 
@@ -47,52 +49,81 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 		{
 			StartAlgorithm._timer.stop();
 		}
-
+		
 		if(totallyFreeDirection(_encircledArea, ScanDirection.LEFT))
 		{
+			if(Movement.getAng()%90 != 0)
+			{
+				roundAngle(Movement.getAng());
+			}
+			
 			Robot.getMovement().turnLeft();
 			Robot.getMovement().moveForward();
 		} else if(totallyFreeDirection(_encircledArea, ScanDirection.FRONT))
 		{
+			if(Movement.getAng()%90 != 0)
+			{
+				roundAngle(Movement.getAng());
+			}
 			Robot.getMovement().moveForward();
 		} else if(totallyFreeDirection(_encircledArea, ScanDirection.RIGHT))
 		{
+			if(Movement.getAng()%90 != 0)
+			{
+				roundAngle(Movement.getAng());
+			}
 			Robot.getMovement().turnRight();
 			Robot.getMovement().moveForward();
 			
 			
 		} else if(partiallyFreeDirection(_encircledArea, ScanDirection.LEFT))
 		{
+			if(Movement.getAng()%90 != 0)
+			{
+				roundAngle(Movement.getAng());
+			}
 			Robot.getMovement().turnLeft();
 			Robot.getMovement().moveForward();
 		} else if(partiallyFreeDirection(_encircledArea, ScanDirection.FRONT))
 		{
+			if(Movement.getAng()%90 != 0)
+			{
+				roundAngle(Movement.getAng());
+			}
 			Robot.getMovement().moveForward();
 		} else if(partiallyFreeDirection(_encircledArea, ScanDirection.RIGHT))
 		{
+			if(Movement.getAng()%90 != 0)
+			{
+				roundAngle(Movement.getAng());
+			}
 			Robot.getMovement().turnRight();
 			Robot.getMovement().moveForward();
 		} else if(totallyCovered(_encircledArea))
 		{
 			if(super.isFrontAccesable(_actualRow, _actualCol))
 			{
-				//Check if nearest neighbour has changed
-				if(nearestNeighbour.getRow() != _oldNearestNeighbour.getRow() && nearestNeighbour.getCol() != _oldNearestNeighbour.getCol())
-				{
-					_pathDeterminer.turnToNearestNeighbour(nearestNeighbour);
-					//System.out.println(Movement.getAng());
-					_oldNearestNeighbour = nearestNeighbour;
-				}
-					Robot.getMovement().moveForward();
+				_pathDeterminer.turnToNearestNeighbour(nearestNeighbour);
+				_flag = 1;
+			}
+			
+			if(super.isFrontAccesable(_actualRow, _actualCol))
+			{
+				Robot.getMovement().moveForward();
 			} else 
 			{
-				if(Movement.getAng()%90 != 0)
+				while(!super.isFrontAccesable(_actualRow, _actualCol))
 				{
-					Movement.setAng(Movement.getAng() + (90 - (Movement.getAng()%90)));
-				} else 
-				{
-					Robot.getMovement().turnRight();
+					if(Movement.getAng()%90 != 0)
+					{
+						Movement.setAng(Movement.getAng() + (90 - (Movement.getAng()%90)));
+						System.out.println(Movement.getAng());
+					} else 
+					{
+						Robot.getMovement().turnRight();
+					}
 				}
+				Robot.getMovement().moveForward();
 			}
 	
 		}
@@ -135,6 +166,22 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 //		}
 	}	
 	
+	private void roundAngle(double ang) 
+	{
+		System.out.println("ang: "+ang);
+		double rest = (ang%90) / 90;
+		System.out.println("rest: " + rest);
+		double roundAngle;
+		if(rest >= 0.5)
+		{
+			roundAngle = ang  + (90 - (ang%90));
+		} else {
+			roundAngle = ang - (ang%90);
+		}
+		System.out.println("round: "+roundAngle);
+		Movement.setAng(roundAngle);
+	}
+
 	@Override
 	boolean isFrontAccesable(int row, int col)
 	{
