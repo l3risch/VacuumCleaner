@@ -24,8 +24,9 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 	private int _actualCol;
 	private Coordinates2D[] _encircledArea = new Coordinates2D[16];
 	private static PathDeterminer _pathDeterminer = new PathDeterminer();
+	Coordinates2D _nearestNeighbour = new Coordinates2D(0, 0);
 
-
+	boolean _nnVisited = true;
 
 	public CustomAlgorithm(MainFrame frame)
 	{
@@ -38,10 +39,7 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 		_actualCol = Robot.getXasCol();
 		_actualRow = Robot.getYasRow();
 		_encircledArea = getEncircledScannedArea(_actualRow, _actualCol);
-		
-		Coordinates2D nearestNeighbour = _pathDeterminer.getNearestNeighbour(_actualRow, _actualCol);
-		
-		
+				
 		if(reachedStoppingCriteria())
 		{
 			StartAlgorithm._timer.stop();
@@ -100,7 +98,21 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 		{
 			if(super.isFrontAccesable(_actualRow, _actualCol))
 			{
-				_pathDeterminer.turnToNearestNeighbour(nearestNeighbour);
+				String key = generateKey(_nearestNeighbour.getRow(), _nearestNeighbour.getCol());
+
+				if( _mentalMap.get(key).equals(CellState.VISITED))
+				{
+					System.out.println(_nearestNeighbour.getRow() +", " +_nearestNeighbour.getCol() + " visited");
+					_nnVisited = true;
+					_nearestNeighbour = _pathDeterminer.getNearestNeighbour(_actualRow, _actualCol);
+					System.out.println("NEW: "+_nearestNeighbour.getRow() +", " +_nearestNeighbour.getCol());
+				}
+				if(_nnVisited)
+				{
+					_pathDeterminer.turnToNearestNeighbour(_nearestNeighbour);
+					System.out.println("Ang: "+Movement.getAng());
+					_nnVisited = false;
+				}
 			}
 			
 			if(super.isFrontAccesable(_actualRow, _actualCol))
@@ -108,12 +120,14 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 				Robot.getMovement().moveForward();
 			} else 
 			{
+				//TODO: Wall Following
+				//TODO: After Obstacle is bypassed and nn is not visited, new Path has to be calcuated
+				
 				while(!super.isFrontAccesable(_actualRow, _actualCol))
 				{
 					if(Movement.getAng()%90 != 0)
 					{
 						Movement.setAng(Movement.getAng() + (90 - (Movement.getAng()%90)));
-						System.out.println(Movement.getAng());
 					} else 
 					{
 						Robot.getMovement().turnRight();
@@ -127,46 +141,18 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 		
 		_frame.repaint();
 		
+		_nearestNeighbour = _pathDeterminer.getNearestNeighbour(_actualRow, _actualCol);
+		
 		if(_actualRow >= 0 && _actualCol >= 0)
 		{
 			updateMap(_actualRow, _actualCol);
 		}
 		
-//		for(int i = 0; i < 4; i++)
-//		{
-//			for(int j = 0; j < 4; j++)
-//			{
-//				System.out.println(Robot.getCoordinates(_actualRow, _actualCol)[i][j].getRow() +", "+Robot.getCoordinates(_actualRow, _actualCol)[i][j].getCol());
-//			}
-//		}
-		
-//		Coordinates2D[] front = getScannedArea(_actualRow, _actualCol, ScanDirection.FRONT);
-//		for(int i = 0; i <4; i++)
-//		{
-//			System.out.println("front area("+i+"): "+front[i].getRow()+", "+ front[i].getCol());
-//		}
-//		Coordinates2D[] left = getScannedArea(_actualRow, _actualCol, ScanDirection.LEFT);
-//		for(int i = 0; i <4; i++)
-//		{
-//			System.out.println("left area("+i+"): "+left[i].getRow()+", "+ left[i].getCol());
-//		}
-//		Coordinates2D[] right = getScannedArea(_actualRow, _actualCol, ScanDirection.RIGHT);
-//		for(int i = 0; i <4; i++)
-//		{
-//			System.out.println("right area("+i+"): "+right[i].getRow()+", "+ right[i].getCol());
-//		}
-//		Coordinates2D[] back = getScannedArea(_actualRow, _actualCol, ScanDirection.BACK);
-//		for(int i = 0; i <4; i++)
-//		{
-//			System.out.println("back area("+i+"): "+back[i].getRow()+", "+ back[i].getCol());
-//		}
 	}	
 	
 	private void roundAngle(double ang) 
 	{
-		System.out.println("ang: "+ang);
 		double rest = (ang%90) / 90;
-		System.out.println("rest: " + rest);
 		double roundAngle;
 		if(rest >= 0.5)
 		{
@@ -174,7 +160,6 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 		} else {
 			roundAngle = ang - (ang%90);
 		}
-		System.out.println("round: "+roundAngle);
 		Movement.setAng(roundAngle);
 	}
 
