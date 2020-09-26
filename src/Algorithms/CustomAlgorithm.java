@@ -24,9 +24,6 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 	private int _actualCol;
 	private Coordinates2D[] _encircledArea = new Coordinates2D[16];
 	private static PathDeterminer _pathDeterminer = new PathDeterminer();
-	private Coordinates2D _oldNearestNeighbour = new Coordinates2D(0, 0);
-	
-	int _flag = 0;
 
 
 
@@ -104,7 +101,6 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 			if(super.isFrontAccesable(_actualRow, _actualCol))
 			{
 				_pathDeterminer.turnToNearestNeighbour(nearestNeighbour);
-				_flag = 1;
 			}
 			
 			if(super.isFrontAccesable(_actualRow, _actualCol))

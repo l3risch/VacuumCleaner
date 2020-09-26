@@ -28,13 +28,12 @@ import Objects.Robot;
 import Objects.Table;
 import Physics.Coordinates2D;
 import Physics.Movement;
-import Physics.Sweeper;
 
 public class Renderer1 extends JPanel{
 			
 	private static Graphics _g;
 
-	private int[][] _opacity = new int[Table._rows][Table._cols];
+	private static int[][] _opacity = new int[Table._rows][Table._cols];
 	
 	public Renderer1()
 	{
@@ -49,9 +48,7 @@ public class Renderer1 extends JPanel{
 		_g = g;
         super.paintComponent(_g);
 		
-        colorFloor();
-        paintFreeCells();
-        paintNearestCell();
+        paintCells();
 		renderRobot(_g);
 		renderTable();	
 	}
@@ -84,26 +81,6 @@ public class Renderer1 extends JPanel{
 		_g.dispose();
 	}
 
-
-	private void colorFloor()
-	{
-		Coordinates2D[][] coordinates = Robot.getCoordinates(Robot.getYasRow(), Robot.getXasCol());
-		
-		//Reset opacity after each run
-		for(int i = 0; i < 4; i++)
-		{
-			for(int j = 0; j < 4; j++)
-			{
-				if(_opacity[coordinates[i][j].getRow()][coordinates[i][j].getCol()] < 235)
-				{
-				_opacity[coordinates[i][j].getRow()][coordinates[i][j].getCol()] = _opacity[coordinates[i][j].getRow()][coordinates[i][j].getCol()] + 20;
-			
-				}
-			}
-		}
-	
-		colorPath();
-	}
 	
 	private BufferedImage rotateRobot(double angle, Image img)
 	{
@@ -158,26 +135,6 @@ public class Renderer1 extends JPanel{
 	    return resizedImg;
 	}
 
-	
-
-	private void colorPath() 
-	{		
-		for(int row = 0; row < Table._rows; row++)
-		{
-			for(int col = 0; col < Table._cols; col++)
-			{
-				if(Table.getPath(row, col))
-				{
-					Color color = new Color(55, 235, 52, _opacity[row][col]);
-					_g.setColor(color);
-					_g.fillRect(col * 10 + 100, row * 10 + 140, 10, 10);
-					_g.setColor(Color.BLACK);
-				}
-				
-			}
-		}
-
-	}
 	
 	private void getObstacle(Obstacle obs) {
 		
@@ -255,23 +212,56 @@ public class Renderer1 extends JPanel{
 		Basic._mentalMap.clear();
 	}
 	
-	public static void paintFreeCells()
+	public static void paintCells()
 	{
-		for(String key : Basic._mentalMap.keySet())
+		resetOpacity();
+		for(String key : Basic._mentalMap.keySet())
  		{
 			int row = Integer.parseInt(key.substring(0, 2));
 			int col = Integer.parseInt(key.substring(2, 4));
 
 
 			if(Basic._mentalMap.get(key).equals(CellState.FREE))
- 			{					_g.setColor(Color.GRAY);					_g.fillRect(col * 10 + 100, row * 10 + 140, 10, 10);					_g.setColor(Color.BLACK); 			}	
+ 			{
+					_g.setColor(Color.GRAY);
+					_g.fillRect(col * 10 + 100, row * 10 + 140, 10, 10);
+					_g.setColor(Color.BLACK);
+ 			}	
+			
+			if(Basic._mentalMap.get(key).equals(CellState.VISITED) && row <64 && row >= 0 && col <64 && col >= 0)
+			{
+				Color color = new Color(55, 235, 52,  _opacity[row][col]);
+				_g.setColor(color);
+				_g.fillRect(col * 10 + 100, row * 10 + 140, 10, 10);
+				_g.setColor(Color.BLACK);
+			}
 		
  		}
+		
+		paintNearestCell();
+
+	}
+	
+	//Reset opacity after each coverage
+	private static void resetOpacity() {
+		Coordinates2D[][] coordinates = Robot.getCoordinates(Robot.getYasRow(), Robot.getXasCol());
+		
+		for(int i = 0; i < 4; i++)
+		{
+			for(int j = 0; j < 4; j++)
+			{
+				if(_opacity[coordinates[i][j].getRow()][coordinates[i][j].getCol()] < 235)
+				{
+				_opacity[coordinates[i][j].getRow()][coordinates[i][j].getCol()] = _opacity[coordinates[i][j].getRow()][coordinates[i][j].getCol()] + 20;
+			
+				}
+			}
+		}		
 	}
 	
 	
 	
-	private void paintNearestCell() 
+	private static void paintNearestCell() 
 	{
 		if(SpiralAlgorithm.getPathDeterminer() != null)
 		{
