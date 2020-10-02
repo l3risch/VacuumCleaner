@@ -30,7 +30,7 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 	private boolean _bypass = false;
 	private String _key;
 	private ScanDirection _dir = ScanDirection.LEFT;
-
+	private int _moves = 0;
 
 	boolean _nnVisited = true;
 
@@ -47,6 +47,7 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 		_encircledArea = getEncircledScannedArea(_actualRow, _actualCol);
 				
 		determineRoute(_actualRow, _actualCol, _encircledArea, _mentalMap, _dir, false);
+		_moves++;
 		_frame.repaint();
 
 	}	
@@ -55,6 +56,7 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 		if(reachedStoppingCriteria())
 		{
 			StartAlgorithm._timer.stop();
+			System.out.println("Moves: " + _moves);
 		}
 		
 		if(totallyFreeDirection(encircledArea, ScanDirection.LEFT))
@@ -193,17 +195,21 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 	
 	private boolean reachedStoppingCriteria() 
 	{
-		for(int i = 0; i < Table._rows; i++)
+
+		if((System.currentTimeMillis() / 1000l) - StartAlgorithm._start > 180)
 		{
-			for(int j = 0; j < Table._cols; j++)
-			{
-				if(Table.getPath(i, j) == true)
-				{
-					return false;
-				}
-			}
+			return true;
+		} else {
+			
+//			for(String key : _mentalMap.keySet())
+//	 		{
+//	 			if(_mentalMap.get(key).equals(CellState.FREE))
+//	 			{
+//	 				return false; 			
+//	 			}
+//	 		}
+			return false;
 		}
-		return true;
 	}
 	
 	public static PathDeterminer getPathDeterminer()

@@ -51,7 +51,7 @@ public class RandomWalk extends Basic implements ActionListener{
 		
 		if(_actualRow >= 0 && _actualCol >= 0)
 		{
-			updateMap(_actualRow, _actualCol);
+			updateMap(_actualRow, _actualCol, _mentalMap);
 		}
 		
 	}

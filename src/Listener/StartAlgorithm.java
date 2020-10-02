@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 
 
 import java.awt.event.ActionListener;
+import java.time.LocalTime;
 
 import javax.swing.Timer;
 
@@ -19,6 +20,7 @@ public class StartAlgorithm implements ActionListener {
 
 	private MainFrame _frame; 
 	public static Timer _timer;
+	public static long _start;
 	
 	public StartAlgorithm(MainFrame frame)
 	{
@@ -28,6 +30,7 @@ public class StartAlgorithm implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
+		_start = System.currentTimeMillis() / 1000l;
 		switch(_frame.getAlgorithm()) {
 		case "Wall Following": WallFollowing test = new WallFollowing(_frame);
 			_timer = new Timer(50, test);
