@@ -6,17 +6,12 @@ import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
 
-import Algorithms.Basic.CellState;
-import Algorithms.Basic.ScanDirection;
 import Listener.StartAlgorithm;
 import Objects.Robot;
 import Objects.Table;
 import Physics.Coordinates2D;
 import Physics.Movement;
-import Physics.Sweeper;
-import Rendering.Renderer1;
 import main.MainFrame;
-import enums.Direction;
 
 
 public class CustomAlgorithm extends Basic implements ActionListener {
@@ -53,11 +48,11 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 	}	
 	
 	private void determineRoute(int actualRow, int actualCol, Coordinates2D[] encircledArea, Map<String, CellState> mentalMap, ScanDirection dir, boolean countMoves) {
-		if(reachedStoppingCriteria())
-		{
-			StartAlgorithm._timer.stop();
-			System.out.println("Moves: " + _moves);
-		}
+	
+		int x = Robot.getX();
+		int y = Robot.getY();
+		double ang = Robot.getMovement().getAng();
+		
 		
 		if(totallyFreeDirection(encircledArea, ScanDirection.LEFT))
 		{
@@ -144,7 +139,15 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 		{
 			updateMap(actualRow, actualCol, mentalMap);
 		}
-				
+		
+		
+		if(reachedStoppingCriteria(x, y, ang))
+		{
+			StartAlgorithm._timer.stop();
+			System.out.println("Moves: " + _moves);
+		}	
+		
+		
 	}
 
 
@@ -193,7 +196,7 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 
     
 	
-	private boolean reachedStoppingCriteria() 
+	private boolean reachedStoppingCriteria(int x, int y, double ang) 
 	{
 
 		if((System.currentTimeMillis() / 1000l) - StartAlgorithm._start > 180)
@@ -201,14 +204,12 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 			return true;
 		} else {
 			
-//			for(String key : _mentalMap.keySet())
-//	 		{
-//	 			if(_mentalMap.get(key).equals(CellState.FREE))
-//	 			{
-//	 				return false; 			
-//	 			}
-//	 		}
-			return false;
+			if(Robot.getX()== x && Robot.getY() == y && ang == Movement.getAng())
+			{
+				return true;
+			} else {
+				return false;
+			}
 		}
 	}
 	
