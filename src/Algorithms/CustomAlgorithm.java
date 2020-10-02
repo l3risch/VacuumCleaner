@@ -3,6 +3,8 @@ package Algorithms;
 import java.awt.event.ActionEvent;
 
 import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Map;
 
 import Algorithms.Basic.CellState;
 import Algorithms.Basic.ScanDirection;
@@ -25,6 +27,9 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 	private Coordinates2D[] _encircledArea = new Coordinates2D[16];
 	private static PathDeterminer _pathDeterminer = new PathDeterminer();
 	Coordinates2D _nearestNeighbour = new Coordinates2D(0, 0);
+	private boolean _bypass = false;
+	private String _key;
+
 
 	boolean _nnVisited = true;
 
@@ -40,12 +45,18 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 		_actualRow = Robot.getYasRow();
 		_encircledArea = getEncircledScannedArea(_actualRow, _actualCol);
 				
+		determineRoute(_actualRow, _actualCol, _encircledArea, _mentalMap, false);
+		_frame.repaint();
+
+	}	
+	
+	private void determineRoute(int actualRow, int actualCol, Coordinates2D[] encircledArea, Map<String, CellState> mentalMap, boolean countMoves) {
 		if(reachedStoppingCriteria())
 		{
 			StartAlgorithm._timer.stop();
 		}
 		
-		if(totallyFreeDirection(_encircledArea, ScanDirection.LEFT))
+		if(totallyFreeDirection(encircledArea, ScanDirection.LEFT))
 		{
 			if(Movement.getAng()%90 != 0)
 			{
@@ -54,14 +65,14 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 			
 			Robot.getMovement().turnLeft();
 			Robot.getMovement().moveForward();
-		} else if(totallyFreeDirection(_encircledArea, ScanDirection.FRONT))
+		} else if(totallyFreeDirection(encircledArea, ScanDirection.FRONT))
 		{
 			if(Movement.getAng()%90 != 0)
 			{
 				roundAngle(Movement.getAng());
 			}
 			Robot.getMovement().moveForward();
-		} else if(totallyFreeDirection(_encircledArea, ScanDirection.RIGHT))
+		} else if(totallyFreeDirection(encircledArea, ScanDirection.RIGHT))
 		{
 			if(Movement.getAng()%90 != 0)
 			{
@@ -71,7 +82,7 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 			Robot.getMovement().moveForward();
 			
 			
-		} else if(partiallyFreeDirection(_encircledArea, ScanDirection.LEFT))
+		} else if(partiallyFreeDirection(encircledArea, ScanDirection.LEFT))
 		{
 			if(Movement.getAng()%90 != 0)
 			{
@@ -79,14 +90,14 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 			}
 			Robot.getMovement().turnLeft();
 			Robot.getMovement().moveForward();
-		} else if(partiallyFreeDirection(_encircledArea, ScanDirection.FRONT))
+		} else if(partiallyFreeDirection(encircledArea, ScanDirection.FRONT))
 		{
 			if(Movement.getAng()%90 != 0)
 			{
 				roundAngle(Movement.getAng());
 			}
 			Robot.getMovement().moveForward();
-		} else if(partiallyFreeDirection(_encircledArea, ScanDirection.RIGHT))
+		} else if(partiallyFreeDirection(encircledArea, ScanDirection.RIGHT))
 		{
 			if(Movement.getAng()%90 != 0)
 			{
@@ -94,62 +105,36 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 			}
 			Robot.getMovement().turnRight();
 			Robot.getMovement().moveForward();
-		} else if(totallyCovered(_encircledArea))
+		} else if(totallyCovered(encircledArea))
 		{
-			if(super.isFrontAccesable(_actualRow, _actualCol))
-			{
-				String key = generateKey(_nearestNeighbour.getRow(), _nearestNeighbour.getCol());
+			
+			_key = generateKey(_nearestNeighbour.getRow(), _nearestNeighbour.getCol());
 
-				if( _mentalMap.get(key).equals(CellState.VISITED))
-				{
-					System.out.println(_nearestNeighbour.getRow() +", " +_nearestNeighbour.getCol() + " visited");
-					_nnVisited = true;
-					_nearestNeighbour = _pathDeterminer.getNearestNeighbour(_actualRow, _actualCol);
-					System.out.println("NEW: "+_nearestNeighbour.getRow() +", " +_nearestNeighbour.getCol());
-				}
-				if(_nnVisited)
-				{
-					_pathDeterminer.turnToNearestNeighbour(_nearestNeighbour);
-					System.out.println("Ang: "+Movement.getAng());
-					_nnVisited = false;
-				}
+			if(mentalMap.get(_key).equals(CellState.VISITED))
+			{
+				_nnVisited = true;
+				_nearestNeighbour = _pathDeterminer.getNearestNeighbour(actualRow, actualCol);
 			}
+			if(_nnVisited)
+			{
+				_pathDeterminer.turnToNearestNeighbour(_nearestNeighbour);
+				_nnVisited = false;
+			}
+
+			bypassObstacle(encircledArea, actualRow, actualCol, countMoves);
+	
+		}
 			
-			if(super.isFrontAccesable(_actualRow, _actualCol))
-			{
-				Robot.getMovement().moveForward();
-			} else 
-			{
-				//TODO: Wall Following
-				//TODO: After Obstacle is bypassed and nn is not visited, new Path has to be calcuated
-				
-				while(!super.isFrontAccesable(_actualRow, _actualCol))
-				{
-					if(Movement.getAng()%90 != 0)
-					{
-						Movement.setAng(Movement.getAng() + (90 - (Movement.getAng()%90)));
-					} else 
-					{
-						Robot.getMovement().turnRight();
-					}
-				}
-				Robot.getMovement().moveForward();
-			}
-	
-		}
-	
+		_nearestNeighbour = _pathDeterminer.getNearestNeighbour(actualRow, actualCol);
 		
-		_frame.repaint();
-		
-		_nearestNeighbour = _pathDeterminer.getNearestNeighbour(_actualRow, _actualCol);
-		
-		if(_actualRow >= 0 && _actualCol >= 0)
+		if(actualRow >= 0 && actualCol >= 0)
 		{
-			updateMap(_actualRow, _actualCol);
+			updateMap(actualRow, actualCol, mentalMap);
 		}
-		
-	}	
-	
+				
+	}
+
+
 	private void roundAngle(double ang) 
 	{
 		double rest = (ang%90) / 90;
@@ -214,4 +199,108 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 	{
 		return _pathDeterminer;
 	}
-}
+	
+	private void bypassObstacle(Coordinates2D[] encircledArea, int row, int col, boolean countMoves) {
+		
+		
+		if(super.isFrontAccesable(row, col))
+		{
+			if(freeDirection(encircledArea, ScanDirection.RIGHT) && _bypass == true)
+			{
+				Robot.getMovement().turnRight();
+				_bypass = false;
+				_nnVisited = true;
+			}
+			Robot.getMovement().moveForward();
+		} else 
+		{
+			//TODO: Wall Following
+			//TODO: After Obstacle is bypassed and nn is not visited, new Path has to be calcuated
+			if(!countMoves)
+			{
+				calcRoute();
+			}
+			bypassLeft();
+			_bypass = true;
+
+		}		
+	}
+	
+	private void bypassRight()
+	{
+		
+		while(!super.isFrontAccesable(_actualRow, _actualCol))
+		{
+			if(Movement.getAng()%90 != 0)
+			{
+				Movement.setAng(Movement.getAng() + (90 - (Movement.getAng()%90)));
+			} else 
+			{
+				Robot.getMovement().turnRight();
+			}
+		}
+		Robot.getMovement().moveForward();
+		if(freeDirection(_encircledArea, ScanDirection.LEFT))
+		{
+			Robot.getMovement().turnLeft();
+		} 
+		
+	}
+	
+	private void bypassLeft()
+	{		
+
+		while(!super.isFrontAccesable(_actualRow, _actualCol))
+		{
+			if(Movement.getAng()%90 != 0)
+			{
+				Movement.setAng(Movement.getAng() - (Movement.getAng()%90));
+			} else 
+			{
+				Robot.getMovement().turnLeft();
+			}
+		}
+		Robot.getMovement().moveForward();
+		
+		_encircledArea = getEncircledScannedArea(_actualRow, _actualCol);
+		if(freeDirection(_encircledArea, ScanDirection.RIGHT))
+		{
+			Robot.getMovement().turnRight();
+		} 
+		
+	}
+	
+	private int calcRoute()
+	{
+		int actualRow = _actualRow;
+		int actualCol = _actualCol;
+		Coordinates2D[] encircledArea = _encircledArea;
+		Map<String, CellState> mentalMap = new HashMap<String, CellState>();
+		
+		mentalMap.putAll(_mentalMap);
+ 		
+		int x = Robot.getX();
+		int y = Robot.getY();
+		double ang = Movement.getAng();
+		
+		int counter = 0;
+
+		
+		while(!mentalMap.get(_key).equals(CellState.VISITED) && counter < 500)
+		{
+			actualCol = Robot.getXasCol();
+			actualRow = Robot.getYasRow();
+			encircledArea = getEncircledScannedArea(actualRow, actualCol);
+			
+			determineRoute(actualRow, actualCol, encircledArea, mentalMap, true);	
+			counter++;
+		}
+		
+		Movement.setX(x);
+		Movement.setY(y);
+		Movement.setAng(ang);
+		
+		return counter;
+	}
+	
+  }

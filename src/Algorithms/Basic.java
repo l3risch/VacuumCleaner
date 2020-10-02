@@ -162,183 +162,6 @@ public class Basic {
 		
 	}
 	
-//	private Coordinates2D[] getAreaIfUp(Coordinates2D[] _scannedArea)
-//	{
-//		Direction dir = Movement._dir;
-//		Coordinates2D[] circledArea = new Coordinates2D[16];
-//		for(int i = 0; i < 4; i++)
-//		{
-//			circledArea[i] = _scannedArea[i];
-//			circledArea[i+4] = leftSensor(_scannedArea, dir)[i];
-//			circledArea[i+8] = lowerSensor(_scannedArea, dir)[i];
-//			circledArea[i+12] = rightSensor(_scannedArea, dir)[i];
-//		}
-//
-//		return circledArea;
-//	}
-//	
-//	private Coordinates2D[] getAreaIfRight(Coordinates2D[] _scannedArea)
-//	{
-//		Direction dir = Movement._dir;
-//		Coordinates2D[] circledArea = new Coordinates2D[16];
-//		for(int i = 0; i < 4; i++)
-//		{
-//			circledArea[i] = upperSensor(_scannedArea, dir)[i];
-//			circledArea[i+4] = leftSensor(_scannedArea, dir)[i];
-//			circledArea[i+8] = lowerSensor(_scannedArea, dir)[i];
-//			circledArea[i+12] = _scannedArea[i];
-//		}
-//		
-//		return circledArea;
-//	}
-//
-//	private Coordinates2D[] getAreaIfDown(Coordinates2D[] _scannedArea)
-//	{
-//		Direction dir = Movement._dir;
-//		Coordinates2D[] circledArea = new Coordinates2D[16];
-//		for(int i = 0; i < 4; i++)
-//		{
-//			circledArea[i] = upperSensor(_scannedArea, dir)[i];
-//			circledArea[i+4] = leftSensor(_scannedArea, dir)[i];
-//			circledArea[i+8] = _scannedArea[i];
-//			circledArea[i+12] = rightSensor(_scannedArea, dir)[i];
-//		}
-//
-//		return circledArea;
-//	}
-//	
-//	private Coordinates2D[] getAreaIfLeft(Coordinates2D[] _scannedArea)
-//	{
-//		Direction dir = Movement._dir;
-//		Coordinates2D[] circledArea = new Coordinates2D[16];
-//		for(int i = 0; i < 4; i++)
-//		{
-//			circledArea[i] = upperSensor(_scannedArea, dir)[i];
-//			circledArea[i+4] = _scannedArea[i];
-//			circledArea[i+8] = lowerSensor(_scannedArea, dir)[i];
-//			circledArea[i+12] = rightSensor(_scannedArea, dir)[i];
-//		}
-//
-//		return circledArea;
-//	}
-	
-//	private Coordinates2D[] upperSensor(Coordinates2D[] _scannedArea, Direction dir) 
-//	{
-//		Coordinates2D[] upperSide = new Coordinates2D[4];
-//		int maxRow = 0;
-//		
-//		if(dir.equals(Direction.RIGHT))
-//		{
-//			maxRow = _scannedArea[3].getRow() - 4;
-//			for(int i = 0; i < 4; i++)
-//			{
-//				upperSide[i] = new Coordinates2D(maxRow, _scannedArea[i].getCol() - i - 1);
-//			}
-//		} else if (dir.equals(Direction.LEFT)) {
-//			maxRow = _scannedArea[3].getRow() - 4;
-//			for(int i = 0; i < 4; i++)
-//			{
-//				upperSide[i] = new Coordinates2D(maxRow, _scannedArea[i].getCol() + i + 1);
-//			}
-//		} else if (dir.equals(Direction.DOWN)) {
-//			maxRow = _scannedArea[3].getRow() - 5;
-//			for(int i = 0; i < 4; i++)
-//			{
-//				upperSide[i] = new Coordinates2D(maxRow, _scannedArea[i].getCol());
-//			
-//			}
-//		}
-//
-//		return upperSide;			
-//	}
-//	
-//	private Coordinates2D[] lowerSensor(Coordinates2D[] _scannedArea, Direction dir) 
-//	{
-//		Coordinates2D[] lowerSide = new Coordinates2D[4];
-//		int maxRow = 0;
-//		
-//		if(dir.equals(Direction.RIGHT))
-//		{
-//			maxRow = _scannedArea[3].getRow() + 1;
-//			for(int i = 0; i < 4; i++)
-//			{
-//				lowerSide[i] = new Coordinates2D(maxRow, _scannedArea[i].getCol() - i - 1);
-//			}
-//		} else if (dir.equals(Direction.LEFT)) {
-//			maxRow = _scannedArea[3].getRow() + 1;
-//			for(int i = 0; i < 4; i++)
-//			{
-//				lowerSide[i] = new Coordinates2D(maxRow, _scannedArea[i].getCol() + i + 1);
-//			}
-//		} else if (dir.equals(Direction.UP)) {
-//			maxRow = _scannedArea[3].getRow() + 5;
-//			for(int i = 0; i < 4; i++)
-//			{
-//				lowerSide[i] = new Coordinates2D(maxRow, _scannedArea[i].getCol());
-//			}
-//		}
-//		
-//		return lowerSide;			
-//	}
-//
-//	private Coordinates2D[] rightSensor(Coordinates2D[] _scannedArea, Direction dir) 
-//	{
-//		Coordinates2D[] rightSide = new Coordinates2D[4];
-//		int maxCol = 0;
-//		
-//		if(dir.equals(Direction.UP))
-//		{
-//			maxCol = _scannedArea[3].getCol() + 1;
-//			for(int i = 0; i < 4; i++)
-//			{
-//				rightSide[i] = new Coordinates2D(_scannedArea[i].getRow() + i + 1, maxCol);
-//			}
-//		} else if (dir.equals(Direction.DOWN)){
-//			maxCol = _scannedArea[3].getCol() + 1;
-//			for(int i = 0; i < 4; i++)
-//			{
-//				rightSide[i] = new Coordinates2D(_scannedArea[i].getRow() - i - 1, maxCol);
-//			}
-//		} else if (dir.equals(Direction.LEFT)) {
-//			maxCol = _scannedArea[0].getCol() + 5;
-//			for(int i = 0; i < 4; i++)
-//			{
-//				rightSide[i] = new Coordinates2D(_scannedArea[i].getRow(), maxCol);
-//			}
-//		}
-//		
-//		return rightSide;		
-//	}
-//
-//	private Coordinates2D[] leftSensor(Coordinates2D[] _scannedArea, Direction dir) 
-//    {
-//		Coordinates2D[] leftSide = new Coordinates2D[4];
-//		int minCol = 0;
-//		
-//		if(dir.equals(Direction.UP))
-//		{
-//			minCol = _scannedArea[0].getCol() - 1;
-//			for(int i = 0; i < 4; i++)
-//			{
-//				leftSide[i] = new Coordinates2D(_scannedArea[i].getRow() + i + 1, minCol);
-//			}
-//		} else if (dir.equals(Direction.DOWN)){
-//				minCol = _scannedArea[0].getCol() - 1;
-//				for(int i = 0; i < 4; i++)
-//				{
-//					leftSide[i] = new Coordinates2D(_scannedArea[i].getRow() - i - 1, minCol);
-//			}
-//		} else if (dir.equals(Direction.RIGHT)) {
-//			minCol = _scannedArea[0].getCol() - 5;
-//			for(int i = 0; i < 4; i++)
-//			{
-//				leftSide[i] = new Coordinates2D(_scannedArea[i].getRow(), minCol);
-//			}
-//		}
-//
-//		return leftSide;
-//    }
-
 	
 	Coordinates2D[] determineScanDirections(Coordinates2D[] scannedArea, ScanDirection direction) {
 		
@@ -592,7 +415,7 @@ public class Basic {
 	}
 	
 	//Updates mental map
-	void updateMap(int row, int col)
+	void updateMap(int row, int col, Map<String, CellState> mentalMap)
 	{
 		Coordinates2D[][] robotCoordinates = Robot.getCoordinates(row, col);
 		
@@ -605,12 +428,12 @@ public class Basic {
 			try {
 				if(Table.getMarkedObstacles(encircledArea[i].getRow(), encircledArea[i].getCol()))
 				{
-					_mentalMap.put(mapKey, CellState.OCCUPIED);
+					mentalMap.put(mapKey, CellState.OCCUPIED);
 				} else if(Table.getPath(encircledArea[i].getRow(), encircledArea[i].getCol()))
 				{
-					_mentalMap.put(mapKey, CellState.VISITED);
+					mentalMap.put(mapKey, CellState.VISITED);
 				} else {
-					_mentalMap.put(mapKey, CellState.FREE);
+					mentalMap.put(mapKey, CellState.FREE);
 				}
 			} catch(ArrayIndexOutOfBoundsException e)
 			{
@@ -625,7 +448,7 @@ public class Basic {
 			{
 				
 				String mapKey = generateKey(robotCoordinates[i][j].getRow(), robotCoordinates[i][j].getCol());
-				_mentalMap.put(mapKey, CellState.VISITED);
+				mentalMap.put(mapKey, CellState.VISITED);
 	
 			}
 		}
@@ -634,17 +457,17 @@ public class Basic {
 		int occupied = 0;
 		int visited = 0;
 		
- 		for(String key : _mentalMap.keySet())
+ 		for(String key : mentalMap.keySet())
  		{
- 			if(_mentalMap.get(key).equals(CellState.FREE))
+ 			if(mentalMap.get(key).equals(CellState.FREE))
  			{
  				free++;
  			}
- 			if(_mentalMap.get(key).equals(CellState.OCCUPIED))
+ 			if(mentalMap.get(key).equals(CellState.OCCUPIED))
  			{
  				occupied++;
  			}
- 			if(_mentalMap.get(key).equals(CellState.VISITED))
+ 			if(mentalMap.get(key).equals(CellState.VISITED))
  			{
  				visited++;
  			}
