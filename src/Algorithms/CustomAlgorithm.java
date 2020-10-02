@@ -29,6 +29,7 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 	Coordinates2D _nearestNeighbour = new Coordinates2D(0, 0);
 	private boolean _bypass = false;
 	private String _key;
+	private ScanDirection _dir = ScanDirection.LEFT;
 
 
 	boolean _nnVisited = true;
@@ -45,12 +46,12 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 		_actualRow = Robot.getYasRow();
 		_encircledArea = getEncircledScannedArea(_actualRow, _actualCol);
 				
-		determineRoute(_actualRow, _actualCol, _encircledArea, _mentalMap, false);
+		determineRoute(_actualRow, _actualCol, _encircledArea, _mentalMap, _dir, false);
 		_frame.repaint();
 
 	}	
 	
-	private void determineRoute(int actualRow, int actualCol, Coordinates2D[] encircledArea, Map<String, CellState> mentalMap, boolean countMoves) {
+	private void determineRoute(int actualRow, int actualCol, Coordinates2D[] encircledArea, Map<String, CellState> mentalMap, ScanDirection dir, boolean countMoves) {
 		if(reachedStoppingCriteria())
 		{
 			StartAlgorithm._timer.stop();
@@ -121,7 +122,17 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 				_nnVisited = false;
 			}
 
-			bypassObstacle(encircledArea, actualRow, actualCol, countMoves);
+			if(!super.isFrontAccesable(actualRow, actualCol))
+			{
+				if(!countMoves)
+				{
+					//Calculate shortest route around obstacle
+					dir = calcRoute();
+					System.out.println(dir);
+				}
+			}
+			
+			bypassObstacle(encircledArea, actualRow, actualCol, countMoves, dir);
 	
 		}
 			
@@ -200,27 +211,33 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 		return _pathDeterminer;
 	}
 	
-	private void bypassObstacle(Coordinates2D[] encircledArea, int row, int col, boolean countMoves) {
+	private void bypassObstacle(Coordinates2D[] encircledArea, int row, int col, boolean countMoves, ScanDirection dir) {
 		
 		
 		if(super.isFrontAccesable(row, col))
 		{
 			if(freeDirection(encircledArea, ScanDirection.RIGHT) && _bypass == true)
 			{
-				Robot.getMovement().turnRight();
+				if(dir == ScanDirection.LEFT)
+				{
+					Robot.getMovement().turnRight();
+				} else if(dir == ScanDirection.RIGHT)
+				{
+					Robot.getMovement().turnLeft();
+				}
 				_bypass = false;
 				_nnVisited = true;
 			}
 			Robot.getMovement().moveForward();
 		} else 
 		{
-			//TODO: Wall Following
-			//TODO: After Obstacle is bypassed and nn is not visited, new Path has to be calcuated
-			if(!countMoves)
+			if(dir == ScanDirection.LEFT)
 			{
-				calcRoute();
+				bypassLeft();
+			} else if(dir == ScanDirection.RIGHT)
+			{
+				bypassRight();
 			}
-			bypassLeft();
 			_bypass = true;
 
 		}		
@@ -270,29 +287,45 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 		
 	}
 	
-	private int calcRoute()
+	private ScanDirection calcRoute()
 	{
 		int actualRow = _actualRow;
 		int actualCol = _actualCol;
 		Coordinates2D[] encircledArea = _encircledArea;
-		Map<String, CellState> mentalMap = new HashMap<String, CellState>();
-		
-		mentalMap.putAll(_mentalMap);
+		Map<String, CellState> mentalMapRight = new HashMap<String, CellState>();
+		Map<String, CellState> mentalMapLeft = new HashMap<String, CellState>();
+
+		mentalMapRight.putAll(_mentalMap);
+		mentalMapLeft.putAll(_mentalMap);
  		
+		int rightCount = countDistance(mentalMapRight, actualRow, actualCol, encircledArea, ScanDirection.RIGHT);
+		int leftCount = countDistance(mentalMapLeft, actualRow, actualCol, encircledArea, ScanDirection.LEFT);
+		
+		System.out.println("Left: "+leftCount+"\nRight:"+rightCount);
+		if(leftCount <= rightCount)
+		{
+			return ScanDirection.LEFT;
+		} else {
+			return ScanDirection.RIGHT;
+		}
+	}
+	
+	//Count distance in left and right direction
+	private int countDistance(Map<String, CellState> mentalMap, int row, int col, Coordinates2D[] encircledArea, ScanDirection dir)
+	{
+		int counter = 0;
 		int x = Robot.getX();
 		int y = Robot.getY();
 		double ang = Movement.getAng();
-		
-		int counter = 0;
 
-		
+
 		while(!mentalMap.get(_key).equals(CellState.VISITED) && counter < 500)
 		{
-			actualCol = Robot.getXasCol();
-			actualRow = Robot.getYasRow();
-			encircledArea = getEncircledScannedArea(actualRow, actualCol);
+			col = Robot.getXasCol();
+			row = Robot.getYasRow();
+			encircledArea = getEncircledScannedArea(row, col);
 			
-			determineRoute(actualRow, actualCol, encircledArea, mentalMap, true);	
+			determineRoute(row, col, encircledArea, mentalMap, dir, true);	
 			counter++;
 		}
 		
@@ -303,4 +336,5 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 		return counter;
 	}
 	
+		
   }
