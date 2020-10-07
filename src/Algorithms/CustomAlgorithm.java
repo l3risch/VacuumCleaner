@@ -124,8 +124,9 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 				if(!countMoves)
 				{
 					//Calculate shortest route around obstacle
+					ShortestPath.calcPath(actualRow, actualCol, _nearestNeighbour);
 					dir = calcRoute();
-					System.out.println(dir);
+					//System.out.println(dir);
 				}
 			}
 			
@@ -144,7 +145,7 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 		if(reachedStoppingCriteria(x, y, ang))
 		{
 			StartAlgorithm._timer.stop();
-			System.out.println("Moves: " + _moves);
+			//System.out.println("Moves: " + _moves);
 		}	
 		
 		
@@ -305,10 +306,10 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 		mentalMapRight.putAll(_mentalMap);
 		mentalMapLeft.putAll(_mentalMap);
  		
-		int rightCount = countDistance(mentalMapRight, actualRow, actualCol, encircledArea, ScanDirection.RIGHT);
-		int leftCount = countDistance(mentalMapLeft, actualRow, actualCol, encircledArea, ScanDirection.LEFT);
+		int rightCount = calcDistance(mentalMapRight, actualRow, actualCol, encircledArea, ScanDirection.RIGHT);
+		int leftCount = calcDistance(mentalMapLeft, actualRow, actualCol, encircledArea, ScanDirection.LEFT);
 		
-		System.out.println("Left: "+leftCount+"\nRight:"+rightCount);
+		//System.out.println("Left: "+leftCount+"\nRight:"+rightCount);
 		if(leftCount <= rightCount)
 		{
 			return ScanDirection.LEFT;
@@ -318,23 +319,67 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 	}
 	
 	//Count distance in left and right direction
-	private int countDistance(Map<String, CellState> mentalMap, int row, int col, Coordinates2D[] encircledArea, ScanDirection dir)
+	private int calcDistance(Map<String, CellState> mentalMap, int row, int col, Coordinates2D[] encircledArea, ScanDirection dir)
 	{
 		int counter = 0;
 		int x = Robot.getX();
 		int y = Robot.getY();
 		double ang = Movement.getAng();
 
-
+		//Set initial direction
+		if(dir == ScanDirection.LEFT)
+		{
+			Robot.getMovement().turnLeft();
+			//System.out.println(ang);
+		} else {
+			Robot.getMovement().turnRight();
+		}
+		
+		
 		while(!mentalMap.get(_key).equals(CellState.VISITED) && counter < 500)
 		{
 			col = Robot.getXasCol();
 			row = Robot.getYasRow();
 			encircledArea = getEncircledScannedArea(row, col);
-			
-			determineRoute(row, col, encircledArea, mentalMap, dir, true);	
-			counter++;
+			//determineRoute(row, col, encircledArea, mentalMap, dir, true);	
+			_pathDeterminer.turnToNearestNeighbour(_nearestNeighbour);
+			ang = Movement.getAng();
+
+//			if(totallyCovered(_encircledArea))
+//			{
+//				if(super.isFrontAccesable(row, col))
+//				{
+//					Robot.getMovement().moveForward();
+//				} else {
+//					if(Movement.getAng()%90 != 0)
+//					{
+//						Movement.setAng(Movement.getAng() - (Movement.getAng()%90));
+//					} else 
+//					{
+//						Robot.getMovement().turnLeft();
+//					}
+//					Robot.getMovement().moveForward();
+//				}
+//				System.out.println(Robot.getYasRow());
+//				System.out.println(Robot.getXasCol());
+//			
+//			}
+
+			if(freeDirection(encircledArea, ScanDirection.RIGHT))
+			{
+				Robot.getMovement().turnRight();
+			} else {
+				
+				if(isFrontAccesable(row, col))
+				{
+					Robot.getMovement().moveForward();
+				} else {
+					Robot.getMovement().turnLeft();
+				}
+			}
 		}
+		
+		counter++;
 		
 		Movement.setX(x);
 		Movement.setY(y);
