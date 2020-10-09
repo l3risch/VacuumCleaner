@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 
 import java.awt.event.ActionListener;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import Listener.StartAlgorithm;
@@ -24,8 +25,9 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 	Coordinates2D _nearestNeighbour = new Coordinates2D(0, 0);
 	private boolean _bypass = false;
 	private String _key;
-	private ScanDirection _dir = ScanDirection.LEFT;
-	private int _moves = 0;
+	private int _movesToNN = 0;
+	private List<Node> _shortestPath;
+	private boolean _pathCalculated = false;
 
 	boolean _nnVisited = true;
 
@@ -41,17 +43,24 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 		_actualRow = Robot.getYasRow();
 		_encircledArea = getEncircledScannedArea(_actualRow, _actualCol);
 				
-		determineRoute(_actualRow, _actualCol, _encircledArea, _mentalMap, _dir, false);
-		_moves++;
+		determineRoute(_actualRow, _actualCol, _encircledArea, _mentalMap);
 		_frame.repaint();
 
 	}	
 	
-	private void determineRoute(int actualRow, int actualCol, Coordinates2D[] encircledArea, Map<String, CellState> mentalMap, ScanDirection dir, boolean countMoves) {
-	
+	private void determineRoute(int actualRow, int actualCol, Coordinates2D[] encircledArea, Map<String, CellState> mentalMap) {
+		//System.out.println(_pathCalculated);
+		
+		if(actualRow >= 0 && actualCol >= 0)
+		{
+			updateMap(actualRow, actualCol, mentalMap);
+		}
+		
+		_nearestNeighbour = _pathDeterminer.getNearestNeighbour(actualRow, actualCol);
+		
 		int x = Robot.getX();
 		int y = Robot.getY();
-		double ang = Robot.getMovement().getAng();
+		double ang = Movement.getAng();
 		
 		
 		if(totallyFreeDirection(encircledArea, ScanDirection.LEFT))
@@ -106,46 +115,81 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 		} else if(totallyCovered(encircledArea))
 		{
 			
-			_key = generateKey(_nearestNeighbour.getRow(), _nearestNeighbour.getCol());
-
-			if(mentalMap.get(_key).equals(CellState.VISITED))
-			{
-				_nnVisited = true;
-				_nearestNeighbour = _pathDeterminer.getNearestNeighbour(actualRow, actualCol);
-			}
-			if(_nnVisited)
-			{
-				_pathDeterminer.turnToNearestNeighbour(_nearestNeighbour);
-				_nnVisited = false;
-			}
+//			_key = generateKey(_nearestNeighbour.getRow(), _nearestNeighbour.getCol());
+//
+//			if(mentalMap.get(_key).equals(CellState.VISITED))
+//			{
+//				_nnVisited = true;
+//				_nearestNeighbour = _pathDeterminer.getNearestNeighbour(actualRow, actualCol);
+//			}
+//			if(_nnVisited)
+//			{
+//				_pathDeterminer.turnToNearestNeighbour(_nearestNeighbour);
+//				_nnVisited = false;
+//			}
 
 			if(!super.isFrontAccesable(actualRow, actualCol))
 			{
-				if(!countMoves)
+				if(!_pathCalculated)
 				{
-					//Calculate shortest route around obstacle
-					ShortestPath.calcPath(actualRow, actualCol, _nearestNeighbour);
-					dir = calcRoute();
-					//System.out.println(dir);
+					//Calculate shortest route to nearest neighbour
+					_shortestPath = ShortestPath.computePath(actualRow, actualCol, _nearestNeighbour);
+					_pathCalculated = true;
 				}
+			} else {
+				Robot.getMovement().moveForward();
 			}
 			
-			bypassObstacle(encircledArea, actualRow, actualCol, countMoves, dir);
-	
-		}
-			
-		_nearestNeighbour = _pathDeterminer.getNearestNeighbour(actualRow, actualCol);
+			if(_pathCalculated)
+			{
+				
+				if(_shortestPath != null)
+				{
+					if(!ShortestPath.nnReached(actualRow, actualCol))
+					{
+//						System.out.println("Current Node: " + _shortestPath.get(_movesToNN ).x + ", " +_shortestPath.get(_movesToNN).y);
+						Movement.setX(100 + 10 * _shortestPath.get(_movesToNN).y);
+						Movement.setY(110 + 10 * _shortestPath.get(_movesToNN).x);
+						Node currentNode = _shortestPath.get(_movesToNN);
+						Node nextNode = _shortestPath.get(_movesToNN+1);
+						
+						if(_movesToNN < _shortestPath.size()-1)
+						{
+							//Determine angle 
+							if(currentNode.x == nextNode.x - 1)
+							{
+								Movement._ang = 90;
+							} else if(currentNode.y == nextNode.y - 1)
+							{
+								Movement._ang = 0;
+							} else if(currentNode.x == nextNode.x + 1)
+							{
+								Movement._ang = 270;
+							} else if(currentNode.y == nextNode.y + 1)
+							{
+								Movement._ang = 180;
+							} 
+							
+						}
+						
+						_movesToNN++;
+
+					} else {
+						_movesToNN = 0;
+						_pathCalculated = false;
+					}
+				} else {
+					_pathCalculated = false;
+				}
+			}
+		} 
+				
 		
-		if(actualRow >= 0 && actualCol >= 0)
-		{
-			updateMap(actualRow, actualCol, mentalMap);
-		}
 		
 		
 		if(reachedStoppingCriteria(x, y, ang))
 		{
 			StartAlgorithm._timer.stop();
-			//System.out.println("Moves: " + _moves);
 		}	
 		
 		

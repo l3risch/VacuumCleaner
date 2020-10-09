@@ -452,32 +452,6 @@ public class Basic {
 	
 			}
 		}
-		
-		int free = 0;
-		int occupied = 0;
-		int visited = 0;
-		
- 		for(String key : mentalMap.keySet())
- 		{
- 			if(mentalMap.get(key).equals(CellState.FREE))
- 			{
- 				free++;
- 			}
- 			if(mentalMap.get(key).equals(CellState.OCCUPIED))
- 			{
- 				occupied++;
- 			}
- 			if(mentalMap.get(key).equals(CellState.VISITED))
- 			{
- 				visited++;
- 			}
- 		}
-//		System.out.println("Free cells: " + free);
-//		System.out.println("Occ cells: " + occupied);
-//		System.out.println("Visited cells: " + visited);
-
-
-
 	}
 
 	

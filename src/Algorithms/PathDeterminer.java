@@ -116,71 +116,6 @@ public class PathDeterminer extends Basic{
 		
 	
 		Movement.setAng(angle);
-
-		
-//		//If target cell below and left
-//		if(nearestNeighbour.getCol() - _robotPos.getCol() < 0 && nearestNeighbour.getRow() - _robotPos.getRow() > 0)
-//		{
-//			Direction dir = Movement._dir;
-//			
-//			switch(dir) {
-//			case RIGHT: angle = angle * (-1) + 180;
-//			break;
-//			case DOWN: angle = angle * (-1) + 90;
-//			break;
-//			case LEFT: angle = angle * (-1);
-//			break;
-//			case UP: angle = angle * (-1) + 270;
-//			}
-//			
-//			//If target cell below and right
-//		} else if(nearestNeighbour.getCol() - _robotPos.getCol() > 0 && nearestNeighbour.getRow() - _robotPos.getRow() > 0)
-//		{
-//			Direction dir = Movement._dir;
-//			
-//			switch(dir) {
-//			case RIGHT:
-//			break;
-//			case DOWN: angle = angle + 270;
-//			break;
-//			case LEFT: angle = angle + 180;
-//			break;
-//			case UP: angle = angle + 90;
-//			}
-//		
-//			//If target cell above and right
-//		} else if(nearestNeighbour.getCol() - _robotPos.getCol() > 0 && nearestNeighbour.getRow() - _robotPos.getRow() < 0)
-//		{
-//			Direction dir = Movement._dir;
-//			
-//			switch(dir) {
-//			case RIGHT: angle = angle * (-1);
-//			break;
-//			case DOWN: angle = angle * (-1) + 270;
-//			break;
-//			case LEFT: angle = angle * (-1) + 180;
-//			break;
-//			case UP: angle = angle * (-1) + 90;
-//			}
-//			
-//			//If target cell above and left
-//		} else if(nearestNeighbour.getCol() - _robotPos.getCol() < 0 && nearestNeighbour.getRow() - _robotPos.getRow() < 0)
-//		{
-//			Direction dir = Movement._dir;
-//			
-//			switch(dir) {
-//			case RIGHT: angle = angle + 180;
-//			break;
-//			case DOWN: angle = angle + 90;
-//			break;
-//			case LEFT: 
-//			break;
-//			case UP: angle = angle + 270;
-//			}
-//			
-//		}
-//		System.out.println(angle);
-//		Movement.setAng(Movement.getAng() + angle);
 	}
 
 
@@ -202,20 +137,5 @@ public class PathDeterminer extends Basic{
 	}
 	
 
-//	private double turnByDegrees(double angle, Coordinates2D nearestNeighbour) 
-//	{
-//		Direction dir = Movement._dir;
-//		switch(dir) {
-//		case RIGHT: 
-//			if(_robotPos.getCol() - nearestNeighbour.getCol() < 0)
-//			{
-//				return angle;
-//			}
-//			else if(_robotPos.getCol() - nearestNeighbour.getCol() > 0)
-//			{
-//				return angle + 180;
-//			}
-//		}
-//	}
 	
 }
