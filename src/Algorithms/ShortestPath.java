@@ -28,6 +28,7 @@ public class ShortestPath extends Basic{
 	
 	 public static List<Node> computePath(int robotRow, int robotCol, Coordinates2D nn)
 	 {
+		 _nodeList.clear();
 		 _nn = nn;
 		 _matrix = new char[64][64];
 		 
@@ -58,20 +59,6 @@ public class ShortestPath extends Basic{
 			 }		
 		 }
 		 
-//		 char[][] matrix = {
-//		            {'S', '0', '1', '1', '1', '1', '1', '1', '0', '1'},
-//		            {'1', '1', '1', '0', '1', '1', '1', '1', '0', '1'},
-//		            {'0', '1', '1', '0', '1', '1', '1', '1', '0', '1'},
-//		            {'1', '0', '1', '0', '1', '1', '1', '1', '0', '1'},
-//		            {'1', '0', '1', '1', '1', '1', '1', '1', '0', '1'},
-//		            {'1', '0', '1', '0', '1', '1', '1', '1', '1', '1'},
-//		            {'1', '0', '1', '0', '1', '1', '1', '1', '1', '1'},
-//		            {'1', '0', '1', '0', '1', '1', '1', '1', '1', '1'},
-//		            {'1', '0', '1', '0', '1', '1', '1', '1', '1', '1'},
-//		            {'1', '0', '1', '0', '1', '1', '1', '1', '1', 'D'},
-//
-//	        };
-		 
 		 _robotPos = Robot.getCoordinates(robotRow, robotCol);
 		 
 		 //Set position of robot as source
@@ -96,9 +83,8 @@ public class ShortestPath extends Basic{
 			_matrix[_nn.getRow()][_nn.getCol()] = 'D';
 		} 
 		
-		 
-       boolean exists = pathExists(_matrix);
-       
+       boolean exists = pathExists(_matrix);		
+		
 		if(exists)
 	    {
 		  //long start = System.currentTimeMillis();
@@ -175,11 +161,10 @@ public class ShortestPath extends Basic{
 		{
 			graph.addNode(node);
 		}
-		//System.out.println("Graph Size: " +  _nodeList.size());
 		
+
 		Node dest = _nodeList.get(_nodeList.size()-1);
 		dest.getShortestPath().add(dest);
-		//System.out.println(dest.x + ", "+ dest.y);
 		Node source = _nodeList.get(0);
 		graph = calculateShortestPathFromSource(graph, source);
 		
@@ -244,16 +229,18 @@ public class ShortestPath extends Basic{
 		 //Set position of robot
 		for(int i = 0; i < 4; i++)
 		{
+			StringBuilder sb = new StringBuilder();
 			for(int j = 0; j < 4; j++)
 			{
 				int row = _robotPos[i][j].getRow();
 				int col = _robotPos[i][j].getCol();
 				_matrix[row][col] = 'S';
-		        //System.out.print("(" + row + ", " + col + ") ");
+				sb.append(row + ", " + col);
 			}
+			//System.out.println(sb);
 		}
 		
-		//System.out.println("Nearest Neighbour: " + _nn.getRow() + ", " + _nn.getCol());
+//		System.out.println("Nearest Neighbour: " + _nn.getRow() + ", " + _nn.getCol());
 		 //Set position of nearest neighbour as destination
 		if(_matrix[_nn.getRow()][_nn.getCol()] == 'S')
 		{
@@ -268,50 +255,40 @@ public class ShortestPath extends Basic{
 	 */
 	private static List<Node> adjustDijkstraPath(List<Node> nodeList)
 	{
-		int x = 0;
-		int y = 0;
-		for(int i = 0; i < nodeList.size()-1; i++)
-		{
-			Node currentNode = nodeList.get(i);
-			Node nextNode = nodeList.get(i+1);
-			
-			Coordinates2D[][] nextRobotPosition = Robot.getCoordinates(nextNode.x + x, nextNode.y + y);
-			if(x != 0 || y != 0)
-			{
-				nextRobotPosition = Robot.getCoordinates(currentNode.x + x, currentNode.y + y);
-			}
-			x = 0;
-			y = 0;
-			System.out.println("Current: "+ currentNode.x + "; " + currentNode.y);
-			System.out.println("Next: " + nextNode.x + ", " +nextNode.y);
 
-			if(isRobotHittingObstacle(nextRobotPosition))
+		List<Node> adjustedNodes = new LinkedList<Node>();
+		
+		for(int i = 1; i < nodeList.size(); i++)
+		{
+			Node currentNode = nodeList.get(i-1);
+			Node nextNode = nodeList.get(i);
+			
+			Coordinates2D[][] nextRobotPosition = Robot.getCoordinates(nextNode.x, nextNode.y);
+
+//			System.out.println("Current: "+ currentNode.x + "; " + currentNode.y);
+//			System.out.println("Next: " + nextNode.x + ", " +nextNode.y);
+
+			if(isTopHittingObstacle(nextRobotPosition))
 			{
-//				for(Node node : nodeList)
-//				{
-//					System.out.println(node.x + ", " + node.y);
-//				}		
-//				System.out.println("__________");
-//				
-				
-				if(currentNode.y + 1 == nextNode.y)
+				nodeList.set(i-1, new Node(currentNode.x+3, currentNode.y));
+			} else if(isRightHittingObstacle(nextRobotPosition))
+			{
+				nodeList.set(i-1, new Node(currentNode.x, currentNode.y-3));
+			}
+			
+			//Set last element
+			if(i == nodeList.size()-1)
+			{
+				if(isTopHittingObstacle(nextRobotPosition))
 				{
-				    nodeList.add(i+1, new Node(currentNode.x + 1, currentNode.y));
-				    y = 1;
-				} else if(currentNode.y -1 == nextNode.y)
+					nodeList.set(i, new Node(nextNode.x+3, nextNode.y));
+				} else if(isRightHittingObstacle(nextRobotPosition))
 				{
-					nodeList.add(i+1, new Node(currentNode.x + 1, currentNode.y));
-				    y = -1;
-				} else if(currentNode.x + 1 == nextNode.x)
-				{
-				    nodeList.add(i+1, new Node(currentNode.x, currentNode.y + 1));
-				    x = 1;
-				} else if(currentNode.x - 1 == nextNode.x)
-				{
-					x = -1;
+					nodeList.set(i, new Node(nextNode.x, nextNode.y-3));
 				}
 			}
 		}
+
 			
 		
 		for(Node node : nodeList)
@@ -324,21 +301,30 @@ public class ShortestPath extends Basic{
 
 
 
-	private static boolean isRobotHittingObstacle(Coordinates2D[][] nextRobotPosition) 
+	private static boolean isTopHittingObstacle(Coordinates2D[][] nextRobotPosition) 
 	{
-//		for(int row = 0; row < 4; row++)
-//		{
-//			StringBuilder sb = new StringBuilder();
-//			for(int col = 0; col < 4; col++)
-//			{
-//				sb.append("("+nextRobotPosition[row][col].getRow()+","+nextRobotPosition[row][col].getCol()+") ");
-//			}
-//			System.out.println(sb);
-//		}
-//			
-		for(int row = 0; row < 4; row++)
+
+		for(int row = 0; row < 1; row++)
 		{
 			for(int col = 0; col < 4; col++)
+			{
+				int robotCellRow = nextRobotPosition[row][col].getRow();
+				int robotCellCol = nextRobotPosition[row][col].getCol();	
+				if(Table.getMarkedObstacles(robotCellRow, robotCellCol) ||  robotCellRow < 0 || robotCellRow >= 64 || robotCellCol < 0 || robotCellCol >= 64)
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	private static boolean isRightHittingObstacle(Coordinates2D[][] nextRobotPosition) 
+	{
+
+		for(int row = 0; row < 4; row++)
+		{
+			for(int col = 3; col < 4; col++)
 			{
 				int robotCellRow = nextRobotPosition[row][col].getRow();
 				int robotCellCol = nextRobotPosition[row][col].getCol();	

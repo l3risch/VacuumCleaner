@@ -25,7 +25,7 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 	Coordinates2D _nearestNeighbour = new Coordinates2D(0, 0);
 	private boolean _bypass = false;
 	private String _key;
-	private int _movesToNN = 0;
+	private int _movesToNN = 1;
 	private List<Node> _shortestPath;
 	private boolean _pathCalculated = false;
 
@@ -63,7 +63,7 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 		double ang = Movement.getAng();
 		
 		
-		if(totallyFreeDirection(encircledArea, ScanDirection.LEFT))
+		if(totallyFreeDirection(encircledArea, ScanDirection.LEFT) && !_pathCalculated)
 		{
 			if(Movement.getAng()%90 != 0)
 			{
@@ -72,14 +72,14 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 			
 			Robot.getMovement().turnLeft();
 			Robot.getMovement().moveForward();
-		} else if(totallyFreeDirection(encircledArea, ScanDirection.FRONT))
+		} else if(totallyFreeDirection(encircledArea, ScanDirection.FRONT) && !_pathCalculated)
 		{
 			if(Movement.getAng()%90 != 0)
 			{
 				roundAngle(Movement.getAng());
 			}
 			Robot.getMovement().moveForward();
-		} else if(totallyFreeDirection(encircledArea, ScanDirection.RIGHT))
+		} else if(totallyFreeDirection(encircledArea, ScanDirection.RIGHT) && !_pathCalculated)
 		{
 			if(Movement.getAng()%90 != 0)
 			{
@@ -89,7 +89,7 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 			Robot.getMovement().moveForward();
 			
 			
-		} else if(partiallyFreeDirection(encircledArea, ScanDirection.LEFT))
+		} else if(partiallyFreeDirection(encircledArea, ScanDirection.LEFT) && !_pathCalculated)
 		{
 			if(Movement.getAng()%90 != 0)
 			{
@@ -97,14 +97,14 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 			}
 			Robot.getMovement().turnLeft();
 			Robot.getMovement().moveForward();
-		} else if(partiallyFreeDirection(encircledArea, ScanDirection.FRONT))
+		} else if(partiallyFreeDirection(encircledArea, ScanDirection.FRONT) && !_pathCalculated)
 		{
 			if(Movement.getAng()%90 != 0)
 			{
 				roundAngle(Movement.getAng());
 			}
 			Robot.getMovement().moveForward();
-		} else if(partiallyFreeDirection(encircledArea, ScanDirection.RIGHT))
+		} else if(partiallyFreeDirection(encircledArea, ScanDirection.RIGHT) && !_pathCalculated)
 		{
 			if(Movement.getAng()%90 != 0)
 			{
@@ -114,44 +114,27 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 			Robot.getMovement().moveForward();
 		} else if(totallyCovered(encircledArea))
 		{
-			
-//			_key = generateKey(_nearestNeighbour.getRow(), _nearestNeighbour.getCol());
-//
-//			if(mentalMap.get(_key).equals(CellState.VISITED))
-//			{
-//				_nnVisited = true;
-//				_nearestNeighbour = _pathDeterminer.getNearestNeighbour(actualRow, actualCol);
-//			}
-//			if(_nnVisited)
-//			{
-//				_pathDeterminer.turnToNearestNeighbour(_nearestNeighbour);
-//				_nnVisited = false;
-//			}
-
-			if(!super.isFrontAccesable(actualRow, actualCol))
+			if(!_pathCalculated)
 			{
-				if(!_pathCalculated)
-				{
-					//Calculate shortest route to nearest neighbour
-					_shortestPath = ShortestPath.computePath(actualRow, actualCol, _nearestNeighbour);
-					_pathCalculated = true;
-				}
-			} else {
-				Robot.getMovement().moveForward();
+				//Calculate shortest route to nearest neighbour
+				_shortestPath = ShortestPath.computePath(actualRow, actualCol, _nearestNeighbour);
+				_pathCalculated = true;
 			}
-			
-			if(_pathCalculated)
+
+			else
+			{			
+			if(_shortestPath != null)
 			{
-				
-				if(_shortestPath != null)
+				if(!ShortestPath.nnReached(actualRow, actualCol))
 				{
-					if(!ShortestPath.nnReached(actualRow, actualCol))
+					Node currentNode = _shortestPath.get(_movesToNN);
+					
+					if(_movesToNN < _shortestPath.size() - 1)
 					{
-//						System.out.println("Current Node: " + _shortestPath.get(_movesToNN ).x + ", " +_shortestPath.get(_movesToNN).y);
-						Movement.setX(100 + 10 * _shortestPath.get(_movesToNN).y);
-						Movement.setY(110 + 10 * _shortestPath.get(_movesToNN).x);
-						Node currentNode = _shortestPath.get(_movesToNN);
 						Node nextNode = _shortestPath.get(_movesToNN+1);
+	//					System.out.println("Current Node: " + _shortestPath.get(_movesToNN ).x + ", " +_shortestPath.get(_movesToNN).y);
+						Movement.setX(100 + 10 * currentNode.y);
+						Movement.setY(110 + 10 * currentNode.x);
 						
 						if(_movesToNN < _shortestPath.size()-1)
 						{
@@ -171,26 +154,36 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 							} 
 							
 						}
-						
-						_movesToNN++;
-
 					} else {
-						_movesToNN = 0;
-						_pathCalculated = false;
+						Movement.setX(100 + 10 * currentNode.y);
+						Movement.setY(110 + 10 * currentNode.x);
 					}
+					
+					_movesToNN++;
+
 				} else {
+					_movesToNN = 0;
 					_pathCalculated = false;
 				}
+			} else {
+				_pathCalculated = false;
+				_movesToNN = 0;
 			}
-		} 
+		}
+		} else {
+			Robot.getMovement().moveForward();
+			_pathCalculated = false;
+			_movesToNN = 0;
+		}
+		
 				
 		
 		
 		
-		if(reachedStoppingCriteria(x, y, ang))
-		{
-			StartAlgorithm._timer.stop();
-		}	
+//		if(reachedStoppingCriteria(x, y, ang))
+//		{
+//			StartAlgorithm._timer.stop();
+//		}	
 		
 		
 	}
@@ -241,22 +234,22 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 
     
 	
-	private boolean reachedStoppingCriteria(int x, int y, double ang) 
-	{
-
-		if((System.currentTimeMillis() / 1000l) - StartAlgorithm._start > 180)
-		{
-			return true;
-		} else {
-			
-			if(Robot.getX()== x && Robot.getY() == y && ang == Movement.getAng())
-			{
-				return true;
-			} else {
-				return false;
-			}
-		}
-	}
+//	private boolean reachedStoppingCriteria(int x, int y, double ang) 
+//	{
+//
+//		if((System.currentTimeMillis() / 1000l) - StartAlgorithm._start > 180)
+//		{
+//			return true;
+//		} else {
+//			
+//			if(Robot.getX()== x && Robot.getY() == y && ang == Movement.getAng())
+//			{
+//				return true;
+//			} else {
+//				return false;
+//			}
+//		}
+//	}
 	
 	public static PathDeterminer getPathDeterminer()
 	{
