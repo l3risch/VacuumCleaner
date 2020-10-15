@@ -169,7 +169,12 @@ public class ShortestPath extends Basic{
 		graph = calculateShortestPathFromSource(graph, source);
 		
 		List<Node> shortestPath = dest.getShortestPath();
-
+		
+		System.out.println("Old Path");
+		for(Node node : shortestPath)
+		{
+			System.out.println(node.x + ", " + node.y);
+		}
 		return shortestPath;
 	}
 	
@@ -255,8 +260,6 @@ public class ShortestPath extends Basic{
 	 */
 	private static List<Node> adjustDijkstraPath(List<Node> nodeList)
 	{
-
-		List<Node> adjustedNodes = new LinkedList<Node>();
 		
 		for(int i = 1; i < nodeList.size(); i++)
 		{
@@ -268,43 +271,55 @@ public class ShortestPath extends Basic{
 //			System.out.println("Current: "+ currentNode.x + "; " + currentNode.y);
 //			System.out.println("Next: " + nextNode.x + ", " +nextNode.y);
 
-			if(isTopHittingObstacle(nextRobotPosition))
-			{
-				nodeList.set(i-1, new Node(currentNode.x+3, currentNode.y));
-			} else if(isRightHittingObstacle(nextRobotPosition))
-			{
-				nodeList.set(i-1, new Node(currentNode.x, currentNode.y-3));
-			}
+//			if(isBottomHittingObstacle(nextRobotPosition))
+//			{
+//				if(isRightHittingObstacle(nextRobotPosition))
+//				{
+//					nodeList.set(i-1, new Node(currentNode.x, currentNode.y-3));
+//				}
+//			}
+			
+			modifyNextPosition(nextRobotPosition, currentNode, nextNode, nodeList, i);
 			
 			//Set last element
 			if(i == nodeList.size()-1)
 			{
-				if(isTopHittingObstacle(nextRobotPosition))
-				{
-					nodeList.set(i, new Node(nextNode.x+3, nextNode.y));
-				} else if(isRightHittingObstacle(nextRobotPosition))
-				{
-					nodeList.set(i, new Node(nextNode.x, nextNode.y-3));
-				}
+				modifyNextPosition(nextRobotPosition, currentNode, nextNode, nodeList, i);
 			}
 		}
 
 			
-		
+		System.out.println("Adj Path: ");
 		for(Node node : nodeList)
 		{
 			System.out.println(node.x + ", " + node.y);
 		}
+		System.out.println("Nearest Neighbour: " + _nn.getRow() + ", " + _nn.getCol());
+		System.out.println("_________________________");
 		return nodeList;
 	}
 	
 
 
 
+	private static void modifyNextPosition(Coordinates2D[][] nextRobotPosition, Node currentNode, Node nextNode, List<Node> nodeList, int i) 
+	{
+		if(isTopHittingObstacle(nextRobotPosition))
+		{
+			nodeList.set(i-1, new Node(currentNode.x+3, currentNode.y));
+
+		} else if(isRightHittingObstacle(nextRobotPosition))
+		{
+			nodeList.set(i-1, new Node(currentNode.x, currentNode.y-3));
+		}		
+	}
+
+
+
 	private static boolean isTopHittingObstacle(Coordinates2D[][] nextRobotPosition) 
 	{
 
-		for(int row = 0; row < 1; row++)
+		for(int row = 0; row < 3; row++)
 		{
 			for(int col = 0; col < 4; col++)
 			{
@@ -324,7 +339,7 @@ public class ShortestPath extends Basic{
 
 		for(int row = 0; row < 4; row++)
 		{
-			for(int col = 3; col < 4; col++)
+			for(int col = 1; col < 4; col++)
 			{
 				int robotCellRow = nextRobotPosition[row][col].getRow();
 				int robotCellCol = nextRobotPosition[row][col].getCol();	
