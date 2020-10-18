@@ -260,8 +260,10 @@ public class ShortestPath extends Basic{
 	 */
 	private static List<Node> adjustDijkstraPath(List<Node> nodeList)
 	{
+		boolean abort = false;
 		List<Node> adjustedPath = new LinkedList<Node>();
 		adjustedPath.add(nodeList.get(0));
+		Coordinates2D[][] nextRobotPosition = new Coordinates2D[4][4];
 		
 		for(int i = 1; i < nodeList.size()-1; i++)
 		{
@@ -271,19 +273,36 @@ public class ShortestPath extends Basic{
 			
 			int[] lastMove = {currentNode.x - previousNode.x, currentNode.y - previousNode.y};
 			int[] nextMove = {nextNode.x - currentNode.x, nextNode.y - currentNode.y};
-			Coordinates2D[][] nextRobotPosition = Robot.getCoordinates(nextNode.x, nextNode.y);
+			nextRobotPosition = Robot.getCoordinates(nextNode.x, nextNode.y);
 			if(isHittingObstacle(nextRobotPosition))
 			{
 				Node adjNode = new Node(currentNode.x  + lastMove[0], currentNode.y + lastMove[1]);
-				for(int j = i+1; j < nodeList.size(); j++)
+				nextRobotPosition = Robot.getCoordinates(adjNode.x, adjNode.y);
+				
+				if(isHittingObstacle(nextRobotPosition))
 				{
-					nodeList.set(j, new Node(nodeList.get(j).x + lastMove[0], nodeList.get(j).y + lastMove[1]));
-				}
-				if(adjustedPath.get(adjustedPath.size()-1).x != currentNode.x || adjustedPath.get(adjustedPath.size()-1).y != currentNode.y)
-					adjustedPath.add(currentNode);
+					for(int j = i; j < nodeList.size(); j++)
+					{
+						nodeList.remove(j);
+					}
+					adjustedPath.add(i, currentNode);
+					i = nodeList.size()-1;
+					abort = true;
 					
-				adjustedPath.add(adjNode);
-				nodeList.add(i+1, adjNode);
+				} else {
+				
+					for(int j = i+1; j < nodeList.size(); j++)
+					{
+						nodeList.set(j, new Node(nodeList.get(j).x + lastMove[0], nodeList.get(j).y + lastMove[1]));
+					}
+					
+					if(adjustedPath.get(adjustedPath.size()-1).x != currentNode.x || adjustedPath.get(adjustedPath.size()-1).y != currentNode.y)
+						adjustedPath.add(currentNode);
+						
+					adjustedPath.add(adjNode);
+					nodeList.add(i+1, adjNode);
+				}
+
 				
 			} else {
 				if(adjustedPath.get(adjustedPath.size()-1).x != currentNode.x || adjustedPath.get(adjustedPath.size()-1).y != currentNode.y)
@@ -292,8 +311,14 @@ public class ShortestPath extends Basic{
 			
 		}
 
-		
-		adjustedPath.add(nodeList.get(nodeList.size()-1));
+		if(!abort)
+		{
+			adjustedPath.add(nodeList.get(nodeList.size()-1));
+		}
+		else {
+			calcRestOfPath(nextRobotPosition);
+			abort = false;
+		}
 
 			
 		System.out.println("Adj Path: ");
@@ -306,6 +331,12 @@ public class ShortestPath extends Basic{
 		return adjustedPath;
 	}
 	
+
+	private static void calcRestOfPath() {
+		
+	}
+
+
 
 	private static boolean isHittingObstacle(Coordinates2D[][] nextRobotPosition) 
 	{
