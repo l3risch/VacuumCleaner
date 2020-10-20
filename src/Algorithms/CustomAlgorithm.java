@@ -49,7 +49,6 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 	}	
 	
 	private void determineRoute(int actualRow, int actualCol, Coordinates2D[] encircledArea, Map<String, CellState> mentalMap) {
-		System.out.println("\nactual row: " +  actualRow +"\nactual col: " + actualCol + "\n");
 		
 		if(actualRow >= 0 && actualCol >= 0)
 		{

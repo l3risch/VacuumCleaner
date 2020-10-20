@@ -168,11 +168,11 @@ public class ShortestPath extends Basic{
 		
 		List<Node> shortestPath = dest.getShortestPath();
 		shortestPath.add(new Node(_nn.getRow(), _nn.getCol()));
-		System.out.println("Old Path");
-		for(Node node : shortestPath)
-		{
-			System.out.println(node.x + ", " + node.y);
-		}
+//		System.out.println("Old Path");
+//		for(Node node : shortestPath)
+//		{
+//			System.out.println(node.x + ", " + node.y);
+//		}
 		return shortestPath;
 	}
 	
@@ -262,7 +262,6 @@ public class ShortestPath extends Basic{
 			Node nextNode = nodeList.get(i+1);
 			
 			int[] lastMove = {currentNode.x - previousNode.x, currentNode.y - previousNode.y};
-			int[] nextMove = {nextNode.x - currentNode.x, nextNode.y - currentNode.y};
 			nextRobotPosition = Robot.getCoordinates(nextNode.x, nextNode.y);
 			if(isHittingObstacle(nextRobotPosition))
 			{
@@ -315,13 +314,13 @@ public class ShortestPath extends Basic{
 		}
 
 			
-		System.out.println("Adj Path: ");
-		for(Node node : adjustedPath)
-		{
-			System.out.println(node.x + ", " + node.y);
-		}
-		System.out.println("Nearest Neighbour: " + _nn.getRow() + ", " + _nn.getCol());
-		System.out.println("_________________________");
+//		System.out.println("Adj Path: ");
+//		for(Node node : adjustedPath)
+//		{
+//			System.out.println(node.x + ", " + node.y);
+//		}
+//		System.out.println("Nearest Neighbour: " + _nn.getRow() + ", " + _nn.getCol());
+//		System.out.println("_________________________");
 		return adjustedPath;
 	}
 	
@@ -333,34 +332,22 @@ public class ShortestPath extends Basic{
 		int[] dir = {nextPosition.getRow() - currentNode.x, nextPosition.getCol() - currentNode.y};
 		String direction = null;
 
-		if(dir[0]==-1) {
-			if(_nn.getCol() - currentNode.y <= 0)
+		if(dir[0]==-1 || dir[0]==1) {
+			if(_nn.getCol() - currentNode.y <= 3)
 			{
 				direction = "LEFT";
 			} else {
 				direction = "RIGHT";
 			}
-		} else if(dir[0]==1) {
-			if(_nn.getCol() - currentNode.y <= 0)
-			{
-				direction = "LEFT";
-			} else {
-				direction = "RIGHT";
-			}		
-		} else if(dir[1]==-1) {
-			if(_nn.getRow() - currentNode.x < 0)
+		
+		} else if(dir[1]==-1 || dir[1]==1) {
+			if(_nn.getRow() - currentNode.x < -3)
 			{
 				direction = "TOP";
 			} else {
 				direction = "BOTTOM";
 			}
-		} else if(dir[1]==1) {
-			if(_nn.getRow() - currentNode.x < 0)
-			{
-				direction = "TOP";
-			} else {
-				direction = "BOTTOM";
-			}
+	
 		}
 
 		List<Node> listNodes = new LinkedList<Node>();
@@ -393,6 +380,12 @@ public class ShortestPath extends Basic{
 			i++;
 		}
 		
+		System.out.println("Avoid obstacle:");
+		for(Node node : listNodes)
+		{
+			System.out.println(node.x + ", " + node.y);
+		}
+		
 		nextPosition = nextRobotPosition[3][0];
 		listNodes.add(new Node(nextPosition.getRow(), nextPosition.getCol()));
 		
@@ -400,12 +393,23 @@ public class ShortestPath extends Basic{
 		{
 			List<Node> listNodesDijkstra = computePath(listNodes.get(listNodes.size()-1).x, listNodes.get(listNodes.size()-1).y, _nn);
 			
-			for(Node node : listNodesDijkstra)
+			if(listNodesDijkstra!=null)
 			{
-				listNodes.add(node);
+				for(Node node : listNodesDijkstra)
+				{
+					listNodes.add(node);
+				}
 			}
 		}
 		
+		System.out.println("Rest of Path:");
+		for(Node node : listNodes)
+		{
+			System.out.println(node.x + ", " + node.y);
+		}
+		
+		System.out.println("Nearest Neighbour: " + _nn.getRow() + ", " + _nn.getCol());
+
 		return listNodes;
 	}
 
@@ -433,35 +437,35 @@ public class ShortestPath extends Basic{
 		return false;
 	}
 
-	private static boolean turnInPath(int[] lastMove, int[]nextMove)
-	{
-		if(lastMove[0] == nextMove[0] && lastMove[1] == nextMove[1])
-		{
-			return false;
-		} else {
-			return true;
-		}
-	}
-
-	private static boolean isTopHittingObstacle(Coordinates2D[][] nextRobotPosition) 
-	{
-
-		for(int row = 0; row < 3; row++)
-		{
-			for(int col = 0; col < 3; col++)
-			{
-				int robotCellRow = nextRobotPosition[row][col].getRow();
-				int robotCellCol = nextRobotPosition[row][col].getCol();	
-				if(Table.getMarkedObstacles(robotCellRow, robotCellCol) ||  robotCellRow < 0 || robotCellRow >= 64 || robotCellCol < 0 || robotCellCol >= 64)
-				{
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-	
-	
+//	private static boolean turnInPath(int[] lastMove, int[]nextMove)
+//	{
+//		if(lastMove[0] == nextMove[0] && lastMove[1] == nextMove[1])
+//		{
+//			return false;
+//		} else {
+//			return true;
+//		}
+//	}
+//
+//	private static boolean isTopHittingObstacle(Coordinates2D[][] nextRobotPosition) 
+//	{
+//
+//		for(int row = 0; row < 3; row++)
+//		{
+//			for(int col = 0; col < 3; col++)
+//			{
+//				int robotCellRow = nextRobotPosition[row][col].getRow();
+//				int robotCellCol = nextRobotPosition[row][col].getCol();	
+//				if(Table.getMarkedObstacles(robotCellRow, robotCellCol) ||  robotCellRow < 0 || robotCellRow >= 64 || robotCellCol < 0 || robotCellCol >= 64)
+//				{
+//					return true;
+//				}
+//			}
+//		}
+//		return false;
+//	}
+//	
+//	
 	private static boolean isRightHittingObstacle(Coordinates2D[][] nextRobotPosition) 
 	{
 

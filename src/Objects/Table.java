@@ -88,7 +88,7 @@ public class Table {
 	}
 	
 	private static void setType3() {
-		Robot.setStartingPos(5, 5);
+		Robot.setStartingPos(56, 5);
 
 		_rows = 64;
 		_cols = 64;
@@ -97,15 +97,17 @@ public class Table {
 		
 		Obstacle obs1 = new Obstacle(230, 260, 300, 100, Shape.RECTANGLE);
 		
-		Obstacle obs2 = new Obstacle(250, 200, 50, 50, Shape.RECTANGLE);
-		Obstacle obs3 = new Obstacle(320, 200, 50, 50, Shape.RECTANGLE);
-		Obstacle obs4 = new Obstacle(390, 200, 50, 50, Shape.RECTANGLE);
-		Obstacle obs5 = new Obstacle(460, 200, 50, 50, Shape.RECTANGLE);
+		Obstacle obs2 = new Obstacle(140, 200, 50, 50, Shape.RECTANGLE);
+		Obstacle obs3 = new Obstacle(320, 250, 50, 50, Shape.RECTANGLE);
+		Obstacle obs4 = new Obstacle(390, 120, 80, 20, Shape.RECTANGLE);
+		Obstacle obs5 = new Obstacle(460, 540, 120, 70, Shape.RECTANGLE);
 
-		Obstacle obs6 = new Obstacle(250, 370, 50, 50, Shape.RECTANGLE);
-		Obstacle obs7 = new Obstacle(320, 370, 50, 50, Shape.RECTANGLE);
-		Obstacle obs8 = new Obstacle(390, 370, 50, 50, Shape.RECTANGLE);
-		Obstacle obs9 = new Obstacle(460, 370, 50, 50, Shape.RECTANGLE);
+		Obstacle obs6 = new Obstacle(250, 130, 30, 50, Shape.RECTANGLE);
+		Obstacle obs7 = new Obstacle(320, 120, 60, 50, Shape.RECTANGLE);
+		Obstacle obs8 = new Obstacle(100, 570, 210, 50, Shape.RECTANGLE);
+		Obstacle obs9 = new Obstacle(460, 420, 90, 50, Shape.RECTANGLE);
+		Obstacle obs10 = new Obstacle(480, 650, 30, 60, Shape.RECTANGLE);
+		Obstacle ob11 = new Obstacle(560, 570, 90, 100, Shape.RECTANGLE);
 		
 		_listObs = new ArrayList<Obstacle>();
 		
@@ -118,6 +120,8 @@ public class Table {
 		_listObs.add(obs7);
 		_listObs.add(obs8);
 		_listObs.add(obs9);
+		_listObs.add(obs10);
+		_listObs.add(ob11);
 		
 		markObstacles();
 
