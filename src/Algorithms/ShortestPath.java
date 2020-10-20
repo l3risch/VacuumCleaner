@@ -87,11 +87,9 @@ public class ShortestPath extends Basic{
 		
 		if(exists)
 	    {
-		  //long start = System.currentTimeMillis();
 		  List<Node> dijkstraPath = computeDijkstraPath();
 		  List<Node> adjustedPath = adjustDijkstraPath(dijkstraPath);
 		  return adjustedPath;
-          //System.out.println(System.currentTimeMillis()-start);
 	    } else {
 	    	return null;
 	    }
@@ -231,28 +229,20 @@ public class ShortestPath extends Basic{
 		
 		 _robotPos = Robot.getCoordinates(robotRow, robotCol);
 
-		 //Set position of robot
+		 //Set position of nearest neighbour as destination
 		for(int i = 0; i < 4; i++)
 		{
-			StringBuilder sb = new StringBuilder();
 			for(int j = 0; j < 4; j++)
 			{
-				int row = _robotPos[i][j].getRow();
-				int col = _robotPos[i][j].getCol();
-				_matrix[row][col] = 'S';
-				sb.append(row + ", " + col);
+				if(_robotPos[i][j].getRow()==_nn.getRow() && _robotPos[i][j].getCol()==_nn.getCol())
+				{
+					return true;
+				}
 			}
-			//System.out.println(sb);
 		}
 		
-//		System.out.println("Nearest Neighbour: " + _nn.getRow() + ", " + _nn.getCol());
-		 //Set position of nearest neighbour as destination
-		if(_matrix[_nn.getRow()][_nn.getCol()] == 'S')
-		{
-			return true;
-		} else {
-			return false;
-		} 
+		return false;
+		
 	}
 	
 	/*
@@ -316,7 +306,11 @@ public class ShortestPath extends Basic{
 			adjustedPath.add(nodeList.get(nodeList.size()-1));
 		}
 		else {
-			calcRestOfPath(nextRobotPosition);
+			List<Node> restPath = calcRestOfPath(nextRobotPosition, adjustedPath.get(adjustedPath.size()-1));
+			for(Node node : restPath)
+			{
+				adjustedPath.add(node);
+			}
 			abort = false;
 		}
 
@@ -332,8 +326,87 @@ public class ShortestPath extends Basic{
 	}
 	
 
-	private static void calcRestOfPath() {
+	private static List<Node> calcRestOfPath(Coordinates2D[][] nextRobotPosition, Node currentNode) 
+	{
+		Coordinates2D nextPosition = nextRobotPosition[3][0];
+		//Determine direction of nearest neighbour
+		int[] dir = {nextPosition.getRow() - currentNode.x, nextPosition.getCol() - currentNode.y};
+		String direction = null;
+
+		if(dir[0]==-1) {
+			if(_nn.getCol() - currentNode.y <= 0)
+			{
+				direction = "LEFT";
+			} else {
+				direction = "RIGHT";
+			}
+		} else if(dir[0]==1) {
+			if(_nn.getCol() - currentNode.y <= 0)
+			{
+				direction = "LEFT";
+			} else {
+				direction = "RIGHT";
+			}		
+		} else if(dir[1]==-1) {
+			if(_nn.getRow() - currentNode.x < 0)
+			{
+				direction = "TOP";
+			} else {
+				direction = "BOTTOM";
+			}
+		} else if(dir[1]==1) {
+			if(_nn.getRow() - currentNode.x < 0)
+			{
+				direction = "TOP";
+			} else {
+				direction = "BOTTOM";
+			}
+		}
+
+		List<Node> listNodes = new LinkedList<Node>();
 		
+		int i = 1;
+		while(isHittingObstacle(nextRobotPosition))
+		{
+			if(direction == "LEFT")
+			{
+				Node nextNode = new Node(currentNode.x, currentNode.y - i);
+				listNodes.add(nextNode);
+				nextRobotPosition = Robot.getCoordinates(nextPosition.getRow(), nextPosition.getCol()-i);
+			} else if(direction == "RIGHT")
+			{
+				Node nextNode = new Node(currentNode.x, currentNode.y + i);
+				listNodes.add(nextNode);
+				nextRobotPosition = Robot.getCoordinates(nextPosition.getRow(), nextPosition.getCol()+i);
+			} else if(direction == "TOP")
+			{
+				Node nextNode = new Node(currentNode.x - i, currentNode.y);
+				listNodes.add(nextNode);
+				nextRobotPosition = Robot.getCoordinates(nextPosition.getRow() - i, nextPosition.getCol());
+			} else if(direction == "BOTTOM")
+			{
+				Node nextNode = new Node(currentNode.x + i, currentNode.y);
+				listNodes.add(nextNode);
+				nextRobotPosition = Robot.getCoordinates(nextPosition.getRow() + i, nextPosition.getCol());
+			} 
+			
+			i++;
+		}
+		
+		nextPosition = nextRobotPosition[3][0];
+		listNodes.add(new Node(nextPosition.getRow(), nextPosition.getCol()));
+		
+		if(!nnReached(listNodes.get(listNodes.size()-1).x, listNodes.get(listNodes.size()-1).y))
+		{
+			List<Node> listNodesDijkstra = computePath(listNodes.get(listNodes.size()-1).x, listNodes.get(listNodes.size()-1).y, _nn);
+			
+			for(Node node : listNodesDijkstra)
+			{
+				listNodes.add(node);
+			}
+		}
+		
+		return listNodes;
 	}
 
 
