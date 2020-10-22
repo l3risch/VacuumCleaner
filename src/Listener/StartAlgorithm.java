@@ -10,8 +10,9 @@ import java.time.LocalTime;
 import javax.swing.Timer;
 
 import Algorithms.WallFollowing;
-import Algorithms.SpiralAlgorithm;
-import Algorithms.CustomAlgorithm;
+import Algorithms.Spiral2;
+import Algorithms.Spiral;
+import Algorithms.BackAndForth;
 import Algorithms.RandomWalk;
 import main.MainFrame;
 
@@ -37,8 +38,8 @@ public class StartAlgorithm implements ActionListener {
 	        _timer.start();
 	        _timer.setRepeats(true);
 		break;
-		case "Custom": CustomAlgorithm custom = new CustomAlgorithm(_frame);
-			_timer = new Timer(50, custom);
+		case "Spiral": Spiral spiral = new Spiral(_frame);
+			_timer = new Timer(50, spiral);
 	        _timer.start();
 	        _timer.setRepeats(true);
 		break;
@@ -47,11 +48,17 @@ public class StartAlgorithm implements ActionListener {
 	        _timer.start();
 	        _timer.setRepeats(true);
 		break;	
-		case "Spiral": SpiralAlgorithm cellDec = new SpiralAlgorithm(_frame);
-			_timer = new Timer(50, cellDec);
+		case "Spiral2": Spiral2 spiral2 = new Spiral2(_frame);
+			_timer = new Timer(50, spiral2);
 	        _timer.start();
 	        _timer.setRepeats(true);
 	break;
+		case "BackForth": BackAndForth backforth = new BackAndForth(_frame);
+		_timer = new Timer(50, backforth);
+        _timer.start();
+        _timer.setRepeats(true);
+        break;
+	
 		}
 		
 

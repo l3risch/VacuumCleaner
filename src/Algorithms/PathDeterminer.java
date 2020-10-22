@@ -11,16 +11,16 @@ import Physics.Movement;
 
 public class PathDeterminer extends Basic{
 
-	private Map<String, CellState> _mentalMap = new HashMap<String, CellState>();
-	private Coordinates2D _robotPos;
-	private double _distance;
+	private static Map<String, CellState> _mentalMap = new HashMap<String, CellState>();
+	private static Coordinates2D _robotPos;
+	private static double _distance;
 	
 	public PathDeterminer()
 	{
 		_mentalMap = getMentalMap();
 	}
 	
-	public Coordinates2D getNearestNeighbour(int row, int col)
+	public static Coordinates2D getNearestNeighbour(int row, int col)
 	{
 		Coordinates2D[][] robotCoordinates = Robot.getCoordinates(row, col);
 		
@@ -130,7 +130,7 @@ public class PathDeterminer extends Basic{
 		return currentAngle % 360;
 	}
 
-	private double calcDistance(Coordinates2D robotPos, Coordinates2D freeCell) 
+	private static double calcDistance(Coordinates2D robotPos, Coordinates2D freeCell) 
 	{
 		double dist = Math.sqrt((robotPos.getRow() - freeCell.getRow()) * (robotPos.getRow() - freeCell.getRow()) + (robotPos.getCol() - freeCell.getCol()) * (robotPos.getCol() - freeCell.getCol()));
 		return dist;

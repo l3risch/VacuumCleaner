@@ -16,7 +16,7 @@ import main.MainFrame;
 import enums.Direction;
 
 
-public class SpiralAlgorithm extends Basic implements ActionListener {
+public class Spiral2 extends Basic implements ActionListener {
 
 	private MainFrame _frame; 
 	private int _actualRow;
@@ -26,7 +26,7 @@ public class SpiralAlgorithm extends Basic implements ActionListener {
 
 
 
-	public SpiralAlgorithm(MainFrame frame)
+	public Spiral2(MainFrame frame)
 	{
 		_frame = frame;
 	}

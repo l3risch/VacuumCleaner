@@ -13,6 +13,8 @@ import java.util.Queue;
 import java.util.Set;
 
 import Algorithms.Basic.CellState;
+import Objects.Graph;
+import Objects.Node;
 import Objects.Robot;
 import Objects.Table;
 import Physics.Coordinates2D;
@@ -25,7 +27,8 @@ public class ShortestPath extends Basic{
 	static List<Node> _nodeList = new LinkedList<Node>();
 	private static char[][] _matrix;
 	private static Coordinates2D _nn;
-	
+	public static List<Node> adjustedPath = new LinkedList<Node>();
+
 	 public static List<Node> computePath(int robotRow, int robotCol, Coordinates2D nn)
 	 {
 		 _nodeList.clear();
@@ -88,7 +91,7 @@ public class ShortestPath extends Basic{
 		if(exists)
 	    {
 		  List<Node> dijkstraPath = computeDijkstraPath();
-		  List<Node> adjustedPath = adjustDijkstraPath(dijkstraPath);
+		  adjustedPath = adjustDijkstraPath(dijkstraPath);
 		  return adjustedPath;
 	    } else {
 	    	return null;
@@ -131,6 +134,39 @@ public class ShortestPath extends Basic{
 		return false;
 	}
 
+
+public static Coordinates2D getNearestNeighbour(int row, int col) {
+		
+		Node source = new Node(_sourceCell.getRow(), _sourceCell.getCol());
+		Queue<Node> queue = new LinkedList<Node>();
+		
+		queue.add(source);
+
+		while(!queue.isEmpty()) {
+			Node currentNode = queue.poll();
+			if(_matrix[currentNode.x][currentNode.y]!='0')
+			{
+				List<Node> neighbourList = addNeighbours(currentNode, _matrix);
+				queue.addAll(neighbourList);
+			
+				String key = generateKey(currentNode.x, currentNode.y);
+				if(_mentalMap.get(key) == CellState.FREE ) {
+					return new Coordinates2D(currentNode.x, currentNode.y);
+				}
+				else {
+			
+					_matrix[currentNode.x][currentNode.y]='0';
+													
+					for(Node node : neighbourList)
+					{
+						currentNode.addDestination(node);
+					}
+	            	
+				}
+			}	
+		}
+		return PathDeterminer.getNearestNeighbour(row, col);
+	}
 
 	private static List<Node> addNeighbours(Node poped, char[][] matrix) {
 		
@@ -246,7 +282,7 @@ public class ShortestPath extends Basic{
 	}
 	
 	/*
-	 * Since robot consists of 16 cells instead of 1, the Disjkastra algorithm has to be adjusted
+	 * Since robot consists of 16 cells instead of 1, the Dijkstra algorithm has to be adjusted
 	 */
 	private static List<Node> adjustDijkstraPath(List<Node> nodeList)
 	{
@@ -267,7 +303,6 @@ public class ShortestPath extends Basic{
 			{
 				Node adjNode = new Node(currentNode.x  + lastMove[0], currentNode.y + lastMove[1]);
 				nextRobotPosition = Robot.getCoordinates(adjNode.x, adjNode.y);
-				
 				if(isHittingObstacle(nextRobotPosition))
 				{
 					for(int j = i; j < nodeList.size(); j++)
@@ -332,8 +367,9 @@ public class ShortestPath extends Basic{
 		int[] dir = {nextPosition.getRow() - currentNode.x, nextPosition.getCol() - currentNode.y};
 		String direction = null;
 
+		//Make sure robot moves into direction of nearest neighbour
 		if(dir[0]==-1 || dir[0]==1) {
-			if(_nn.getCol() - currentNode.y <= 3)
+			if(_nn.getCol() - currentNode.y <= 2)
 			{
 				direction = "LEFT";
 			} else {
@@ -341,7 +377,7 @@ public class ShortestPath extends Basic{
 			}
 		
 		} else if(dir[1]==-1 || dir[1]==1) {
-			if(_nn.getRow() - currentNode.x < -3)
+			if(_nn.getRow() - currentNode.x < -2)
 			{
 				direction = "TOP";
 			} else {
@@ -385,6 +421,7 @@ public class ShortestPath extends Basic{
 		{
 			System.out.println(node.x + ", " + node.y);
 		}
+		
 		
 		nextPosition = nextRobotPosition[3][0];
 		listNodes.add(new Node(nextPosition.getRow(), nextPosition.getCol()));
@@ -447,31 +484,67 @@ public class ShortestPath extends Basic{
 //		}
 //	}
 //
-//	private static boolean isTopHittingObstacle(Coordinates2D[][] nextRobotPosition) 
-//	{
-//
-//		for(int row = 0; row < 3; row++)
-//		{
-//			for(int col = 0; col < 3; col++)
-//			{
-//				int robotCellRow = nextRobotPosition[row][col].getRow();
-//				int robotCellCol = nextRobotPosition[row][col].getCol();	
-//				if(Table.getMarkedObstacles(robotCellRow, robotCellCol) ||  robotCellRow < 0 || robotCellRow >= 64 || robotCellCol < 0 || robotCellCol >= 64)
-//				{
-//					return true;
-//				}
-//			}
-//		}
-//		return false;
-//	}
-//	
-//	
+	private static boolean isTopHittingObstacle(Coordinates2D[][] nextRobotPosition) 
+	{
+
+		for(int row = 0; row < 1; row++)
+		{
+			for(int col = 0; col < 4; col++)
+			{
+				int robotCellRow = nextRobotPosition[row][col].getRow();
+				int robotCellCol = nextRobotPosition[row][col].getCol();	
+				if(Table.getMarkedObstacles(robotCellRow, robotCellCol) ||  robotCellRow < 0 || robotCellRow >= 64 || robotCellCol < 0 || robotCellCol >= 64)
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	private static boolean isBottomHittingObstacle(Coordinates2D[][] nextRobotPosition) 
+	{
+
+		for(int row = 3; row < 4; row++)
+		{
+			for(int col = 0; col < 4; col++)
+			{
+				int robotCellRow = nextRobotPosition[row][col].getRow();
+				int robotCellCol = nextRobotPosition[row][col].getCol();	
+				if(Table.getMarkedObstacles(robotCellRow, robotCellCol) ||  robotCellRow < 0 || robotCellRow >= 64 || robotCellCol < 0 || robotCellCol >= 64)
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	
 	private static boolean isRightHittingObstacle(Coordinates2D[][] nextRobotPosition) 
 	{
 
-		for(int row = 1; row < 4; row++)
+		for(int row = 0; row < 4; row++)
 		{
-			for(int col = 1; col < 4; col++)
+			for(int col = 3; col < 4; col++)
+			{
+				int robotCellRow = nextRobotPosition[row][col].getRow();
+				int robotCellCol = nextRobotPosition[row][col].getCol();	
+				if(Table.getMarkedObstacles(robotCellRow, robotCellCol) ||  robotCellRow < 0 || robotCellRow >= 64 || robotCellCol < 0 || robotCellCol >= 64)
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	private static boolean isLeftHittingObstacle(Coordinates2D[][] nextRobotPosition) 
+	{
+
+		for(int row = 0; row < 4; row++)
+		{
+			for(int col = 0; col < 1; col++)
 			{
 				int robotCellRow = nextRobotPosition[row][col].getRow();
 				int robotCellCol = nextRobotPosition[row][col].getCol();	
@@ -487,66 +560,5 @@ public class ShortestPath extends Basic{
 
 }
 
-class Node {
-    int x;
-    int y;
-    List<Node> shortestPath = new LinkedList<>();
-    
-    Integer distance = Integer.MAX_VALUE;
-    
-    List<Node> adjacentNodes = new LinkedList<>();
- 
-    public void addDestination(Node destination) {
-        adjacentNodes.add(destination);
-    }
-    
-    Node(int x, int y) {
-        this.x = x;
-        this.y = y;
-     
-    }
-    
-    public void setShortestPath(List<Node> shortestPath)
-    {
-    	this.shortestPath = shortestPath;
-    }
-    
-    public List<Node> getShortestPath()
-    {
-    	return this.shortestPath;
-    }
-    
-    public void setDistance(Integer distance)
-    {
-    	this.distance = distance;
-    }
-    
-    public Integer getDistance()
-    {
-    	return distance;
-    }
-    
-    public void setAdjacentNodes(List<Node> adjacentNodes)
-    {
-    	this.adjacentNodes = adjacentNodes;
-    }
-    
-    public List<Node> getAdjacentNodes()
-    {
-    	return this.adjacentNodes;
-    }
-}
 
-class Graph {
-	 
-    Set<Node> nodes = new HashSet<>();
-    
-    public void addNode(Node nodeA) {
-        nodes.add(nodeA);
-    }
- 
-    public Set<Node> getNodes()
-    {
-    	return this.nodes;
-    }
-}
+

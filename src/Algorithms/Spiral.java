@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import Listener.StartAlgorithm;
+import Objects.Node;
 import Objects.Robot;
 import Objects.Table;
 import Physics.Coordinates2D;
@@ -15,7 +16,7 @@ import Physics.Movement;
 import main.MainFrame;
 
 
-public class CustomAlgorithm extends Basic implements ActionListener {
+public class Spiral extends Basic implements ActionListener {
 
 	private MainFrame _frame; 
 	private int _actualRow;
@@ -31,7 +32,7 @@ public class CustomAlgorithm extends Basic implements ActionListener {
 
 	boolean _nnVisited = true;
 
-	public CustomAlgorithm(MainFrame frame)
+	public Spiral(MainFrame frame)
 	{
 		_frame = frame;
 	}
