@@ -41,10 +41,6 @@ public class Table {
 		break;
 		case "3": setType3();
 		break;
-		case "4": setType4();
-		break;
-		case "5": setType5();
-		break;
 		}
 	}
 
@@ -58,36 +54,8 @@ public class Table {
 		_listObs = null;
 	}
 
-	private static void setType2() {
-		Robot.setStartingPos(5, 5);
-
-		_rows = 64;
-		_cols = 64;
-		_markedPath = new boolean[_rows][_cols];
-		_markedObstacles = new boolean[_rows][_cols];
-		_listObs = new ArrayList<Obstacle>();
-		
-		Obstacle obs1 = new Obstacle(230, 260, 200, 200, Shape.OVAL);
-		
-		Obstacle obs2 = new Obstacle(285, 460, 50, 50, Shape.OVAL);
-		Obstacle obs3 = new Obstacle(370, 450, 50, 50, Shape.OVAL);
-		Obstacle obs4 = new Obstacle(410, 410, 50, 50, Shape.OVAL);
-		Obstacle obs5 = new Obstacle(300, 200, 50, 50, Shape.OVAL);
-		Obstacle obs6 = new Obstacle(500, 730, 200, 50, Shape.RECTANGLE);
-		Obstacle obs7 = new Obstacle(100, 530, 60, 60, Shape.RECTANGLE);
-
-		_listObs.add(obs1);
-		_listObs.add(obs2);
-		_listObs.add(obs3);
-		_listObs.add(obs4);
-		_listObs.add(obs5);
-		_listObs.add(obs6);
-		_listObs.add(obs7);
-
-		markObstacles();
-	}
 	
-	private static void setType3() {
+	private static void setType2() {
 		Robot.setStartingPos(56, 5);
 
 		_rows = 64;
@@ -126,39 +94,8 @@ public class Table {
 		markObstacles();
 
 	}
-	
-	private static void setType4() {
-		Robot.setStartingPos(5, 5);
 
-		_rows = 64;
-		_cols = 52;
-		_markedPath = new boolean[_rows][_cols];
-		_markedObstacles = new boolean[_rows][_cols];
-		_listObs = new ArrayList<Obstacle>();
-		
-		Obstacle obs1 = new Obstacle(100, 530, 60, 60, Shape.RECTANGLE);
-		Obstacle obs2 = new Obstacle(340, 540, 50, 50, Shape.RECTANGLE);
-		Obstacle obs3 = new Obstacle(350, 730, 100, 50, Shape.RECTANGLE);
-		Obstacle obs4 = new Obstacle(590, 510, 30, 50, Shape.RECTANGLE);
-		Obstacle obs5 = new Obstacle(140, 230, 100, 50, Shape.RECTANGLE);
-		Obstacle obs6 = new Obstacle(400, 200, 70, 70, Shape.OVAL);
-		Obstacle obs7 = new Obstacle(320, 320, 100, 100, Shape.RECTANGLE);
-		Obstacle obs8 = new Obstacle(360, 360, 25, 125, Shape.RECTANGLE);
-
-		_listObs.add(obs1);
-		_listObs.add(obs2);
-		_listObs.add(obs3);
-		_listObs.add(obs4);
-		_listObs.add(obs5);
-		_listObs.add(obs6);
-		_listObs.add(obs7);
-		_listObs.add(obs8);
-		
-		markObstacles();
-	}
-	
-
-	private static void setType5() {
+	private static void setType3() {
 		Robot.setStartingPos(27, 27);
 		Robot.getMovement().setAng(270);
 		_rows = 64;

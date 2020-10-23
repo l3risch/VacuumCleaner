@@ -2,13 +2,13 @@ package Algorithms;
 
 import java.util.HashMap;
 
+
 import java.util.Map;
 
 import Objects.Robot;
 import Objects.Table;
 import Physics.Coordinates2D;
-import Physics.Movement;
-import enums.Direction;
+
 
 public class Basic {
 	
@@ -197,34 +197,6 @@ public class Basic {
 		
 		return scanArea;
 		
-	}
-	
-	
-	//Direction is covered, which means no obstacles or walls but parts of the scanned area are covered in this direction
-	boolean partiallyCoveredPathInDirection(Coordinates2D[] scannedArea, ScanDirection direction)
-	{
-		Coordinates2D[] scanArea = determineScanDirections(scannedArea, direction);
-
-		boolean pathCovered = false;
-		
-		for(int i = 0; i < scanArea.length; i++)
-		{
-			try {
-				if(Table.getMarkedObstacles(scanArea[i].getRow(), scanArea[i].getCol()))
-				{
-					return false;
-				} else if(Table.getPath(scanArea[i].getRow(), scanArea[i].getCol()))
-				{
-					pathCovered = true;
-				}
-			} catch(ArrayIndexOutOfBoundsException e)
-			{
-				e.getStackTrace();
-				pathCovered = false;
-			}
-		}
-		return pathCovered;
-			
 	}
 	
 	
@@ -477,7 +449,7 @@ public class Basic {
 		return key;
 	}
 
-	Map<String, CellState> getMentalMap()
+	static Map<String, CellState> getMentalMap()
 	{
 		return _mentalMap;
 	}

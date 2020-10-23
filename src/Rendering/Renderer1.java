@@ -1,5 +1,6 @@
 package Rendering;
 import java.awt.AlphaComposite;
+
 import java.awt.Color;
 
 import java.awt.Graphics;
@@ -20,9 +21,8 @@ import javax.swing.JPanel;
 
 import Algorithms.Basic;
 import Algorithms.Basic.CellState;
-import Algorithms.PathDeterminer;
-import Algorithms.ShortestPath;
-import Algorithms.Spiral2;
+import Algorithms.NearestNeighbour;
+import Algorithms.DijsktraAlgorithm;
 import Objects.Node;
 import Objects.Obstacle;
 import Objects.Obstacle.Shape;
@@ -201,14 +201,12 @@ public class Renderer1 extends JPanel{
  		}
 		
 		//Clear nearest free cell
-		if(Spiral2.getPathDeterminer() != null)
-		{
-			PathDeterminer path = Spiral2.getPathDeterminer();
-			Coordinates2D nn = path.getNearestNeighbour(Robot.getYasRow(), Robot.getXasCol());
-			_g.setColor(new Color(0,0,0,0));
-			_g.fillRect(nn.getCol() * 10 + 100, nn.getRow() * 10 + 140, 10, 10);
-			_g.setColor(Color.BLACK);
-		}
+		Coordinates2D nn = NearestNeighbour.getNearestNeighbour(Robot.getYasRow(), Robot.getXasCol());
+		_g.setColor(new Color(0,0,0,0));
+		_g.fillRect(nn.getCol() * 10 + 100, nn.getRow() * 10 + 140, 10, 10);
+		_g.setColor(Color.BLACK);
+		
+		
 		
 		_opacity = new int[Table._rows][Table._cols];
 		Basic._mentalMap.clear();
@@ -264,15 +262,11 @@ public class Renderer1 extends JPanel{
 	
 	private static void paintNearestCell() 
 	{
-		if(Spiral2.getPathDeterminer() != null)
-		{
-		PathDeterminer path = Spiral2.getPathDeterminer();
-		Coordinates2D nn = path.getNearestNeighbour(Robot.getYasRow(), Robot.getXasCol());
+		
+		Coordinates2D nn = NearestNeighbour.getNearestNeighbour(Robot.getYasRow(), Robot.getXasCol());
 		_g.setColor(Color.BLUE);
 		_g.fillRect(nn.getCol() * 10 + 100, nn.getRow() * 10 + 140, 10, 10);
 		_g.setColor(Color.BLACK);
-		}
-		
 	}
 
 }

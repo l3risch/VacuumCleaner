@@ -9,8 +9,6 @@ import java.time.LocalTime;
 
 import javax.swing.Timer;
 
-import Algorithms.WallFollowing;
-import Algorithms.Spiral2;
 import Algorithms.Spiral;
 import Algorithms.BackAndForth;
 import Algorithms.RandomWalk;
@@ -33,11 +31,6 @@ public class StartAlgorithm implements ActionListener {
 		
 		_start = System.currentTimeMillis() / 1000l;
 		switch(_frame.getAlgorithm()) {
-		case "Wall Following": WallFollowing test = new WallFollowing(_frame);
-			_timer = new Timer(50, test);
-	        _timer.start();
-	        _timer.setRepeats(true);
-		break;
 		case "Spiral": Spiral spiral = new Spiral(_frame);
 			_timer = new Timer(50, spiral);
 	        _timer.start();
@@ -48,11 +41,6 @@ public class StartAlgorithm implements ActionListener {
 	        _timer.start();
 	        _timer.setRepeats(true);
 		break;	
-		case "Spiral2": Spiral2 spiral2 = new Spiral2(_frame);
-			_timer = new Timer(50, spiral2);
-	        _timer.start();
-	        _timer.setRepeats(true);
-	break;
 		case "BackForth": BackAndForth backforth = new BackAndForth(_frame);
 		_timer = new Timer(50, backforth);
         _timer.start();

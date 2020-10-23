@@ -22,10 +22,9 @@ public class Spiral extends Basic implements ActionListener {
 	private int _actualRow;
 	private int _actualCol;
 	private Coordinates2D[] _encircledArea = new Coordinates2D[16];
-	private static PathDeterminer _pathDeterminer = new PathDeterminer();
-	Coordinates2D _nearestNeighbour = new Coordinates2D(0, 0);
-	private boolean _bypass = false;
-	private String _key;
+	
+	Coordinates2D _nn = new Coordinates2D(0, 0);
+	
 	private int _movesToNN = 1;
 	private List<Node> _shortestPath;
 	private boolean _pathCalculated = false;
@@ -56,68 +55,43 @@ public class Spiral extends Basic implements ActionListener {
 			updateMap(actualRow, actualCol, mentalMap);
 		}
 		
-		_nearestNeighbour = _pathDeterminer.getNearestNeighbour(actualRow, actualCol);
-		
-		int x = Robot.getX();
-		int y = Robot.getY();
-		double ang = Robot.getMovement().getAng();
+		_nn = NearestNeighbour.getNearestNeighbour(actualRow, actualCol);
 		
 		
 		if(totallyFreeDirection(encircledArea, ScanDirection.LEFT) && !_pathCalculated)
 		{
-			if(Robot.getMovement().getAng()%90 != 0)
-			{
-				roundAngle(Robot.getMovement().getAng());
-			}
-			
 			Robot.getMovement().turnLeft();
 			Robot.getMovement().moveForward();
+			
 		} else if(totallyFreeDirection(encircledArea, ScanDirection.FRONT) && !_pathCalculated)
 		{
-			if(Robot.getMovement().getAng()%90 != 0)
-			{
-				roundAngle(Robot.getMovement().getAng());
-			}
-			Robot.getMovement().moveForward();
-		} else if(totallyFreeDirection(encircledArea, ScanDirection.RIGHT) && !_pathCalculated)
-		{
-			if(Robot.getMovement().getAng()%90 != 0)
-			{
-				roundAngle(Robot.getMovement().getAng());
-			}
-			Robot.getMovement().turnRight();
 			Robot.getMovement().moveForward();
 			
+		} else if(totallyFreeDirection(encircledArea, ScanDirection.RIGHT) && !_pathCalculated)
+		{
+			Robot.getMovement().turnRight();
+			Robot.getMovement().moveForward();
 			
 		} else if(partiallyFreeDirection(encircledArea, ScanDirection.LEFT) && !_pathCalculated)
 		{
-			if(Robot.getMovement().getAng()%90 != 0)
-			{
-				roundAngle(Robot.getMovement().getAng());
-			}
 			Robot.getMovement().turnLeft();
 			Robot.getMovement().moveForward();
+			
 		} else if(partiallyFreeDirection(encircledArea, ScanDirection.FRONT) && !_pathCalculated)
 		{
-			if(Robot.getMovement().getAng()%90 != 0)
-			{
-				roundAngle(Robot.getMovement().getAng());
-			}
 			Robot.getMovement().moveForward();
+			
 		} else if(partiallyFreeDirection(encircledArea, ScanDirection.RIGHT) && !_pathCalculated)
 		{
-			if(Robot.getMovement().getAng()%90 != 0)
-			{
-				roundAngle(Robot.getMovement().getAng());
-			}
 			Robot.getMovement().turnRight();
 			Robot.getMovement().moveForward();
+			
 		} else if(totallyCovered(encircledArea))
 		{
 			if(!_pathCalculated)
 			{
 				//Calculate shortest route to nearest neighbour
-				_shortestPath = ShortestPath.computePath(actualRow, actualCol, _nearestNeighbour);
+				_shortestPath = DijsktraAlgorithm.computePath(actualRow, actualCol, _nn);
 				_pathCalculated = true;
 			}
 
@@ -125,7 +99,7 @@ public class Spiral extends Basic implements ActionListener {
 			{			
 			if(_shortestPath != null)
 			{
-				if(!ShortestPath.nnReached(actualRow, actualCol))
+				if(!DijsktraAlgorithm.nnReached(actualRow, actualCol))
 				{
 					Node currentNode = _shortestPath.get(_movesToNN);
 					
@@ -176,62 +150,13 @@ public class Spiral extends Basic implements ActionListener {
 			_movesToNN = 0;
 		}
 		
-				
-		
-		
-		
 //		if(reachedStoppingCriteria(x, y, ang))
 //		{
 //			StartAlgorithm._timer.stop();
 //		}	
-		
-		
 	}
 
-
-	private void roundAngle(double ang) 
-	{
-		double rest = (ang%90) / 90;
-		double roundAngle;
-		if(rest >= 0.5)
-		{
-			roundAngle = ang  + (90 - (ang%90));
-		} else {
-			roundAngle = ang - (ang%90);
-		}
-		Robot.getMovement().setAng(roundAngle);
-	}
-
-//	@Override
-//	boolean isFrontAccesable(int row, int col)
-//	{
-//		Coordinates2D[] scannedArea = getEncircledScannedArea(row, col);
-//		Coordinates2D[] frontOfRobot = determineScanDirections(scannedArea, ScanDirection.FRONT);
-//
-//		boolean accesable = true;
-//		
-//		for(int i = 0; i < frontOfRobot.length; i++)
-//		try {
-//
-//			if(Table.getMarkedObstacles(frontOfRobot[i].getRow(), frontOfRobot[i].getCol()))
-//			{
-//				accesable = false;
-//			}
-//			
-//			if(Table._markedPath[frontOfRobot[i].getRow()][frontOfRobot[i].getCol()])
-//			{
-//				accesable = false;
-//			}
-//			
-//		} catch(ArrayIndexOutOfBoundsException e)
-//		{
-//			e.getStackTrace();
-//			accesable = false;
-//		}
-//		
-//		return accesable;
-//	}
-
+ 
     
 	
 //	private boolean reachedStoppingCriteria(int x, int y, double ang) 
@@ -250,180 +175,6 @@ public class Spiral extends Basic implements ActionListener {
 //			}
 //		}
 //	}
-	
-	public static PathDeterminer getPathDeterminer()
-	{
-		return _pathDeterminer;
-	}
-	
-	private void bypassObstacle(Coordinates2D[] encircledArea, int row, int col, boolean countMoves, ScanDirection dir) {
-		
-		
-		if(super.isFrontAccesable(row, col))
-		{
-			if(freeDirection(encircledArea, ScanDirection.RIGHT) && _bypass == true)
-			{
-				if(dir == ScanDirection.LEFT)
-				{
-					Robot.getMovement().turnRight();
-				} else if(dir == ScanDirection.RIGHT)
-				{
-					Robot.getMovement().turnLeft();
-				}
-				_bypass = false;
-				_nnVisited = true;
-			}
-			Robot.getMovement().moveForward();
-		} else 
-		{
-			if(dir == ScanDirection.LEFT)
-			{
-				bypassLeft();
-			} else if(dir == ScanDirection.RIGHT)
-			{
-				bypassRight();
-			}
-			_bypass = true;
-
-		}		
-	}
-	
-	private void bypassRight()
-	{
-		
-		while(!super.isFrontAccesable(_actualRow, _actualCol))
-		{
-			if(Robot.getMovement().getAng()%90 != 0)
-			{
-				Robot.getMovement().setAng(Robot.getMovement().getAng() + (90 - (Robot.getMovement().getAng()%90)));
-			} else 
-			{
-				Robot.getMovement().turnRight();
-			}
-		}
-		Robot.getMovement().moveForward();
-		if(freeDirection(_encircledArea, ScanDirection.LEFT))
-		{
-			Robot.getMovement().turnLeft();
-		} 
-		
-	}
-	
-	private void bypassLeft()
-	{		
-
-		while(!super.isFrontAccesable(_actualRow, _actualCol))
-		{
-			if(Robot.getMovement().getAng()%90 != 0)
-			{
-				Robot.getMovement().setAng(Robot.getMovement().getAng() - (Robot.getMovement().getAng()%90));
-			} else 
-			{
-				Robot.getMovement().turnLeft();
-			}
-		}
-		Robot.getMovement().moveForward();
-		
-		_encircledArea = getEncircledScannedArea(_actualRow, _actualCol);
-		if(freeDirection(_encircledArea, ScanDirection.RIGHT))
-		{
-			Robot.getMovement().turnRight();
-		} 
-		
-	}
-	
-	private ScanDirection calcRoute()
-	{
-		int actualRow = _actualRow;
-		int actualCol = _actualCol;
-		Coordinates2D[] encircledArea = _encircledArea;
-		Map<String, CellState> mentalMapRight = new HashMap<String, CellState>();
-		Map<String, CellState> mentalMapLeft = new HashMap<String, CellState>();
-
-		mentalMapRight.putAll(_mentalMap);
-		mentalMapLeft.putAll(_mentalMap);
- 		
-		int rightCount = calcDistance(mentalMapRight, actualRow, actualCol, encircledArea, ScanDirection.RIGHT);
-		int leftCount = calcDistance(mentalMapLeft, actualRow, actualCol, encircledArea, ScanDirection.LEFT);
-		
-		//System.out.println("Left: "+leftCount+"\nRight:"+rightCount);
-		if(leftCount <= rightCount)
-		{
-			return ScanDirection.LEFT;
-		} else {
-			return ScanDirection.RIGHT;
-		}
-	}
-	
-	//Count distance in left and right direction
-	private int calcDistance(Map<String, CellState> mentalMap, int row, int col, Coordinates2D[] encircledArea, ScanDirection dir)
-	{
-		int counter = 0;
-		int x = Robot.getX();
-		int y = Robot.getY();
-		double ang = Robot.getMovement().getAng();
-
-		//Set initial direction
-		if(dir == ScanDirection.LEFT)
-		{
-			Robot.getMovement().turnLeft();
-			//System.out.println(ang);
-		} else {
-			Robot.getMovement().turnRight();
-		}
-		
-		
-		while(!mentalMap.get(_key).equals(CellState.VISITED) && counter < 500)
-		{
-			col = Robot.getXasCol();
-			row = Robot.getYasRow();
-			encircledArea = getEncircledScannedArea(row, col);
-			//determineRoute(row, col, encircledArea, mentalMap, dir, true);	
-			_pathDeterminer.turnToNearestNeighbour(_nearestNeighbour);
-			ang = Robot.getMovement().getAng();
-
-//			if(totallyCovered(_encircledArea))
-//			{
-//				if(super.isFrontAccesable(row, col))
-//				{
-//					Robot.getMovement().moveForward();
-//				} else {
-//					if(Robot.getMovement().getAng()%90 != 0)
-//					{
-//						Robot.getMovement().setAng(Robot.getMovement().getAng() - (Robot.getMovement().getAng()%90));
-//					} else 
-//					{
-//						Robot.getMovement().turnLeft();
-//					}
-//					Robot.getMovement().moveForward();
-//				}
-//				System.out.println(Robot.getYasRow());
-//				System.out.println(Robot.getXasCol());
-//			
-//			}
-
-			if(freeDirection(encircledArea, ScanDirection.RIGHT))
-			{
-				Robot.getMovement().turnRight();
-			} else {
-				
-				if(isFrontAccesable(row, col))
-				{
-					Robot.getMovement().moveForward();
-				} else {
-					Robot.getMovement().turnLeft();
-				}
-			}
-		}
-		
-		counter++;
-		
-		Robot.getMovement().setX(x);
-		Robot.getMovement().setY(y);
-		Robot.getMovement().setAng(ang);
-		
-		return counter;
-	}
 	
 		
   }
