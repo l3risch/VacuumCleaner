@@ -13,6 +13,7 @@ import java.util.Queue;
 import java.util.Set;
 
 import Algorithms.Basic.CellState;
+import Algorithms.Basic.ScanDirection;
 import Objects.Graph;
 import Objects.Node;
 import Objects.Robot;
@@ -286,7 +287,9 @@ public static Coordinates2D getNearestNeighbour(int row, int col) {
 	 */
 	private static List<Node> adjustDijkstraPath(List<Node> nodeList)
 	{
-		boolean abort = false;
+		//Consider only visited fields by the Dijkstra path until obstacle is hit
+		
+		boolean pathIsCut = false;
 		List<Node> adjustedPath = new LinkedList<Node>();
 		adjustedPath.add(nodeList.get(0));
 		Coordinates2D[][] nextRobotPosition = new Coordinates2D[4][4];
@@ -311,7 +314,7 @@ public static Coordinates2D getNearestNeighbour(int row, int col) {
 					}
 					adjustedPath.add(i, currentNode);
 					i = nodeList.size()-1;
-					abort = true;
+					pathIsCut = true;
 					
 				} else {
 				
@@ -335,30 +338,110 @@ public static Coordinates2D getNearestNeighbour(int row, int col) {
 			
 		}
 
-		if(!abort)
+		if(!pathIsCut)
 		{
 			adjustedPath.add(nodeList.get(nodeList.size()-1));
-		}
-		else {
-			List<Node> restPath = calcRestOfPath(nextRobotPosition, adjustedPath.get(adjustedPath.size()-1));
+		} else {
+//			List<Node> restPath = calcRestOfPath(nextRobotPosition, adjustedPath.get(adjustedPath.size()-1));
+//			List<Node> restPath = followWall(nextRobotPosition, adjustedPath.get(adjustedPath.size()-1));
+			List<Node> restPath = bypassRight(adjustedPath.get(adjustedPath.size()-1));
 			for(Node node : restPath)
 			{
 				adjustedPath.add(node);
 			}
-			abort = false;
-		}
-
 			
-//		System.out.println("Adj Path: ");
-//		for(Node node : adjustedPath)
-//		{
-//			System.out.println(node.x + ", " + node.y);
-//		}
-//		System.out.println("Nearest Neighbour: " + _nn.getRow() + ", " + _nn.getCol());
-//		System.out.println("_________________________");
+			System.out.println("Restlicher Pfad:");
+			for(Node node : adjustedPath)
+			{
+				System.out.println(node.x + ", "+ node.y);		
+			}
+			pathIsCut = false;
+		}
+		
+		
 		return adjustedPath;
 	}
 	
+	private static List<Node> followWall(Coordinates2D[][] nextRobotPosition, Node lastNode) 
+	{
+
+		if(isTopHittingObstacle(nextRobotPosition))
+		{
+			bypassRight(lastNode);
+		} else if(isRightHittingObstacle(nextRobotPosition))
+		{
+			
+		} else if(isBottomHittingObstacle(nextRobotPosition))
+		{
+			
+		} else if(isLeftHittingObstacle(nextRobotPosition))
+		{
+			
+		}
+		return null;
+	}
+
+	
+
+	private static List<Node> bypassRight(Node lastNode) 
+	{
+		List<Node> wallFollowPath = new LinkedList<Node>();
+		Coordinates2D[] encircledArea = getEncircledScannedArea(Robot.getYasRow(), Robot.getXasCol());
+		double ang = Robot.getMovement().getAng();
+
+		int x = Robot.getX();
+		int y = Robot.getY();
+				
+		System.out.println(x + ", " + y);
+		
+		Node nextNode = lastNode;
+				
+		System.out.println("NN:" + _nn.getRow() + ", " + _nn.getCol());
+		System.out.println("Last Node: " + lastNode.x + ","  + lastNode.y);
+		
+		while(!isFrontAccesable(Robot.getYasRow(), Robot.getXasCol()))
+		{
+			Robot.getMovement().turnRight(); 
+		}
+		do
+		{
+			if(freeDirection(encircledArea, ScanDirection.FRONT))
+			{
+				if(freeDirection(encircledArea, ScanDirection.LEFT))
+				{
+					Robot.getMovement().turnLeft();
+				}
+				Robot.getMovement().moveForward();
+
+			} else {
+				if(freeDirection(encircledArea, ScanDirection.LEFT))
+				{
+					Robot.getMovement().turnLeft();
+				} else if(freeDirection(encircledArea, ScanDirection.RIGHT))
+				{
+					Robot.getMovement().turnRight();
+				} else 
+				{
+					Robot.getMovement().turnLeft();
+					Robot.getMovement().turnLeft();
+				}
+			}
+			
+			nextNode = new Node(Robot.getYasRow(), Robot.getXasCol());
+			
+			System.out.println(Robot.getYasRow() + ", " + Robot.getXasCol());
+			
+			wallFollowPath.add(nextNode);
+			encircledArea = getEncircledScannedArea(Robot.getYasRow(), Robot.getXasCol());
+		} while(!nnReached(nextNode.x, nextNode.y) && !(lastNode.x == nextNode.x && lastNode.y == nextNode.y));
+			
+		Robot.getMovement().setAng(ang);
+		Robot.getMovement().setX(x);
+		Robot.getMovement().setY(y);
+		return wallFollowPath;
+	}
+
+
 
 	private static List<Node> calcRestOfPath(Coordinates2D[][] nextRobotPosition, Node currentNode) 
 	{

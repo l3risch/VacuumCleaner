@@ -76,6 +76,7 @@ public class Robot {
 		return xRound;
 	}
 	
+	
 	public static int getY()
 	{
 		_y = _move.getY();
@@ -88,6 +89,7 @@ public class Robot {
 		int yRound = Math.round(yFloat);
 		return yRound;
 	}
+	
 	
 	public static int getInitX()
 	{

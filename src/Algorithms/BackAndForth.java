@@ -57,25 +57,25 @@ public class BackAndForth extends Basic implements ActionListener {
 		
 		if(totallyFreeDirection(encircledArea, ScanDirection.FRONT) && !_pathCalculated)
 		{
-			if(Movement.getAng()%90 != 0)
+			if(Robot.getMovement().getAng()%90 != 0)
 			{
 				Robot.getMovement().moveForward();
 			}
 			Robot.getMovement().moveForward();
 		} else if(totallyFreeDirection(encircledArea, ScanDirection.RIGHT) && !_pathCalculated)
 		{
-			if(Movement.getAng()%90 != 0)
+			if(Robot.getMovement().getAng()%90 != 0)
 			{
-				roundAngle(Movement.getAng());
+				roundAngle(Robot.getMovement().getAng());
 			}
 			Robot.getMovement().turnRight();
 			Robot.getMovement().moveForward();
 			
 		} else if(totallyFreeDirection(encircledArea, ScanDirection.LEFT) && !_pathCalculated)
 		{
-			if(Movement.getAng()%90 != 0)
+			if(Robot.getMovement().getAng()%90 != 0)
 			{
-				roundAngle(Movement.getAng());
+				roundAngle(Robot.getMovement().getAng());
 			}
 			Robot.getMovement().turnLeft();
 			Robot.getMovement().moveForward();
@@ -83,24 +83,24 @@ public class BackAndForth extends Basic implements ActionListener {
 			
 		} else if(partiallyFreeDirection(encircledArea, ScanDirection.FRONT) && !_pathCalculated)
 		{
-			if(Movement.getAng()%90 != 0)
+			if(Robot.getMovement().getAng()%90 != 0)
 			{
-				roundAngle(Movement.getAng());
+				roundAngle(Robot.getMovement().getAng());
 			}
 			Robot.getMovement().moveForward();
 		} else if(partiallyFreeDirection(encircledArea, ScanDirection.RIGHT) && !_pathCalculated)
 		{
-			if(Movement.getAng()%90 != 0)
+			if(Robot.getMovement().getAng()%90 != 0)
 			{
-				roundAngle(Movement.getAng());
+				roundAngle(Robot.getMovement().getAng());
 			}
 			Robot.getMovement().turnRight();
 			Robot.getMovement().moveForward();
 		} else if(partiallyFreeDirection(encircledArea, ScanDirection.LEFT) && !_pathCalculated)
 		{
-			if(Movement.getAng()%90 != 0)
+			if(Robot.getMovement().getAng()%90 != 0)
 			{
-				roundAngle(Movement.getAng());
+				roundAngle(Robot.getMovement().getAng());
 			}
 			Robot.getMovement().turnLeft();
 			Robot.getMovement().moveForward();
@@ -125,30 +125,30 @@ public class BackAndForth extends Basic implements ActionListener {
 					{
 						Node nextNode = _shortestPath.get(_movesToNN+1);
 	//					System.out.println("Current Node: " + _shortestPath.get(_movesToNN ).x + ", " +_shortestPath.get(_movesToNN).y);
-						Movement.setX(100 + 10 * currentNode.y);
-						Movement.setY(110 + 10 * currentNode.x);
+						Robot.getMovement().setX(100 + 10 * currentNode.y);
+						Robot.getMovement().setY(110 + 10 * currentNode.x);
 						
 						if(_movesToNN < _shortestPath.size()-1)
 						{
 							//Determine angle 
 							if(currentNode.x == nextNode.x - 1)
 							{
-								Movement._ang = 90;
+								Robot.getMovement()._ang = 90;
 							} else if(currentNode.y == nextNode.y - 1)
 							{
-								Movement._ang = 0;
+								Robot.getMovement()._ang = 0;
 							} else if(currentNode.x == nextNode.x + 1)
 							{
-								Movement._ang = 270;
+								Robot.getMovement()._ang = 270;
 							} else if(currentNode.y == nextNode.y + 1)
 							{
-								Movement._ang = 180;
+								Robot.getMovement()._ang = 180;
 							} 
 							
 						}
 					} else {
-						Movement.setX(100 + 10 * currentNode.y);
-						Movement.setY(110 + 10 * currentNode.x);
+						Robot.getMovement().setX(100 + 10 * currentNode.y);
+						Robot.getMovement().setY(110 + 10 * currentNode.x);
 					}
 					
 					_movesToNN++;
@@ -188,7 +188,7 @@ public class BackAndForth extends Basic implements ActionListener {
 		} else {
 			roundAngle = ang - (ang%90);
 		}
-		Movement.setAng(roundAngle);
+		Robot.getMovement().setAng(roundAngle);
 	}
 
 	@Override

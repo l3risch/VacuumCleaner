@@ -160,7 +160,7 @@ public class Table {
 
 	private static void setType5() {
 		Robot.setStartingPos(27, 27);
-		Movement.setAng(270);
+		Robot.getMovement().setAng(270);
 		_rows = 64;
 		_cols = 64;
 		_markedPath = new boolean[_rows][_cols];

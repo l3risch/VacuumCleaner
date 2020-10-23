@@ -18,7 +18,7 @@ public class Basic {
 	
 	public static Map<String, CellState> _mentalMap = new HashMap<String, CellState>();
 	
-	boolean isFrontAccesable(int row, int col)
+	static boolean isFrontAccesable(int row, int col)
 	{
 		Coordinates2D[] scannedArea = getScannedArea(row, col, ScanDirection.FRONT);
 
@@ -42,7 +42,7 @@ public class Basic {
 	}
 
 	
-	Coordinates2D[] getScannedArea(int row, int col, ScanDirection dir) {
+	static Coordinates2D[] getScannedArea(int row, int col, ScanDirection dir) {
 		
 		Coordinates2D[][] oldArrayPosition = new Coordinates2D[4][4];
 		oldArrayPosition = Robot.getCoordinates(row, col);
@@ -65,8 +65,8 @@ public class Basic {
 				//Copy old array into new array
 				newArrayPosition[i][j] = Coordinates2D.copyOf(oldArrayPosition[i][j]);
 				
-				int x = (int) Math.round(Math.cos(Math.toRadians(Movement._ang)));
-				int y = (int) Math.round(Math.sin(Math.toRadians(Movement._ang)));
+				int x = (int) Math.round(Math.cos(Math.toRadians(Robot.getMovement().getAng())));
+				int y = (int) Math.round(Math.sin(Math.toRadians(Robot.getMovement().getAng())));
 
 				if(dir == ScanDirection.FRONT)
 				{
@@ -124,7 +124,7 @@ public class Basic {
 		
 
 	
-	private boolean isElementContainedInArray(Coordinates2D coordinates2d, Coordinates2D[][] oldArrayPosition) 
+	private static boolean isElementContainedInArray(Coordinates2D coordinates2d, Coordinates2D[][] oldArrayPosition) 
 	{
 		for(int i = 0; i < 4; i++)
 		{
@@ -140,7 +140,7 @@ public class Basic {
 		return false;
 	}
 	
-	public Coordinates2D[] getEncircledScannedArea(int row, int col) 
+	public static Coordinates2D[] getEncircledScannedArea(int row, int col) 
 	{
 		Coordinates2D[] circledArea = new Coordinates2D[16];
 		
@@ -163,7 +163,7 @@ public class Basic {
 	}
 	
 	
-	Coordinates2D[] determineScanDirections(Coordinates2D[] scannedArea, ScanDirection direction) {
+	static Coordinates2D[] determineScanDirections(Coordinates2D[] scannedArea, ScanDirection direction) {
 		
 		Coordinates2D[] front = new Coordinates2D[4];
 		Coordinates2D[] left = new Coordinates2D[4];
@@ -393,7 +393,7 @@ public class Basic {
 	}
 	
 	//Direction is free, which means no obstacles or walls in this scanning direction
-	boolean freeDirection(Coordinates2D[] scannedArea, ScanDirection direction) {
+	static boolean freeDirection(Coordinates2D[] scannedArea, ScanDirection direction) {
 		
 		Coordinates2D[] scanArea = determineScanDirections(scannedArea, direction);
 		

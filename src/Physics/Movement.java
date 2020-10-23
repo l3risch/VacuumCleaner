@@ -8,18 +8,18 @@ import enums.Direction;
 
 public class Movement {
 	
-	public static int _i = 0;
-	public static int _x = 0;
-	public static int _y = 0;
+	public int _i = 0;
+	public int _x = 0;
+	public int _y = 0;
 	
 	//Ausrichtung nach oben
-	public static double _ang;
+	public double _ang;
 	
-	public static Direction _dir;
+	public Direction _dir;
 	
 	public enum LastMove{FORWARD, RIGHT, LEFT};
 	
-	public static List<LastMove> _listOfMovements = new ArrayList<LastMove>();
+	public List<LastMove> _listOfMovements = new ArrayList<LastMove>();
 
 	
 	public Movement()
@@ -88,12 +88,12 @@ public class Movement {
 		_listOfMovements.add(LastMove.LEFT);
 	}
 	
-	public static void setX(int x)
+	public void setX(int x)
 	{
 		_x = x;
 	}
 	
-	public static void setY(int y)
+	public void setY(int y)
 	{
 		_y = y;
 	}
@@ -108,12 +108,12 @@ public class Movement {
 		return _y;
 	}
 	
-	public static void setAng(double ang)
+	public void setAng(double ang)
 	{
 		_ang = ang;
 	}
 	
-	public static double getAng()
+	public double getAng()
 	{
 		return _ang;
 	}

@@ -60,30 +60,30 @@ public class Spiral extends Basic implements ActionListener {
 		
 		int x = Robot.getX();
 		int y = Robot.getY();
-		double ang = Movement.getAng();
+		double ang = Robot.getMovement().getAng();
 		
 		
 		if(totallyFreeDirection(encircledArea, ScanDirection.LEFT) && !_pathCalculated)
 		{
-			if(Movement.getAng()%90 != 0)
+			if(Robot.getMovement().getAng()%90 != 0)
 			{
-				roundAngle(Movement.getAng());
+				roundAngle(Robot.getMovement().getAng());
 			}
 			
 			Robot.getMovement().turnLeft();
 			Robot.getMovement().moveForward();
 		} else if(totallyFreeDirection(encircledArea, ScanDirection.FRONT) && !_pathCalculated)
 		{
-			if(Movement.getAng()%90 != 0)
+			if(Robot.getMovement().getAng()%90 != 0)
 			{
-				roundAngle(Movement.getAng());
+				roundAngle(Robot.getMovement().getAng());
 			}
 			Robot.getMovement().moveForward();
 		} else if(totallyFreeDirection(encircledArea, ScanDirection.RIGHT) && !_pathCalculated)
 		{
-			if(Movement.getAng()%90 != 0)
+			if(Robot.getMovement().getAng()%90 != 0)
 			{
-				roundAngle(Movement.getAng());
+				roundAngle(Robot.getMovement().getAng());
 			}
 			Robot.getMovement().turnRight();
 			Robot.getMovement().moveForward();
@@ -91,24 +91,24 @@ public class Spiral extends Basic implements ActionListener {
 			
 		} else if(partiallyFreeDirection(encircledArea, ScanDirection.LEFT) && !_pathCalculated)
 		{
-			if(Movement.getAng()%90 != 0)
+			if(Robot.getMovement().getAng()%90 != 0)
 			{
-				roundAngle(Movement.getAng());
+				roundAngle(Robot.getMovement().getAng());
 			}
 			Robot.getMovement().turnLeft();
 			Robot.getMovement().moveForward();
 		} else if(partiallyFreeDirection(encircledArea, ScanDirection.FRONT) && !_pathCalculated)
 		{
-			if(Movement.getAng()%90 != 0)
+			if(Robot.getMovement().getAng()%90 != 0)
 			{
-				roundAngle(Movement.getAng());
+				roundAngle(Robot.getMovement().getAng());
 			}
 			Robot.getMovement().moveForward();
 		} else if(partiallyFreeDirection(encircledArea, ScanDirection.RIGHT) && !_pathCalculated)
 		{
-			if(Movement.getAng()%90 != 0)
+			if(Robot.getMovement().getAng()%90 != 0)
 			{
-				roundAngle(Movement.getAng());
+				roundAngle(Robot.getMovement().getAng());
 			}
 			Robot.getMovement().turnRight();
 			Robot.getMovement().moveForward();
@@ -133,30 +133,30 @@ public class Spiral extends Basic implements ActionListener {
 					{
 						Node nextNode = _shortestPath.get(_movesToNN+1);
 	//					System.out.println("Current Node: " + _shortestPath.get(_movesToNN ).x + ", " +_shortestPath.get(_movesToNN).y);
-						Movement.setX(100 + 10 * currentNode.y);
-						Movement.setY(110 + 10 * currentNode.x);
+						Robot.getMovement().setX(100 + 10 * currentNode.y);
+						Robot.getMovement().setY(110 + 10 * currentNode.x);
 						
 						if(_movesToNN < _shortestPath.size()-1)
 						{
 							//Determine angle 
 							if(currentNode.x == nextNode.x - 1)
 							{
-								Movement._ang = 90;
+								Robot.getMovement()._ang = 90;
 							} else if(currentNode.y == nextNode.y - 1)
 							{
-								Movement._ang = 0;
+								Robot.getMovement()._ang = 0;
 							} else if(currentNode.x == nextNode.x + 1)
 							{
-								Movement._ang = 270;
+								Robot.getMovement()._ang = 270;
 							} else if(currentNode.y == nextNode.y + 1)
 							{
-								Movement._ang = 180;
+								Robot.getMovement()._ang = 180;
 							} 
 							
 						}
 					} else {
-						Movement.setX(100 + 10 * currentNode.y);
-						Movement.setY(110 + 10 * currentNode.x);
+						Robot.getMovement().setX(100 + 10 * currentNode.y);
+						Robot.getMovement().setY(110 + 10 * currentNode.x);
 					}
 					
 					_movesToNN++;
@@ -199,38 +199,38 @@ public class Spiral extends Basic implements ActionListener {
 		} else {
 			roundAngle = ang - (ang%90);
 		}
-		Movement.setAng(roundAngle);
+		Robot.getMovement().setAng(roundAngle);
 	}
 
-	@Override
-	boolean isFrontAccesable(int row, int col)
-	{
-		Coordinates2D[] scannedArea = getEncircledScannedArea(row, col);
-		Coordinates2D[] frontOfRobot = determineScanDirections(scannedArea, ScanDirection.FRONT);
-
-		boolean accesable = true;
-		
-		for(int i = 0; i < frontOfRobot.length; i++)
-		try {
-
-			if(Table.getMarkedObstacles(frontOfRobot[i].getRow(), frontOfRobot[i].getCol()))
-			{
-				accesable = false;
-			}
-			
-			if(Table._markedPath[frontOfRobot[i].getRow()][frontOfRobot[i].getCol()])
-			{
-				accesable = false;
-			}
-			
-		} catch(ArrayIndexOutOfBoundsException e)
-		{
-			e.getStackTrace();
-			accesable = false;
-		}
-		
-		return accesable;
-	}
+//	@Override
+//	boolean isFrontAccesable(int row, int col)
+//	{
+//		Coordinates2D[] scannedArea = getEncircledScannedArea(row, col);
+//		Coordinates2D[] frontOfRobot = determineScanDirections(scannedArea, ScanDirection.FRONT);
+//
+//		boolean accesable = true;
+//		
+//		for(int i = 0; i < frontOfRobot.length; i++)
+//		try {
+//
+//			if(Table.getMarkedObstacles(frontOfRobot[i].getRow(), frontOfRobot[i].getCol()))
+//			{
+//				accesable = false;
+//			}
+//			
+//			if(Table._markedPath[frontOfRobot[i].getRow()][frontOfRobot[i].getCol()])
+//			{
+//				accesable = false;
+//			}
+//			
+//		} catch(ArrayIndexOutOfBoundsException e)
+//		{
+//			e.getStackTrace();
+//			accesable = false;
+//		}
+//		
+//		return accesable;
+//	}
 
     
 	
@@ -242,7 +242,7 @@ public class Spiral extends Basic implements ActionListener {
 //			return true;
 //		} else {
 //			
-//			if(Robot.getX()== x && Robot.getY() == y && ang == Movement.getAng())
+//			if(Robot.getX()== x && Robot.getY() == y && ang == Robot.getMovement().getAng())
 //			{
 //				return true;
 //			} else {
@@ -293,9 +293,9 @@ public class Spiral extends Basic implements ActionListener {
 		
 		while(!super.isFrontAccesable(_actualRow, _actualCol))
 		{
-			if(Movement.getAng()%90 != 0)
+			if(Robot.getMovement().getAng()%90 != 0)
 			{
-				Movement.setAng(Movement.getAng() + (90 - (Movement.getAng()%90)));
+				Robot.getMovement().setAng(Robot.getMovement().getAng() + (90 - (Robot.getMovement().getAng()%90)));
 			} else 
 			{
 				Robot.getMovement().turnRight();
@@ -314,9 +314,9 @@ public class Spiral extends Basic implements ActionListener {
 
 		while(!super.isFrontAccesable(_actualRow, _actualCol))
 		{
-			if(Movement.getAng()%90 != 0)
+			if(Robot.getMovement().getAng()%90 != 0)
 			{
-				Movement.setAng(Movement.getAng() - (Movement.getAng()%90));
+				Robot.getMovement().setAng(Robot.getMovement().getAng() - (Robot.getMovement().getAng()%90));
 			} else 
 			{
 				Robot.getMovement().turnLeft();
@@ -361,7 +361,7 @@ public class Spiral extends Basic implements ActionListener {
 		int counter = 0;
 		int x = Robot.getX();
 		int y = Robot.getY();
-		double ang = Movement.getAng();
+		double ang = Robot.getMovement().getAng();
 
 		//Set initial direction
 		if(dir == ScanDirection.LEFT)
@@ -380,7 +380,7 @@ public class Spiral extends Basic implements ActionListener {
 			encircledArea = getEncircledScannedArea(row, col);
 			//determineRoute(row, col, encircledArea, mentalMap, dir, true);	
 			_pathDeterminer.turnToNearestNeighbour(_nearestNeighbour);
-			ang = Movement.getAng();
+			ang = Robot.getMovement().getAng();
 
 //			if(totallyCovered(_encircledArea))
 //			{
@@ -388,9 +388,9 @@ public class Spiral extends Basic implements ActionListener {
 //				{
 //					Robot.getMovement().moveForward();
 //				} else {
-//					if(Movement.getAng()%90 != 0)
+//					if(Robot.getMovement().getAng()%90 != 0)
 //					{
-//						Movement.setAng(Movement.getAng() - (Movement.getAng()%90));
+//						Robot.getMovement().setAng(Robot.getMovement().getAng() - (Robot.getMovement().getAng()%90));
 //					} else 
 //					{
 //						Robot.getMovement().turnLeft();
@@ -418,9 +418,9 @@ public class Spiral extends Basic implements ActionListener {
 		
 		counter++;
 		
-		Movement.setX(x);
-		Movement.setY(y);
-		Movement.setAng(ang);
+		Robot.getMovement().setX(x);
+		Robot.getMovement().setY(y);
+		Robot.getMovement().setAng(ang);
 		
 		return counter;
 	}

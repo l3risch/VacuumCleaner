@@ -61,7 +61,7 @@ public class WallFollowing extends Basic implements ActionListener{
 //			StartAlgorithm._timer.start();	
 //						
 //		}  
-		double ang = Movement.getAng();
+		double ang = Robot.getMovement().getAng();
 		_nearestNeighbour = _pathDeterminer.getNearestNeighbour(_actualRow, _actualCol);
 		_pathDeterminer.turnToNearestNeighbour(_nearestNeighbour);
 
@@ -70,7 +70,7 @@ public class WallFollowing extends Basic implements ActionListener{
 			Robot.getMovement().moveForward();
 		} else {
 			
-			Movement.setAng(ang);
+			Robot.getMovement().setAng(ang);
 			if(freeDirection(_scannedArea, ScanDirection.RIGHT))
 			{
 				Robot.getMovement().turnRight();

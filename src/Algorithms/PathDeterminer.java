@@ -69,9 +69,9 @@ public class PathDeterminer extends Basic{
 		double hypotenuse = _distance;
 		double gegenkathete;
 		double radian;
-		double angle = Movement.getAng();
+		double angle = Robot.getMovement().getAng();
 		
-		double currentAngle = Movement.getAng();
+		double currentAngle = Robot.getMovement().getAng();
 		double normedAngle = getNormedAngle(currentAngle);
 		int rowDistance;
 		int colDistance;
@@ -115,7 +115,7 @@ public class PathDeterminer extends Basic{
 		}
 		
 	
-		Movement.setAng(angle);
+		Robot.getMovement().setAng(angle);
 	}
 
 

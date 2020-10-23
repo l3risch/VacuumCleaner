@@ -61,7 +61,7 @@ public class Renderer1 extends JPanel{
 		ImageIcon round = createRoundImage(g);
 		Image img = round.getImage();
 		Image scaledImg = getScaledImage(img, 40, 40);
-		double angle = Movement._ang + 90;
+		double angle = Robot.getMovement().getAng() + 90;
 		BufferedImage rotatedImg = rotateRobot(angle, scaledImg);
 	    
 		_g.drawImage(rotatedImg, Robot.getX(), Robot.getY(), this);

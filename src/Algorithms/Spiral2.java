@@ -43,13 +43,13 @@ public class Spiral2 extends Basic implements ActionListener {
 
 		Coordinates2D nearestNeighbour = _pathDeterminer.getNearestNeighbour(_actualRow, _actualCol);
 		
-		if(Movement.getAng()%90 != 0)
+		if(Robot.getMovement().getAng()%90 != 0)
 		{
 			accesableField = super.isFrontAccesable(_actualRow, _actualCol);
 			if(!accesableField)
 			{
 				StartAlgorithm._timer.stop();
-				Movement.setAng(Movement.getAng() + Movement.getAng()%90);
+				Robot.getMovement().setAng(Robot.getMovement().getAng() + Robot.getMovement().getAng()%90);
 				StartAlgorithm._timer.start();	
 				
 			}
