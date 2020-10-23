@@ -22,7 +22,7 @@ import javax.swing.JPanel;
 import Algorithms.Basic;
 import Algorithms.Basic.CellState;
 import Algorithms.NearestNeighbour;
-import Algorithms.DijsktraAlgorithm;
+import Algorithms.DijkstraAlgorithm;
 import Objects.Node;
 import Objects.Obstacle;
 import Objects.Obstacle.Shape;

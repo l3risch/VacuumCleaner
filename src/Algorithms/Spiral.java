@@ -91,7 +91,7 @@ public class Spiral extends Basic implements ActionListener {
 			if(!_pathCalculated)
 			{
 				//Calculate shortest route to nearest neighbour
-				_shortestPath = DijsktraAlgorithm.computePath(actualRow, actualCol, _nn);
+				_shortestPath = DijkstraAlgorithm.computePath(actualRow, actualCol, _nn);
 				_pathCalculated = true;
 			}
 
@@ -99,7 +99,7 @@ public class Spiral extends Basic implements ActionListener {
 			{			
 			if(_shortestPath != null)
 			{
-				if(!DijsktraAlgorithm.nnReached(actualRow, actualCol))
+				if(!DijkstraAlgorithm.nnReached(actualRow, actualCol))
 				{
 					Node currentNode = _shortestPath.get(_movesToNN);
 					

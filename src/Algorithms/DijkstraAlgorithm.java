@@ -21,7 +21,7 @@ import Objects.Table;
 import Physics.Coordinates2D;
 import Physics.Movement;
 
-public class DijsktraAlgorithm extends Basic{
+public class DijkstraAlgorithm extends Basic{
 
 	static List<Node> _nodeList = new LinkedList<Node>();
 	private static char[][] _matrix;
