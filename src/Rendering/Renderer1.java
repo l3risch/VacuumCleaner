@@ -210,24 +210,6 @@ public class Renderer1 extends JPanel{
 			_g.setColor(Color.BLACK);
 		}
 		
-		//Clear marked Dijsktra Path
-		if(ShortestPath.adjustedPath != null)
-		{
-			for(Node node : ShortestPath.adjustedPath)
-			{
-				Coordinates2D[][] robotCoordinates = Robot.getCoordinates(node.x, node.y);
-				for(int i = 0; i < 4; i++)
-				{
-					for(int j = 0; j < 4; j++)
-					{
-						_g.setColor(new Color(0,0,0,0));
-						_g.fillRect(robotCoordinates[i][j].getCol() * 10 + 100, robotCoordinates[i][j].getRow() * 10 + 140, 10, 10);
-					}
-				}
-			}
-			_g.setColor(Color.BLACK);
-		}
-		
 		_opacity = new int[Table._rows][Table._cols];
 		Basic._mentalMap.clear();
 	}
@@ -258,7 +240,6 @@ public class Renderer1 extends JPanel{
 		
  		}
 		
-		paintDijkstraCells();
 		paintNearestCell();
 
 	}
@@ -280,25 +261,6 @@ public class Renderer1 extends JPanel{
 		}		
 	}
 	
-	private static void paintDijkstraCells() 
-	{
-		if(ShortestPath.adjustedPath != null)
-		{
-			_g.setColor(Color.MAGENTA);
-			for(Node node : ShortestPath.adjustedPath)
-			{
-				Coordinates2D[][] robotCoordinates = Robot.getCoordinates(node.x, node.y);
-				for(int i = 0; i < 4; i++)
-				{
-					for(int j = 0; j < 4; j++)
-					{
-						_g.fillRect(robotCoordinates[i][j].getCol() * 10 + 100, robotCoordinates[i][j].getRow() * 10 + 140, 10, 10);
-					}
-				}	
-			}
-			_g.setColor(Color.BLACK);
-		}
-	}
 	
 	private static void paintNearestCell() 
 	{

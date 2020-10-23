@@ -23,8 +23,6 @@ import Physics.Movement;
 
 public class ShortestPath extends Basic{
 
-	private static Coordinates2D[][] _robotPos = new Coordinates2D[4][4];
-	private static Coordinates2D _sourceCell;
 	static List<Node> _nodeList = new LinkedList<Node>();
 	private static char[][] _matrix;
 	private static Coordinates2D _nn;
@@ -62,38 +60,91 @@ public class ShortestPath extends Basic{
 				 }
 			 }		
 		 }
+
+		 //Adjust obstacles to match with robot size by extending each obstacle by 3 cells in width and height
+		 List<Coordinates2D> rowList = new ArrayList<Coordinates2D>();
+		 List<Coordinates2D> colList = new ArrayList<Coordinates2D>();
+
+		 for(int i = 0; i < 61; i++)
+		 {
+			 for(int j = 3; j < 64; j++)
+			 {
+				 if(_matrix[i][j] == '0')
+				 {
+					 for(int k = 1; k < 4; k++)
+					 {
+						 rowList.add(new Coordinates2D(i+k,j));
+						 colList.add(new Coordinates2D(i,j-k));
+					 }
+				 }
+			 }		
+		 }
 		 
-		 _robotPos = Robot.getCoordinates(robotRow, robotCol);
+		 for(Coordinates2D coor : rowList)
+		 {
+			 for(int i = 0; i < 4; i++)
+			 {
+				 _matrix[coor.getRow()][coor.getCol()-i] = '0';
+			 }
+		 }
 		 
+		 for(Coordinates2D coor : colList)
+		 {
+			 for(int i = 0; i < 4; i++)
+			 {
+				 _matrix[coor.getRow()+i][coor.getCol()] = '0';
+			 }
+		 }
+		 		 
 		 //Set position of robot as source
-		for(int i = 0; i < 4; i++)
-		{
-			for(int j = 0; j < 4; j++)
-			{
-				int row = _robotPos[i][j].getRow();
-				int col = _robotPos[i][j].getCol();
-				_matrix[row][col] = 'S';
-			}
-		}
-		
-		//Choose starting position 
-		_sourceCell = _robotPos[3][0];
+		 _matrix[robotRow][robotCol] = 'S';
 		 
 		 //Set position of nearest neighbour as destination
-		if(_matrix[_nn.getRow()][_nn.getCol()] == 'S')
+		if(_nn.getRow() < 61 && _nn.getCol() >= 0)
 		{
-			return null;
+			if(_matrix[_nn.getRow()+3][_nn.getCol()-3] != '0')
+			{
+				_matrix[_nn.getRow()+3][_nn.getCol()-3] = 'D';
+				
+			} else if(_matrix[_nn.getRow()+3][_nn.getCol()] != '0')
+			{
+				_matrix[_nn.getRow()+3][_nn.getCol()] = 'D';
+				
+			} else if(_matrix[_nn.getRow()][_nn.getCol()-3] != '0')
+			{
+				_matrix[_nn.getRow()][_nn.getCol()-3] = 'D';
+				
+			} else {
+				_matrix[_nn.getRow()][_nn.getCol()] = 'D';
+			}
 		} else {
 			_matrix[_nn.getRow()][_nn.getCol()] = 'D';
-		} 
+		}
 		
-       boolean exists = pathExists(_matrix);		
+		
+//		 for(int i = 0; i < 64; i++)
+//		 {
+//			 StringBuilder sb = new StringBuilder();
+//			 for(int j = 0; j < 64; j++)
+//			 {
+//				 sb.append(_matrix[i][j]);
+//			 }
+//			 System.out.println(sb);
+//		 }
+//		System.out.println("\n\n");
+       boolean exists = pathExists(_matrix, robotRow, robotCol);		
 		
 		if(exists)
 	    {
 		  List<Node> dijkstraPath = computeDijkstraPath();
-		  adjustedPath = adjustDijkstraPath(dijkstraPath);
-		  return adjustedPath;
+		  //adjustedPath = adjustDijkstraPath(dijkstraPath);
+//		  System.out.println("Disjktra");
+//		  for(Node node: dijkstraPath)
+//		  {
+//			  System.out.println(node.x + ", "+ node.y);
+//		  }
+		  
+		  return dijkstraPath;
 	    } else {
 	    	return null;
 	    }
@@ -101,15 +152,16 @@ public class ShortestPath extends Basic{
 	 
 
 
-	private static boolean pathExists(char[][] matrix) {
+	private static boolean pathExists(char[][] matrix, int row, int col) {
 		
-		Node source = new Node(_sourceCell.getRow(), _sourceCell.getCol());
+		Node source = new Node(row, col);
 		Queue<Node> queue = new LinkedList<Node>();
 		
 		queue.add(source);
 
 		while(!queue.isEmpty()) {
 			Node currentNode = queue.poll();
+			
 			if(matrix[currentNode.x][currentNode.y]!='0')
 			{
 				List<Node> neighbourList = addNeighbours(currentNode, matrix);
@@ -129,6 +181,7 @@ public class ShortestPath extends Basic{
 					}
 	            	
 					_nodeList.add(currentNode);
+
 				}
 			}	
 		}
@@ -138,7 +191,7 @@ public class ShortestPath extends Basic{
 
 public static Coordinates2D getNearestNeighbour(int row, int col) {
 		
-		Node source = new Node(_sourceCell.getRow(), _sourceCell.getCol());
+		Node source = new Node(row, col);
 		Queue<Node> queue = new LinkedList<Node>();
 		
 		queue.add(source);
@@ -173,16 +226,16 @@ public static Coordinates2D getNearestNeighbour(int row, int col) {
 		
 		List<Node> list = new LinkedList<Node>();
 		
-		if((poped.x-1 > 0 && poped.x-1 < matrix.length) && matrix[poped.x-1][poped.y] != '0') {
+		if((poped.x-1 >= 0 && poped.x-1 < matrix.length) && matrix[poped.x-1][poped.y] != '0') {
 			list.add(new Node(poped.x-1, poped.y));
 		}
-		if((poped.x+1 > 0 && poped.x+1 < matrix.length) && matrix[poped.x+1][poped.y] != '0') {
+		if((poped.x+1 >= 0 && poped.x+1 < matrix.length) && matrix[poped.x+1][poped.y] != '0') {
 			list.add(new Node(poped.x+1, poped.y));
 		}
-		if((poped.y-1 > 0 && poped.y-1 < matrix.length) && matrix[poped.x][poped.y-1] != '0') {
+		if((poped.y-1 >= 0 && poped.y-1 < matrix.length) && matrix[poped.x][poped.y-1] != '0') {
 			list.add(new Node(poped.x, poped.y-1));
 		}
-		if((poped.y+1 > 0 && poped.y+1 < matrix.length) && matrix[poped.x][poped.y+1] != '0') {
+		if((poped.y+1 >= 0 && poped.y+1 < matrix.length) && matrix[poped.x][poped.y+1] != '0') {
 			list.add(new Node(poped.x, poped.y+1));
 		}		
 		return list;
@@ -264,7 +317,7 @@ public static Coordinates2D getNearestNeighbour(int row, int col) {
 	public static boolean nnReached(int robotRow, int robotCol)
 	{
 		
-		 _robotPos = Robot.getCoordinates(robotRow, robotCol);
+		 Coordinates2D[][] _robotPos = Robot.getCoordinates(robotRow, robotCol);
 
 		 //Set position of nearest neighbour as destination
 		for(int i = 0; i < 4; i++)
