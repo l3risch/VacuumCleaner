@@ -2,13 +2,13 @@ package Algorithms;
 
 import java.util.HashMap;
 
+
 import java.util.Map;
 
 import Objects.Robot;
 import Objects.Table;
 import Physics.Coordinates2D;
-import Physics.Movement;
-import enums.Direction;
+
 
 public class Basic {
 	
@@ -18,7 +18,7 @@ public class Basic {
 	
 	public static Map<String, CellState> _mentalMap = new HashMap<String, CellState>();
 	
-	boolean isFrontAccesable(int row, int col)
+	static boolean isFrontAccesable(int row, int col)
 	{
 		Coordinates2D[] scannedArea = getScannedArea(row, col, ScanDirection.FRONT);
 
@@ -42,7 +42,7 @@ public class Basic {
 	}
 
 	
-	Coordinates2D[] getScannedArea(int row, int col, ScanDirection dir) {
+	static Coordinates2D[] getScannedArea(int row, int col, ScanDirection dir) {
 		
 		Coordinates2D[][] oldArrayPosition = new Coordinates2D[4][4];
 		oldArrayPosition = Robot.getCoordinates(row, col);
@@ -65,8 +65,8 @@ public class Basic {
 				//Copy old array into new array
 				newArrayPosition[i][j] = Coordinates2D.copyOf(oldArrayPosition[i][j]);
 				
-				int x = (int) Math.round(Math.cos(Math.toRadians(Movement._ang)));
-				int y = (int) Math.round(Math.sin(Math.toRadians(Movement._ang)));
+				int x = (int) Math.round(Math.cos(Math.toRadians(Robot.getMovement().getAng())));
+				int y = (int) Math.round(Math.sin(Math.toRadians(Robot.getMovement().getAng())));
 
 				if(dir == ScanDirection.FRONT)
 				{
@@ -124,7 +124,7 @@ public class Basic {
 		
 
 	
-	private boolean isElementContainedInArray(Coordinates2D coordinates2d, Coordinates2D[][] oldArrayPosition) 
+	private static boolean isElementContainedInArray(Coordinates2D coordinates2d, Coordinates2D[][] oldArrayPosition) 
 	{
 		for(int i = 0; i < 4; i++)
 		{
@@ -140,7 +140,7 @@ public class Basic {
 		return false;
 	}
 	
-	public Coordinates2D[] getEncircledScannedArea(int row, int col) 
+	public static Coordinates2D[] getEncircledScannedArea(int row, int col) 
 	{
 		Coordinates2D[] circledArea = new Coordinates2D[16];
 		
@@ -162,185 +162,8 @@ public class Basic {
 		
 	}
 	
-//	private Coordinates2D[] getAreaIfUp(Coordinates2D[] _scannedArea)
-//	{
-//		Direction dir = Movement._dir;
-//		Coordinates2D[] circledArea = new Coordinates2D[16];
-//		for(int i = 0; i < 4; i++)
-//		{
-//			circledArea[i] = _scannedArea[i];
-//			circledArea[i+4] = leftSensor(_scannedArea, dir)[i];
-//			circledArea[i+8] = lowerSensor(_scannedArea, dir)[i];
-//			circledArea[i+12] = rightSensor(_scannedArea, dir)[i];
-//		}
-//
-//		return circledArea;
-//	}
-//	
-//	private Coordinates2D[] getAreaIfRight(Coordinates2D[] _scannedArea)
-//	{
-//		Direction dir = Movement._dir;
-//		Coordinates2D[] circledArea = new Coordinates2D[16];
-//		for(int i = 0; i < 4; i++)
-//		{
-//			circledArea[i] = upperSensor(_scannedArea, dir)[i];
-//			circledArea[i+4] = leftSensor(_scannedArea, dir)[i];
-//			circledArea[i+8] = lowerSensor(_scannedArea, dir)[i];
-//			circledArea[i+12] = _scannedArea[i];
-//		}
-//		
-//		return circledArea;
-//	}
-//
-//	private Coordinates2D[] getAreaIfDown(Coordinates2D[] _scannedArea)
-//	{
-//		Direction dir = Movement._dir;
-//		Coordinates2D[] circledArea = new Coordinates2D[16];
-//		for(int i = 0; i < 4; i++)
-//		{
-//			circledArea[i] = upperSensor(_scannedArea, dir)[i];
-//			circledArea[i+4] = leftSensor(_scannedArea, dir)[i];
-//			circledArea[i+8] = _scannedArea[i];
-//			circledArea[i+12] = rightSensor(_scannedArea, dir)[i];
-//		}
-//
-//		return circledArea;
-//	}
-//	
-//	private Coordinates2D[] getAreaIfLeft(Coordinates2D[] _scannedArea)
-//	{
-//		Direction dir = Movement._dir;
-//		Coordinates2D[] circledArea = new Coordinates2D[16];
-//		for(int i = 0; i < 4; i++)
-//		{
-//			circledArea[i] = upperSensor(_scannedArea, dir)[i];
-//			circledArea[i+4] = _scannedArea[i];
-//			circledArea[i+8] = lowerSensor(_scannedArea, dir)[i];
-//			circledArea[i+12] = rightSensor(_scannedArea, dir)[i];
-//		}
-//
-//		return circledArea;
-//	}
 	
-//	private Coordinates2D[] upperSensor(Coordinates2D[] _scannedArea, Direction dir) 
-//	{
-//		Coordinates2D[] upperSide = new Coordinates2D[4];
-//		int maxRow = 0;
-//		
-//		if(dir.equals(Direction.RIGHT))
-//		{
-//			maxRow = _scannedArea[3].getRow() - 4;
-//			for(int i = 0; i < 4; i++)
-//			{
-//				upperSide[i] = new Coordinates2D(maxRow, _scannedArea[i].getCol() - i - 1);
-//			}
-//		} else if (dir.equals(Direction.LEFT)) {
-//			maxRow = _scannedArea[3].getRow() - 4;
-//			for(int i = 0; i < 4; i++)
-//			{
-//				upperSide[i] = new Coordinates2D(maxRow, _scannedArea[i].getCol() + i + 1);
-//			}
-//		} else if (dir.equals(Direction.DOWN)) {
-//			maxRow = _scannedArea[3].getRow() - 5;
-//			for(int i = 0; i < 4; i++)
-//			{
-//				upperSide[i] = new Coordinates2D(maxRow, _scannedArea[i].getCol());
-//			
-//			}
-//		}
-//
-//		return upperSide;			
-//	}
-//	
-//	private Coordinates2D[] lowerSensor(Coordinates2D[] _scannedArea, Direction dir) 
-//	{
-//		Coordinates2D[] lowerSide = new Coordinates2D[4];
-//		int maxRow = 0;
-//		
-//		if(dir.equals(Direction.RIGHT))
-//		{
-//			maxRow = _scannedArea[3].getRow() + 1;
-//			for(int i = 0; i < 4; i++)
-//			{
-//				lowerSide[i] = new Coordinates2D(maxRow, _scannedArea[i].getCol() - i - 1);
-//			}
-//		} else if (dir.equals(Direction.LEFT)) {
-//			maxRow = _scannedArea[3].getRow() + 1;
-//			for(int i = 0; i < 4; i++)
-//			{
-//				lowerSide[i] = new Coordinates2D(maxRow, _scannedArea[i].getCol() + i + 1);
-//			}
-//		} else if (dir.equals(Direction.UP)) {
-//			maxRow = _scannedArea[3].getRow() + 5;
-//			for(int i = 0; i < 4; i++)
-//			{
-//				lowerSide[i] = new Coordinates2D(maxRow, _scannedArea[i].getCol());
-//			}
-//		}
-//		
-//		return lowerSide;			
-//	}
-//
-//	private Coordinates2D[] rightSensor(Coordinates2D[] _scannedArea, Direction dir) 
-//	{
-//		Coordinates2D[] rightSide = new Coordinates2D[4];
-//		int maxCol = 0;
-//		
-//		if(dir.equals(Direction.UP))
-//		{
-//			maxCol = _scannedArea[3].getCol() + 1;
-//			for(int i = 0; i < 4; i++)
-//			{
-//				rightSide[i] = new Coordinates2D(_scannedArea[i].getRow() + i + 1, maxCol);
-//			}
-//		} else if (dir.equals(Direction.DOWN)){
-//			maxCol = _scannedArea[3].getCol() + 1;
-//			for(int i = 0; i < 4; i++)
-//			{
-//				rightSide[i] = new Coordinates2D(_scannedArea[i].getRow() - i - 1, maxCol);
-//			}
-//		} else if (dir.equals(Direction.LEFT)) {
-//			maxCol = _scannedArea[0].getCol() + 5;
-//			for(int i = 0; i < 4; i++)
-//			{
-//				rightSide[i] = new Coordinates2D(_scannedArea[i].getRow(), maxCol);
-//			}
-//		}
-//		
-//		return rightSide;		
-//	}
-//
-//	private Coordinates2D[] leftSensor(Coordinates2D[] _scannedArea, Direction dir) 
-//    {
-//		Coordinates2D[] leftSide = new Coordinates2D[4];
-//		int minCol = 0;
-//		
-//		if(dir.equals(Direction.UP))
-//		{
-//			minCol = _scannedArea[0].getCol() - 1;
-//			for(int i = 0; i < 4; i++)
-//			{
-//				leftSide[i] = new Coordinates2D(_scannedArea[i].getRow() + i + 1, minCol);
-//			}
-//		} else if (dir.equals(Direction.DOWN)){
-//				minCol = _scannedArea[0].getCol() - 1;
-//				for(int i = 0; i < 4; i++)
-//				{
-//					leftSide[i] = new Coordinates2D(_scannedArea[i].getRow() - i - 1, minCol);
-//			}
-//		} else if (dir.equals(Direction.RIGHT)) {
-//			minCol = _scannedArea[0].getCol() - 5;
-//			for(int i = 0; i < 4; i++)
-//			{
-//				leftSide[i] = new Coordinates2D(_scannedArea[i].getRow(), minCol);
-//			}
-//		}
-//
-//		return leftSide;
-//    }
-
-	
-	Coordinates2D[] determineScanDirections(Coordinates2D[] scannedArea, ScanDirection direction) {
+	static Coordinates2D[] determineScanDirections(Coordinates2D[] scannedArea, ScanDirection direction) {
 		
 		Coordinates2D[] front = new Coordinates2D[4];
 		Coordinates2D[] left = new Coordinates2D[4];
@@ -374,34 +197,6 @@ public class Basic {
 		
 		return scanArea;
 		
-	}
-	
-	
-	//Direction is covered, which means no obstacles or walls but parts of the scanned area are covered in this direction
-	boolean partiallyCoveredPathInDirection(Coordinates2D[] scannedArea, ScanDirection direction)
-	{
-		Coordinates2D[] scanArea = determineScanDirections(scannedArea, direction);
-
-		boolean pathCovered = false;
-		
-		for(int i = 0; i < scanArea.length; i++)
-		{
-			try {
-				if(Table.getMarkedObstacles(scanArea[i].getRow(), scanArea[i].getCol()))
-				{
-					return false;
-				} else if(Table.getPath(scanArea[i].getRow(), scanArea[i].getCol()))
-				{
-					pathCovered = true;
-				}
-			} catch(ArrayIndexOutOfBoundsException e)
-			{
-				e.getStackTrace();
-				pathCovered = false;
-			}
-		}
-		return pathCovered;
-			
 	}
 	
 	
@@ -570,7 +365,7 @@ public class Basic {
 	}
 	
 	//Direction is free, which means no obstacles or walls in this scanning direction
-	boolean freeDirection(Coordinates2D[] scannedArea, ScanDirection direction) {
+	static boolean freeDirection(Coordinates2D[] scannedArea, ScanDirection direction) {
 		
 		Coordinates2D[] scanArea = determineScanDirections(scannedArea, direction);
 		
@@ -592,7 +387,7 @@ public class Basic {
 	}
 	
 	//Updates mental map
-	void updateMap(int row, int col)
+	void updateMap(int row, int col, Map<String, CellState> mentalMap)
 	{
 		Coordinates2D[][] robotCoordinates = Robot.getCoordinates(row, col);
 		
@@ -605,12 +400,12 @@ public class Basic {
 			try {
 				if(Table.getMarkedObstacles(encircledArea[i].getRow(), encircledArea[i].getCol()))
 				{
-					_mentalMap.put(mapKey, CellState.OCCUPIED);
+					mentalMap.put(mapKey, CellState.OCCUPIED);
 				} else if(Table.getPath(encircledArea[i].getRow(), encircledArea[i].getCol()))
 				{
-					_mentalMap.put(mapKey, CellState.VISITED);
+					mentalMap.put(mapKey, CellState.VISITED);
 				} else {
-					_mentalMap.put(mapKey, CellState.FREE);
+					mentalMap.put(mapKey, CellState.FREE);
 				}
 			} catch(ArrayIndexOutOfBoundsException e)
 			{
@@ -625,36 +420,10 @@ public class Basic {
 			{
 				
 				String mapKey = generateKey(robotCoordinates[i][j].getRow(), robotCoordinates[i][j].getCol());
-				_mentalMap.put(mapKey, CellState.VISITED);
+				mentalMap.put(mapKey, CellState.VISITED);
 	
 			}
 		}
-		
-		int free = 0;
-		int occupied = 0;
-		int visited = 0;
-		
- 		for(String key : _mentalMap.keySet())
- 		{
- 			if(_mentalMap.get(key).equals(CellState.FREE))
- 			{
- 				free++;
- 			}
- 			if(_mentalMap.get(key).equals(CellState.OCCUPIED))
- 			{
- 				occupied++;
- 			}
- 			if(_mentalMap.get(key).equals(CellState.VISITED))
- 			{
- 				visited++;
- 			}
- 		}
-//		System.out.println("Free cells: " + free);
-//		System.out.println("Occ cells: " + occupied);
-//		System.out.println("Visited cells: " + visited);
-
-
-
 	}
 
 	
@@ -680,7 +449,7 @@ public class Basic {
 		return key;
 	}
 
-	Map<String, CellState> getMentalMap()
+	static Map<String, CellState> getMentalMap()
 	{
 		return _mentalMap;
 	}

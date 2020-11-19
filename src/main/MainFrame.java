@@ -78,7 +78,7 @@ public class MainFrame extends JFrame{
 		/**
 		 * Choose Map
 		 */
-		String mapList[] = {"1", "2", "3", "4", "5"};
+		String mapList[] = {"1", "2", "3"};
 		JComboBox<String> comboBox_2 = new JComboBox<String>(mapList);
 		c.insets = new Insets(0,10,10,10); 
 		c.gridwidth = 2;
@@ -138,7 +138,7 @@ public class MainFrame extends JFrame{
 		/**
 		 * Choose Algorithm
 		 */
-		String algList[] = {"Custom", "Random Walk", "Wall Following", "Spiral"};
+		String algList[] = {"Random Walk", "Spiral", "BackForth"};
 		_comboBox_1 = new JComboBox<String>(algList);
 		_comboBox_1.addActionListener(new ActionListener() {
 			
