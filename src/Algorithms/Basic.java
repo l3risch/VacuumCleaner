@@ -1,10 +1,11 @@
 package Algorithms;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-
-
+import java.util.List;
 import java.util.Map;
 
+import Algorithms.Basic.CellState;
 import Objects.Robot;
 import Objects.Table;
 import Physics.Coordinates2D;
@@ -17,6 +18,8 @@ public class Basic {
 	public enum CellState{FREE, VISITED, OCCUPIED};
 	
 	public static Map<String, CellState> _mentalMap = new HashMap<String, CellState>();
+	
+	protected static char[][] _matrix = new char[64][64];
 	
 	static boolean isFrontAccesable(int row, int col)
 	{
@@ -452,6 +455,39 @@ public class Basic {
 	static Map<String, CellState> getMentalMap()
 	{
 		return _mentalMap;
+	}
+	
+	protected static char[][] updateMatrix()
+	{
+		 //Transform Hash Map to char matrix
+		 for(String key : _mentalMap.keySet())
+		 {
+			 int row = Integer.parseInt(key.substring(0, 2));
+			 int col = Integer.parseInt(key.substring(2, 4));
+			 if(_mentalMap.get(key).equals(CellState.FREE) || _mentalMap.get(key).equals(CellState.VISITED))
+			 {
+				 _matrix[row][col] = '1';
+			 }
+			 if(_mentalMap.get(key).equals(CellState.OCCUPIED))
+			 {
+				 _matrix[row][col] = '0';
+	 		 }
+		 }
+		 
+		 //Set all unknown cells as obstacles '0'
+		 for(int i = 0; i < 64; i++)
+		 {
+			 for(int j = 0; j < 64; j++)
+			 {
+				 if(_matrix[i][j] == 0)
+				 {
+					 _matrix[i][j] = '0';
+				 }
+			 }		
+		 }
+		 
+		 
+		 return _matrix;
 	}
 
 }

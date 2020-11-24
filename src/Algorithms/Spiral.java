@@ -53,10 +53,7 @@ public class Spiral extends Basic implements ActionListener {
 		if(actualRow >= 0 && actualCol >= 0)
 		{
 			updateMap(actualRow, actualCol, mentalMap);
-		}
-		
-		_nn = NearestNeighbour.getNearestNeighbour(actualRow, actualCol);
-		
+		}		
 		
 		if(totallyFreeDirection(encircledArea, ScanDirection.LEFT) && !_pathCalculated)
 		{
@@ -88,6 +85,8 @@ public class Spiral extends Basic implements ActionListener {
 			
 		} else if(totallyCovered(encircledArea))
 		{
+			_nn = NearestNeighbour.getNearestNeighbour(actualRow, actualCol);
+
 			if(!_pathCalculated)
 			{
 				//Calculate shortest route to nearest neighbour

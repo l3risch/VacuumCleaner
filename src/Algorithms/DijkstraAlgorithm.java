@@ -32,35 +32,8 @@ public class DijkstraAlgorithm extends Basic{
 	 {
 		 _nodeList.clear();
 		 _nn = nn;
-		 _matrix = new char[64][64];
+		 _matrix = updateMatrix();
 		 
-		 //Transform Hash Map to char matrix
-		 for(String key : _mentalMap.keySet())
-		 {
-			 int row = Integer.parseInt(key.substring(0, 2));
-			 int col = Integer.parseInt(key.substring(2, 4));
-			 if(_mentalMap.get(key).equals(CellState.FREE) || _mentalMap.get(key).equals(CellState.VISITED))
- 			 {
-				 _matrix[row][col] = '1';
- 			 }
-			 if(_mentalMap.get(key).equals(CellState.OCCUPIED))
- 			 {
-				 _matrix[row][col] = '0';
- 	 		 }
-		 }
-		 
-		 //Set all unknown cells as obstacles '0'
-		 for(int i = 0; i < 64; i++)
-		 {
-			 for(int j = 0; j < 64; j++)
-			 {
-				 if(_matrix[i][j] == 0)
-				 {
-					 _matrix[i][j] = '0';
-				 }
-			 }		
-		 }
-
 		 //Adjust obstacles to match with robot size by extending each obstacle by 3 cells in width and height
 		 List<Coordinates2D> rowList = new ArrayList<Coordinates2D>();
 		 List<Coordinates2D> colList = new ArrayList<Coordinates2D>();

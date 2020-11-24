@@ -52,9 +52,7 @@ public class BackAndForth extends Basic implements ActionListener {
 		{
 			updateMap(actualRow, actualCol, mentalMap);
 		}
-		
-		_nn = NearestNeighbour.getNearestNeighbour(actualRow, actualCol);		
-		
+				
 		
 		if(totallyFreeDirection(encircledArea, ScanDirection.FRONT) && !_pathCalculated)
 		{
@@ -85,6 +83,8 @@ public class BackAndForth extends Basic implements ActionListener {
 			
 		} else if(totallyCovered(encircledArea))
 		{
+			_nn = NearestNeighbour.getNearestNeighbour(actualRow, actualCol);		
+
 			if(!_pathCalculated)
 			{
 				//Calculate shortest route to nearest neighbour

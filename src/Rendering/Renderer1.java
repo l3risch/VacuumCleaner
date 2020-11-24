@@ -201,10 +201,10 @@ public class Renderer1 extends JPanel{
  		}
 		
 		//Clear nearest free cell
-		Coordinates2D nn = NearestNeighbour.getNearestNeighbour(Robot.getYasRow(), Robot.getXasCol());
-		_g.setColor(new Color(0,0,0,0));
-		_g.fillRect(nn.getCol() * 10 + 100, nn.getRow() * 10 + 140, 10, 10);
-		_g.setColor(Color.BLACK);
+//		Coordinates2D nn = NearestNeighbour.getNearestNeighbour(Robot.getYasRow(), Robot.getXasCol());
+//		_g.setColor(new Color(0,0,0,0));
+//		_g.fillRect(nn.getCol() * 10 + 100, nn.getRow() * 10 + 140, 10, 10);
+//		_g.setColor(Color.BLACK);
 		
 		
 		
@@ -238,7 +238,7 @@ public class Renderer1 extends JPanel{
 		
  		}
 		
-		paintNearestCell();
+//		paintNearestCell();
 
 	}
 	
@@ -260,13 +260,13 @@ public class Renderer1 extends JPanel{
 	}
 	
 	
-	private static void paintNearestCell() 
-	{
-		
-		Coordinates2D nn = NearestNeighbour.getNearestNeighbour(Robot.getYasRow(), Robot.getXasCol());
-		_g.setColor(Color.BLUE);
-		_g.fillRect(nn.getCol() * 10 + 100, nn.getRow() * 10 + 140, 10, 10);
-		_g.setColor(Color.BLACK);
-	}
+//	private static void paintNearestCell() 
+//	{
+//		
+//		Coordinates2D nn = NearestNeighbour.getNearestNeighbour(Robot.getYasRow(), Robot.getXasCol());
+//		_g.setColor(Color.BLUE);
+//		_g.fillRect(nn.getCol() * 10 + 100, nn.getRow() * 10 + 140, 10, 10);
+//		_g.setColor(Color.BLACK);
+//	}
 
 }
