@@ -92,15 +92,21 @@ public class NearestNeighbour extends Basic{
 			queue.addAll(neighbourList);
 		}
 		
-//		for(int k = 0; k < 64; k++)
-//		{
-//			StringBuilder sb = new StringBuilder();
-//			for(int l = 0; l < 64; l++)
-//			{
-//				sb.append(wavefrontMatrix[k][l] +  " ");
-//			}
-//			System.out.println(sb);
-//		}
+		for(int k = 0; k < 64; k++)
+		{
+			StringBuilder sb = new StringBuilder();
+			for(int l = 0; l < 64; l++)
+			{
+				if(wavefrontMatrix[k][l] < 10 )
+				{
+					sb.append(" "+ wavefrontMatrix[k][l] +  " ");
+
+				} else {
+					sb.append(wavefrontMatrix[k][l] +  " ");
+				}
+			}
+			System.out.println(sb);
+		}
 		
 		Map<Coordinates2D, Integer> map = new HashMap<Coordinates2D, Integer>();
 		
