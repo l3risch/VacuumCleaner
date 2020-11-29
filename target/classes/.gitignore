@@ -1,3 +1,5 @@
+/.metadata/
+/.recommenders/
 /Algorithms/
 /Listener/
 /MapGeneration/
@@ -6,4 +8,3 @@
 /Rendering/
 /enums/
 /main/
-/.recommenders/

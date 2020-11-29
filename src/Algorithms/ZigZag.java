@@ -3,25 +3,23 @@ package Algorithms;
 import java.awt.event.ActionEvent;
 
 import java.awt.event.ActionListener;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import Listener.StartAlgorithm;
 import Objects.Node;
 import Objects.Robot;
-import Objects.Table;
 import Physics.Coordinates2D;
-import Physics.Movement;
 import main.MainFrame;
 
 
-public class Spiral extends Basic implements ActionListener {
+public class ZigZag extends Basic implements ActionListener {
 
 	private MainFrame _frame; 
 	private int _actualRow;
 	private int _actualCol;
 	private Coordinates2D[] _encircledArea = new Coordinates2D[16];
+	private int _uTurn = 0;
+	private boolean right = true;
 	
 	Coordinates2D _nn = new Coordinates2D(0, 0);
 	
@@ -31,7 +29,7 @@ public class Spiral extends Basic implements ActionListener {
 
 	boolean _nnVisited = true;
 
-	public Spiral(MainFrame frame)
+	public ZigZag(MainFrame frame)
 	{
 		_frame = frame;
 	}
@@ -53,56 +51,92 @@ public class Spiral extends Basic implements ActionListener {
 		if(actualRow >= 0 && actualCol >= 0)
 		{
 			updateMap(actualRow, actualCol, mentalMap);
-		}		
-		
-		if(totallyFreeDirection(encircledArea, ScanDirection.LEFT) && !_pathCalculated)
-		{
-			Robot.getMovement().turnLeft();
-			Robot.getMovement().moveForward();
-			
-		} else if(totallyFreeDirection(encircledArea, ScanDirection.FRONT) && !_pathCalculated)
+		}
+				
+		if(partiallyFreeDirection(encircledArea, ScanDirection.FRONT) && _uTurn == 0 && !_pathCalculated)
 		{
 			Robot.getMovement().moveForward();
 			
-		} else if(totallyFreeDirection(encircledArea, ScanDirection.RIGHT) && !_pathCalculated)
+		} else if(right && !_pathCalculated && partiallyFreeDirection(encircledArea, ScanDirection.RIGHT))
 		{
-			Robot.getMovement().turnRight();
-			Robot.getMovement().moveForward();
+			performUTurnRight(encircledArea);
 			
-		} else if(partiallyFreeDirection(encircledArea, ScanDirection.LEFT) && !_pathCalculated)
+		} else if(!right && !_pathCalculated && partiallyFreeDirection(encircledArea, ScanDirection.LEFT)) 
 		{
-			Robot.getMovement().turnLeft();
-			Robot.getMovement().moveForward();
-			
-		} else if(partiallyFreeDirection(encircledArea, ScanDirection.FRONT) && !_pathCalculated)
-		{
-			Robot.getMovement().moveForward();
-			
-		} else if(partiallyFreeDirection(encircledArea, ScanDirection.RIGHT) && !_pathCalculated)
-		{
-			Robot.getMovement().turnRight();
-			Robot.getMovement().moveForward();
+			performUTurnLeft(encircledArea);
 			
 		} else if(totallyCovered(encircledArea))
 		{
 			backtrack(_actualRow, _actualCol);
 
 		} else {
-			Robot.getMovement().moveForward();
+			if(partiallyFreeDirection(encircledArea, ScanDirection.FRONT))
+			{
+				Robot.getMovement().moveForward();
+			}
 			_pathCalculated = false;
 			_movesToNN = 0;
 		}
 		
-//		if(reachedStoppingCriteria(x, y, ang))
-//		{
-//			StartAlgorithm._timer.stop();
-//		}	
 	}
 
- 
+	private void performUTurnRight(Coordinates2D[] encircledArea) {
+		if(totallyFreeDirection(encircledArea, ScanDirection.RIGHT))
+		{
+			_uTurn += 1;
+			Robot.getMovement().turnRight();
+		} else if(totallyFreeDirection(encircledArea, ScanDirection.LEFT))
+		{
+			_uTurn += 1;
+			Robot.getMovement().turnLeft();
+		} 
+		else if(partiallyFreeDirection(encircledArea, ScanDirection.FRONT))
+		{
+			Robot.getMovement().moveForward();
+		} 	else
+		{
+			_uTurn += 1;
+			Robot.getMovement().turnRight();
+		}
+		
+		if(_uTurn > 1)
+		{
+			right = false;
+			_uTurn = 0;
+		}
+	}
+	
+	private void performUTurnLeft(Coordinates2D[] encircledArea) {
+		if(totallyFreeDirection(encircledArea, ScanDirection.LEFT))
+		{
+			_uTurn += 1;
+			Robot.getMovement().turnLeft();
+		} else if(totallyFreeDirection(encircledArea, ScanDirection.RIGHT))
+		{
+			_uTurn += 1;
+			Robot.getMovement().turnRight();
+		} 
+		else if(partiallyFreeDirection(encircledArea, ScanDirection.FRONT))
+		{
+			Robot.getMovement().moveForward();
+		} 	else
+		{
+			_uTurn += 1;
+			Robot.getMovement().turnLeft();
+		}
+		
+		if(_uTurn > 1)
+		{
+			right = true;
+			_uTurn = 0;
+		}
+	}
+
+	
 	private void backtrack(int actualRow, int actualCol) {
 		_nn = NearestNeighbour.getNearestNeighbour(actualRow, actualCol);		
 
+		System.out.println(_nn.getRow()+", " + _nn.getCol());
 		if(!_pathCalculated)
 		{
 			//Calculate shortest route to nearest neighbour
@@ -161,24 +195,6 @@ public class Spiral extends Basic implements ActionListener {
 	}		
 	}
 
-    
+
 	
-//	private boolean reachedStoppingCriteria(int x, int y, double ang) 
-//	{
-//
-//		if((System.currentTimeMillis() / 1000l) - StartAlgorithm._start > 180)
-//		{
-//			return true;
-//		} else {
-//			
-//			if(Robot.getX()== x && Robot.getY() == y && ang == Robot.getMovement().getAng())
-//			{
-//				return true;
-//			} else {
-//				return false;
-//			}
-//		}
-//	}
-	
-		
   }

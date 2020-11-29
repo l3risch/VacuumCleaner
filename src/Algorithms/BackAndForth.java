@@ -83,64 +83,8 @@ public class BackAndForth extends Basic implements ActionListener {
 			
 		} else if(totallyCovered(encircledArea))
 		{
-			_nn = NearestNeighbour.getNearestNeighbour(actualRow, actualCol);		
+			backtrack(_actualRow, _actualCol);
 
-			if(!_pathCalculated)
-			{
-				//Calculate shortest route to nearest neighbour
-				_shortestPath = DijkstraAlgorithm.computePath(actualRow, actualCol, _nn);
-				_pathCalculated = true;
-			}
-
-			else
-			{			
-			if(_shortestPath != null)
-			{
-				if(!DijkstraAlgorithm.nnReached(actualRow, actualCol))
-				{
-					Node currentNode = _shortestPath.get(_movesToNN);
-					
-					if(_movesToNN < _shortestPath.size() - 1)
-					{
-						Node nextNode = _shortestPath.get(_movesToNN+1);
-	//					System.out.println("Current Node: " + _shortestPath.get(_movesToNN ).x + ", " +_shortestPath.get(_movesToNN).y);
-						Robot.getMovement().setX(100 + 10 * currentNode.y);
-						Robot.getMovement().setY(110 + 10 * currentNode.x);
-						
-						if(_movesToNN < _shortestPath.size()-1)
-						{
-							//Determine angle 
-							if(currentNode.x == nextNode.x - 1)
-							{
-								Robot.getMovement()._ang = 90;
-							} else if(currentNode.y == nextNode.y - 1)
-							{
-								Robot.getMovement()._ang = 0;
-							} else if(currentNode.x == nextNode.x + 1)
-							{
-								Robot.getMovement()._ang = 270;
-							} else if(currentNode.y == nextNode.y + 1)
-							{
-								Robot.getMovement()._ang = 180;
-							} 
-							
-						}
-					} else {
-						Robot.getMovement().setX(100 + 10 * currentNode.y);
-						Robot.getMovement().setY(110 + 10 * currentNode.x);
-					}
-					
-					_movesToNN++;
-
-				} else {
-					_movesToNN = 0;
-					_pathCalculated = false;
-				}
-			} else {
-				_pathCalculated = false;
-				_movesToNN = 0;
-			}
-		}
 		} else {
 			Robot.getMovement().moveForward();
 			_pathCalculated = false;
@@ -154,6 +98,67 @@ public class BackAndForth extends Basic implements ActionListener {
 //		}	
 		
 		
+	}
+
+	private void backtrack(int actualRow, int actualCol) {
+		_nn = NearestNeighbour.getNearestNeighbour(actualRow, actualCol);		
+
+		if(!_pathCalculated)
+		{
+			//Calculate shortest route to nearest neighbour
+			_shortestPath = DijkstraAlgorithm.computePath(actualRow, actualCol, _nn);
+			_pathCalculated = true;
+		}
+
+		else
+		{			
+		if(_shortestPath != null)
+		{
+			if(!DijkstraAlgorithm.nnReached(actualRow, actualCol))
+			{
+				Node currentNode = _shortestPath.get(_movesToNN);
+				
+				if(_movesToNN < _shortestPath.size() - 1)
+				{
+					Node nextNode = _shortestPath.get(_movesToNN+1);
+//					System.out.println("Current Node: " + _shortestPath.get(_movesToNN ).x + ", " +_shortestPath.get(_movesToNN).y);
+					Robot.getMovement().setX(100 + 10 * currentNode.y);
+					Robot.getMovement().setY(110 + 10 * currentNode.x);
+					
+					if(_movesToNN < _shortestPath.size()-1)
+					{
+						//Determine angle 
+						if(currentNode.x == nextNode.x - 1)
+						{
+							Robot.getMovement()._ang = 90;
+						} else if(currentNode.y == nextNode.y - 1)
+						{
+							Robot.getMovement()._ang = 0;
+						} else if(currentNode.x == nextNode.x + 1)
+						{
+							Robot.getMovement()._ang = 270;
+						} else if(currentNode.y == nextNode.y + 1)
+						{
+							Robot.getMovement()._ang = 180;
+						} 
+						
+					}
+				} else {
+					Robot.getMovement().setX(100 + 10 * currentNode.y);
+					Robot.getMovement().setY(110 + 10 * currentNode.x);
+				}
+				
+				_movesToNN++;
+
+			} else {
+				_movesToNN = 0;
+				_pathCalculated = false;
+			}
+		} else {
+			_pathCalculated = false;
+			_movesToNN = 0;
+		}
+	}		
 	}
 
 

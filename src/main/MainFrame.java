@@ -138,7 +138,7 @@ public class MainFrame extends JFrame{
 		/**
 		 * Choose Algorithm
 		 */
-		String algList[] = {"Random Walk", "Spiral", "BackForth"};
+		String algList[] = {"Random Walk", "Spiral", "BackForth", "ZigZag"};
 		_comboBox_1 = new JComboBox<String>(algList);
 		_comboBox_1.addActionListener(new ActionListener() {
 			

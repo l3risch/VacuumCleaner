@@ -73,7 +73,7 @@ public class DijkstraAlgorithm extends Basic{
 		 _matrix[robotRow][robotCol] = 'S';
 		 
 		 //Set position of nearest neighbour as destination
-		if(_nn.getRow() < 61 && _nn.getCol() >= 0)
+		if(_nn.getRow() < 61 && _nn.getCol() > 2)
 		{
 			if(_matrix[_nn.getRow()+3][_nn.getCol()-3] != '0')
 			{

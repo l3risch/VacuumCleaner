@@ -10,6 +10,7 @@ import java.time.LocalTime;
 import javax.swing.Timer;
 
 import Algorithms.Spiral;
+import Algorithms.ZigZag;
 import Algorithms.BackAndForth;
 import Algorithms.RandomWalk;
 import main.MainFrame;
@@ -46,7 +47,11 @@ public class StartAlgorithm implements ActionListener {
         _timer.start();
         _timer.setRepeats(true);
         break;
-	
+		case "ZigZag": ZigZag zigzag = new ZigZag(_frame);
+		_timer = new Timer(50, zigzag);
+        _timer.start();
+        _timer.setRepeats(true);
+        break;
 		}
 		
 
