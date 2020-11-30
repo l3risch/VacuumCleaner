@@ -11,7 +11,7 @@ import javax.swing.Timer;
 
 import Algorithms.Spiral;
 import Algorithms.ZigZag;
-import Algorithms.BackAndForth;
+import Algorithms.CustomAlgorithm;
 import Algorithms.RandomWalk;
 import main.MainFrame;
 
@@ -42,8 +42,8 @@ public class StartAlgorithm implements ActionListener {
 	        _timer.start();
 	        _timer.setRepeats(true);
 		break;	
-		case "BackForth": BackAndForth backforth = new BackAndForth(_frame);
-		_timer = new Timer(50, backforth);
+		case "Custom": CustomAlgorithm custom = new CustomAlgorithm(_frame);
+		_timer = new Timer(50, custom);
         _timer.start();
         _timer.setRepeats(true);
         break;

@@ -3,7 +3,6 @@ package Algorithms;
 import java.awt.event.ActionEvent;
 
 import java.awt.event.ActionListener;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,9 +16,9 @@ import Physics.Movement;
 import main.MainFrame;
 
 
-public class Spiral extends CPPAlgorithm implements ActionListener {
+public class CustomAlgorithm extends CPPAlgorithm implements ActionListener {
 
-	public Spiral(MainFrame frame)
+	public CustomAlgorithm(MainFrame frame)
 	{
 		_frame = frame;
 	}
@@ -41,23 +40,18 @@ public class Spiral extends CPPAlgorithm implements ActionListener {
 		if(actualRow >= 0 && actualCol >= 0)
 		{
 			updateMap(actualRow, actualCol, mentalMap);
-		}		
+		}
+				
 		
-		if(totallyFreeDirection(encircledArea, ScanDirection.LEFT) && !_pathCalculated)
-		{
-			Robot.getMovement().turnLeft();
-			Robot.getMovement().moveForward();
-			
-		} else if(totallyFreeDirection(encircledArea, ScanDirection.FRONT) && !_pathCalculated)
+		if(totallyFreeDirection(encircledArea, ScanDirection.FRONT) && !_pathCalculated)
 		{
 			Robot.getMovement().moveForward();
-			
 		} else if(totallyFreeDirection(encircledArea, ScanDirection.RIGHT) && !_pathCalculated)
 		{
 			Robot.getMovement().turnRight();
 			Robot.getMovement().moveForward();
 			
-		} else if(partiallyFreeDirection(encircledArea, ScanDirection.LEFT) && !_pathCalculated)
+		} else if(totallyFreeDirection(encircledArea, ScanDirection.LEFT) && !_pathCalculated)
 		{
 			Robot.getMovement().turnLeft();
 			Robot.getMovement().moveForward();
@@ -71,6 +65,11 @@ public class Spiral extends CPPAlgorithm implements ActionListener {
 			Robot.getMovement().turnRight();
 			Robot.getMovement().moveForward();
 			
+		} else if(partiallyFreeDirection(encircledArea, ScanDirection.LEFT) && !_pathCalculated)
+		{
+			Robot.getMovement().turnLeft();
+			Robot.getMovement().moveForward();
+			
 		} else if(totallyCovered(encircledArea))
 		{
 			backtrack(_actualRow, _actualCol);
@@ -80,15 +79,16 @@ public class Spiral extends CPPAlgorithm implements ActionListener {
 			_pathCalculated = false;
 			_movesToNN = 0;
 		}
-		
+	
 		if(reachedStoppingCriteria())
 		{
 			StartAlgorithm._timer.stop();
 			Performance perf = new Performance();
 			perf.evaluate();
-		}				
+		}			
+		
+		
 	}
 
 	
-		
   }

@@ -3,21 +3,19 @@ package Algorithms;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import Algorithms.Basic.CellState;
 import Listener.StartAlgorithm;
 import Objects.Robot;
 import Objects.Table;
+import Performance.Performance;
 import Physics.Coordinates2D;
 import Physics.Movement;
 import Physics.Movement.LastMove;
 import main.MainFrame;
 
-public class RandomWalk extends Basic implements ActionListener{
+public class RandomWalk extends CPPAlgorithm implements ActionListener{
 
-	
-	private MainFrame _frame; 
 	public boolean _distanceExceeded = false;
-	private int _actualRow;
-	private int _actualCol;
 	
 	
 	public RandomWalk(MainFrame frame) {
@@ -30,6 +28,10 @@ public class RandomWalk extends Basic implements ActionListener{
 		_actualCol = Robot.getXasCol();
 		_actualRow = Robot.getYasRow();
 		
+		if(_actualRow >= 0 && _actualCol >= 0)
+		{
+			updateMap(_actualRow, _actualCol, _mentalMap);
+		}
 		
 		boolean accesableField;
 
@@ -44,21 +46,17 @@ public class RandomWalk extends Basic implements ActionListener{
 			Robot.getMovement().moveForward();
 		}
 
-		//TODO: Quitting Criteria
-		reachedStoppingCriteria();
-
+		if(reachedStoppingCriteria())
+		{
+			StartAlgorithm._timer.stop();
+			Performance perf = new Performance();
+			perf.evaluate();
+		}			
+		
 		_frame.repaint();		
 		
-		if(_actualRow >= 0 && _actualCol >= 0)
-		{
-			updateMap(_actualRow, _actualCol, _mentalMap);
-		}
+		
 		
 	}
 
-	
-	private boolean reachedStoppingCriteria() {
-		return false;
-	}
-	
 }
