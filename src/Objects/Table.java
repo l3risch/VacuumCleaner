@@ -45,7 +45,7 @@ public class Table {
 	}
 
 	private static void setType1() {
-		Robot.setStartingPos(5, 5);
+		Robot.setStartingPos(15, 53);
 
 		_rows = 64;
 		_cols = 64;

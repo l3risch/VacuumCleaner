@@ -11,6 +11,9 @@ public class Movement {
 	public int _i = 0;
 	public int _x = 0;
 	public int _y = 0;
+	public int _totalDistance = 0;
+	public int _numberOfTurns = 0;
+
 	
 	//Ausrichtung nach oben
 	public double _ang;
@@ -44,11 +47,16 @@ public class Movement {
 		}
 		
 		_listOfMovements.add(LastMove.FORWARD);
+		
+
+		_totalDistance++;
 	}
 	
 	public void turnByDegrees(int ang) 
 	{
 		_ang = _ang + ang;
+
+		_numberOfTurns++;
 		
 	}
 	
@@ -68,6 +76,8 @@ public class Movement {
 		}
 		
 		_listOfMovements.add(LastMove.RIGHT);
+		
+		_numberOfTurns++;
 	}
 	
 	public void turnLeft()
@@ -86,6 +96,8 @@ public class Movement {
 		}
 		
 		_listOfMovements.add(LastMove.LEFT);
+		
+		_numberOfTurns++;
 	}
 	
 	public void setX(int x)

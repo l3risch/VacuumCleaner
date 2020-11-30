@@ -27,10 +27,10 @@ public class NearestNeighbour extends Basic{
 	public static Coordinates2D getNearestNeighbour(int row, int col)
 	{
 		_mentalMap = getMentalMap();
-		Coordinates2D[][] robotCoordinates = Robot.getCoordinates(row, col);
+		//Coordinates2D[][] robotCoordinates = Robot.getCoordinates(row, col);
 		
 		//The cell that is covered by the robot in the 2nd row and 2nd col is considered as the middle of the robot
-		_robotPos = robotCoordinates[1][1];
+		_robotPos = new Coordinates2D(row, col);
 		
 
 		Map<Coordinates2D, Integer> map = getFreeCells();
@@ -92,21 +92,21 @@ public class NearestNeighbour extends Basic{
 			queue.addAll(neighbourList);
 		}
 		
-		for(int k = 0; k < 64; k++)
-		{
-			StringBuilder sb = new StringBuilder();
-			for(int l = 0; l < 64; l++)
-			{
-				if(wavefrontMatrix[k][l] < 10 )
-				{
-					sb.append(" "+ wavefrontMatrix[k][l] +  " ");
-
-				} else {
-					sb.append(wavefrontMatrix[k][l] +  " ");
-				}
-			}
-			System.out.println(sb);
-		}
+//		for(int k = 0; k < 64; k++)
+//		{
+//			StringBuilder sb = new StringBuilder();
+//			for(int l = 0; l < 64; l++)
+//			{
+//				if(wavefrontMatrix[k][l] < 10 )
+//				{
+//					sb.append(" "+ wavefrontMatrix[k][l] +  " ");
+//
+//				} else {
+//					sb.append(wavefrontMatrix[k][l] +  " ");
+//				}
+//			}
+//			System.out.println(sb);
+//		}
 		
 		Map<Coordinates2D, Integer> map = new HashMap<Coordinates2D, Integer>();
 		

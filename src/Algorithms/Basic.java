@@ -238,6 +238,42 @@ public class Basic {
 		}
 		
 	}
+	
+	//Direction is partially covered, which means no obstacles, walls but the scanned area is partially covered in this direction
+	boolean partiallyCoveredDirection(Coordinates2D[] scannedArea, ScanDirection direction) {
+		
+		Coordinates2D[] scanArea = determineScanDirections(scannedArea, direction);
+		
+		int pixels = 0;
+
+		for(int i = 0; i < scanArea.length; i++)
+		{
+			try {
+				if(Table.getMarkedObstacles(scanArea[i].getRow(), scanArea[i].getCol()))
+				{
+					return false;
+				}
+				
+				if(Table.getPath(scanArea[i].getRow(), scanArea[i].getCol()))
+				{
+					pixels += 1;
+				}
+				
+			} catch(ArrayIndexOutOfBoundsException e)
+			{
+				e.getStackTrace();
+				return false;
+			}
+		}
+		
+		if(pixels > 3 || pixels <= 0)
+		{
+			return false;
+		} else {
+			return true;
+		}
+		
+	}
 
 	
 	//Robot is completely surrounded by Obstacles and visited Cells

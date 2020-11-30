@@ -6,8 +6,11 @@ import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.Map;
 
+import Algorithms.Basic.CellState;
+import Listener.StartAlgorithm;
 import Objects.Node;
 import Objects.Robot;
+import Performance.Performance;
 import Physics.Coordinates2D;
 import main.MainFrame;
 
@@ -26,7 +29,7 @@ public class ZigZag extends Basic implements ActionListener {
 	private int _movesToNN = 1;
 	private List<Node> _shortestPath;
 	private boolean _pathCalculated = false;
-
+	
 	boolean _nnVisited = true;
 
 	public ZigZag(MainFrame frame)
@@ -52,7 +55,8 @@ public class ZigZag extends Basic implements ActionListener {
 		{
 			updateMap(actualRow, actualCol, mentalMap);
 		}
-				
+
+		
 		if(partiallyFreeDirection(encircledArea, ScanDirection.FRONT) && _uTurn == 0 && !_pathCalculated)
 		{
 			Robot.getMovement().moveForward();
@@ -67,28 +71,42 @@ public class ZigZag extends Basic implements ActionListener {
 			
 		} else if(totallyCovered(encircledArea))
 		{
-			backtrack(_actualRow, _actualCol);
+			backtrack(actualRow, actualCol);
 
 		} else {
-			if(partiallyFreeDirection(encircledArea, ScanDirection.FRONT))
+			if(partiallyFreeDirection(encircledArea, ScanDirection.RIGHT))
 			{
+				performUTurnRight(encircledArea);
+			} else if(partiallyFreeDirection(encircledArea, ScanDirection.LEFT))
+			{
+				performUTurnLeft(encircledArea);
+			} else {
 				Robot.getMovement().moveForward();
 			}
 			_pathCalculated = false;
 			_movesToNN = 0;
 		}
 		
+		if(reachedStoppingCriteria())
+		{
+			StartAlgorithm._timer.stop();
+			Performance perf = new Performance();
+			perf.evaluate();
+		}			
 	}
+
 
 	private void performUTurnRight(Coordinates2D[] encircledArea) {
 		if(totallyFreeDirection(encircledArea, ScanDirection.RIGHT))
 		{
 			_uTurn += 1;
 			Robot.getMovement().turnRight();
+			Robot.getMovement().moveForward();
 		} else if(totallyFreeDirection(encircledArea, ScanDirection.LEFT))
 		{
 			_uTurn += 1;
 			Robot.getMovement().turnLeft();
+			Robot.getMovement().moveForward();
 		} 
 		else if(partiallyFreeDirection(encircledArea, ScanDirection.FRONT))
 		{
@@ -97,6 +115,7 @@ public class ZigZag extends Basic implements ActionListener {
 		{
 			_uTurn += 1;
 			Robot.getMovement().turnRight();
+			Robot.getMovement().moveForward();
 		}
 		
 		if(_uTurn > 1)
@@ -111,10 +130,12 @@ public class ZigZag extends Basic implements ActionListener {
 		{
 			_uTurn += 1;
 			Robot.getMovement().turnLeft();
+			Robot.getMovement().moveForward();
 		} else if(totallyFreeDirection(encircledArea, ScanDirection.RIGHT))
 		{
 			_uTurn += 1;
 			Robot.getMovement().turnRight();
+			Robot.getMovement().moveForward();
 		} 
 		else if(partiallyFreeDirection(encircledArea, ScanDirection.FRONT))
 		{
@@ -123,6 +144,7 @@ public class ZigZag extends Basic implements ActionListener {
 		{
 			_uTurn += 1;
 			Robot.getMovement().turnLeft();
+			Robot.getMovement().moveForward();
 		}
 		
 		if(_uTurn > 1)
@@ -136,7 +158,6 @@ public class ZigZag extends Basic implements ActionListener {
 	private void backtrack(int actualRow, int actualCol) {
 		_nn = NearestNeighbour.getNearestNeighbour(actualRow, actualCol);		
 
-		System.out.println(_nn.getRow()+", " + _nn.getCol());
 		if(!_pathCalculated)
 		{
 			//Calculate shortest route to nearest neighbour
@@ -195,6 +216,26 @@ public class ZigZag extends Basic implements ActionListener {
 	}		
 	}
 
-
+	private boolean reachedStoppingCriteria() 
+	{
+		if((System.currentTimeMillis() / 1000l) - StartAlgorithm._start > 240)
+		{
+			return true;
+		} else if(Robot.getMovement()._totalDistance > 4000)
+		{
+			return true;
+		}  
+		
+		for(String key : _mentalMap.keySet())
+		{
+			if(_mentalMap.get(key).equals(CellState.FREE))
+			{
+				return false;
+			}
+		}
+		
+		return true;
+	}
 	
-  }
+}
+

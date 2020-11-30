@@ -90,21 +90,22 @@ public class DijkstraAlgorithm extends Basic{
 			} else {
 				_matrix[_nn.getRow()][_nn.getCol()] = 'D';
 			}
+			
+			 for(int i = 0; i < 64; i++)
+			 {
+				 StringBuilder sb = new StringBuilder();
+				 for(int j = 0; j < 64; j++)
+				 {
+					 sb.append(_matrix[i][j]);
+				 }
+				 System.out.println(sb);
+			 }
+			System.out.println("\n\n");
 		} else {
 			_matrix[_nn.getRow()][_nn.getCol()] = 'D';
 		}
+
 		
-		
-//		 for(int i = 0; i < 64; i++)
-//		 {
-//			 StringBuilder sb = new StringBuilder();
-//			 for(int j = 0; j < 64; j++)
-//			 {
-//				 sb.append(_matrix[i][j]);
-//			 }
-//			 System.out.println(sb);
-//		 }
-//		System.out.println("\n\n");
        boolean exists = pathExists(_matrix, robotRow, robotCol);		
 		
 		if(exists)
