@@ -86,7 +86,7 @@ public class Spiral extends CPPAlgorithm implements ActionListener {
 		if(reachedStoppingCriteria())
 		{
 			StartAlgorithm._timer.stop();
-			Performance perf = new Performance();
+			Performance perf = new Performance(_frame);
 			perf.evaluate();
 		}				
 	}

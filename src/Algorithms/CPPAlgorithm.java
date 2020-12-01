@@ -88,7 +88,7 @@ public class CPPAlgorithm extends Basic{
 
 	protected boolean reachedStoppingCriteria() 
 	{
-		if((System.currentTimeMillis() / 1000l) - StartAlgorithm._start > 10)
+		if((System.currentTimeMillis() / 1000l) - StartAlgorithm._start > 1)
 		{
 			return true;
 		} else if(Robot.getMovement()._totalDistance > 4000)

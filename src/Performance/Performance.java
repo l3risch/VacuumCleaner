@@ -1,9 +1,15 @@
 package Performance;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+
 import Algorithms.Basic;
 import Algorithms.NearestNeighbour;
 import Objects.Robot;
 import Objects.Table;
+import main.MainFrame;
 
 public class Performance extends Basic{
 
@@ -11,8 +17,16 @@ public class Performance extends Basic{
 	private int _totalDistance;
 	private int _totalMovements;
 	
-	public Performance()
+	private int _freeCells = 0;
+	private int _visitedCells = 0;
+	private int _obstacleCells = 0;
+	private int _accessableCells = 0;
+	private double _coverage = 0;
+	private MainFrame _frame;
+	
+	public Performance(MainFrame frame)
 	{
+		_frame = frame;
 		_numberOfTurns = Robot.getMovement()._numberOfTurns;
 		_totalDistance = Robot.getMovement()._totalDistance;
 		_totalMovements= _totalDistance + _numberOfTurns;
@@ -25,6 +39,44 @@ public class Performance extends Basic{
 		System.out.println("Total Movements: " + _totalMovements);
 		
 		calculateCoverage();
+		
+		archive();
+		_frame.saveImage();
+	}
+
+	private void archive() {
+		FileOutputStream fos;
+		try {
+			fos = new FileOutputStream("./results/log01.txt");
+			OutputStreamWriter osw = new OutputStreamWriter(fos);
+
+		    writeToFile("Local Time:_" + java.time.LocalDateTime.now() + "_____________________\n\n", osw);
+		    writeToFile("Algorithmus: " + _frame.getAlgorithm() + "\n\n", osw);
+
+			writeToFile("\nDistance: " + _totalDistance, osw);
+			writeToFile("\nNumber of turns: " + _numberOfTurns, osw);
+			writeToFile("\nTotal Movements: " + _totalMovements, osw);
+			
+			writeToFile("\n\nFree Cells: " + _freeCells, osw);
+			writeToFile("\nVisited Cells: " + _visitedCells, osw);
+			writeToFile("\nObstacle Cells: " + _obstacleCells, osw);
+			writeToFile("\nAccessable Cells: " + _accessableCells, osw);
+			writeToFile("\n\nCoverage: " +  _coverage + "%", osw);
+
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private static void writeToFile(String message, OutputStreamWriter osw){
+	    try {
+	        osw.write(message);
+	        osw.flush();
+	    } catch (IOException e) {
+	        // TODO Auto-generated catch block
+	        e.printStackTrace();
+	    }
 	}
 
 	private void calculateCoverage() 
@@ -42,12 +94,6 @@ public class Performance extends Basic{
 		}
 		System.out.println("\n");
 
-		
-		int freeCells = 0;
-		int visitedCells = 0;
-		int obstacleCells = 0;
-		int accessableCells = 0;
-		double coverage = 0;
 
 		for(int i = 0; i<64; i++)
 		{
@@ -55,26 +101,26 @@ public class Performance extends Basic{
 			{
 				if(pathMatrix[i][j]=='2' || pathMatrix[i][j]=='D')
 				{
-					freeCells++;
+					_freeCells++;
 				}
 				if(pathMatrix[i][j]=='1' || pathMatrix[i][j]=='S')
 				{
-					visitedCells++;
+					_visitedCells++;
 				}
 				if(Table._markedObstacles[i][j] == true)
 				{
-					obstacleCells++;
+					_obstacleCells++;
 				}
 			}
 		}
 		
-		accessableCells = (64*64) - obstacleCells;
-		coverage = ((double)visitedCells/(double)accessableCells) * 100;
+		_accessableCells = (64*64) - _obstacleCells;
+		_coverage = ((double)_visitedCells/(double)_accessableCells) * 100;
 		
-		System.out.println("\nFree Cells: " + freeCells);
-		System.out.println("Visited Cells: " + visitedCells);
-		System.out.println("Obstacle Cells: " + obstacleCells);
-		System.out.println("Accessable Cells: " + accessableCells);
-		System.out.println("Coverage: " +  coverage + "%");
+		System.out.println("\nFree Cells: " + _freeCells);
+		System.out.println("Visited Cells: " + _visitedCells);
+		System.out.println("Obstacle Cells: " + _obstacleCells);
+		System.out.println("Accessable Cells: " + _accessableCells);
+		System.out.println("Coverage: " +  _coverage + "%");
 	}
 }

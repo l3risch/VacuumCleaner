@@ -8,8 +8,12 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Observable;
 
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -206,6 +210,19 @@ public class MainFrame extends JFrame{
 	{
 		_algorithm = _comboBox_1.getSelectedItem().toString();
 		return _algorithm;
+	}
+	
+	public void saveImage()
+	{
+		Container c = getContentPane();
+		BufferedImage im = new BufferedImage(c.getWidth(), c.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		c.paint(im.getGraphics());
+		try {
+			ImageIO.write(im, "PNG", new File("./results/shot.png"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
 
