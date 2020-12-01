@@ -28,6 +28,9 @@ public class RandomWalk extends CPPAlgorithm implements ActionListener{
 		_actualCol = Robot.getXasCol();
 		_actualRow = Robot.getYasRow();
 		
+		_nn = NearestNeighbour.getNearestNeighbour(_actualRow, _actualCol);		
+
+		
 		if(_actualRow >= 0 && _actualCol >= 0)
 		{
 			updateMap(_actualRow, _actualCol, _mentalMap);

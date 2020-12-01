@@ -26,7 +26,7 @@ public class CPPAlgorithm extends Basic{
 	protected boolean _nnVisited = true;
 
 	protected void backtrack(int actualRow, int actualCol) {
-		_nn = NearestNeighbour.getNearestNeighbour(actualRow, actualCol);		
+//		_nn = NearestNeighbour.getNearestNeighbour(actualRow, actualCol);		
 
 		if(!_pathCalculated)
 		{
@@ -88,7 +88,7 @@ public class CPPAlgorithm extends Basic{
 
 	protected boolean reachedStoppingCriteria() 
 	{
-		if((System.currentTimeMillis() / 1000l) - StartAlgorithm._start > 5)
+		if((System.currentTimeMillis() / 1000l) - StartAlgorithm._start > 10)
 		{
 			return true;
 		} else if(Robot.getMovement()._totalDistance > 4000)

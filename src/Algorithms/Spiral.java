@@ -38,6 +38,8 @@ public class Spiral extends CPPAlgorithm implements ActionListener {
 	
 	private void determineRoute(int actualRow, int actualCol, Coordinates2D[] encircledArea, Map<String, CellState> mentalMap) {
 		
+		_nn = NearestNeighbour.getNearestNeighbour(actualRow, actualCol);		
+
 		if(actualRow >= 0 && actualCol >= 0)
 		{
 			updateMap(actualRow, actualCol, mentalMap);

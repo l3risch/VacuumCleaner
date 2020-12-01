@@ -21,8 +21,7 @@ public class NearestNeighbour extends Basic{
 
 	private static Map<String, CellState> _mentalMap = new HashMap<String, CellState>();
 	private static Coordinates2D _robotPos;
-	private static double _distance;
-	
+	public static char[][] _pathMatrix = new char[64][64];
 	
 	public static Coordinates2D getNearestNeighbour(int row, int col)
 	{
@@ -59,21 +58,8 @@ public class NearestNeighbour extends Basic{
 		int robotRow = _robotPos.getRow();
 		int robotCol = _robotPos.getCol();
 		
-		char[][] pathMatrix = updateMatrix();
+		_pathMatrix = updatePathMatrix(robotRow, robotCol);
 		
-		 //Set position of robot as source
-		 pathMatrix[robotRow][robotCol] = 'S';
-		 
-		//Mark free cells in matrix
-		for(String key : _mentalMap.keySet())
-		{
-			int row = Integer.parseInt(key.substring(0, 2));
-			int col = Integer.parseInt(key.substring(2, 4));
-			if(_mentalMap.get(key).equals(CellState.FREE))
-			{
-				pathMatrix[row][col] = '2';
-			}
-		}
 		
 		int[][] wavefrontMatrix = new int[64][64];
 		wavefrontMatrix[startPoint.getRow()][startPoint.getCol()] = 1;
@@ -87,7 +73,7 @@ public class NearestNeighbour extends Basic{
 		{
 			Coordinates2D currentCell = queue.poll();
 			i = wavefrontMatrix[currentCell.getRow()][currentCell.getCol()];
-			List<Coordinates2D> neighbourList = getNeighbours(wavefrontMatrix, pathMatrix, currentCell, i);
+			List<Coordinates2D> neighbourList = getNeighbours(wavefrontMatrix, _pathMatrix, currentCell, i);
 
 			queue.addAll(neighbourList);
 		}
@@ -114,7 +100,7 @@ public class NearestNeighbour extends Basic{
 		{
 			for(int l = 0; l < 64; l++)
 			{
-				if(pathMatrix[k][l] == '2')
+				if(_pathMatrix[k][l] == '2')
 				{
 					map.put(new Coordinates2D(k, l), wavefrontMatrix[k][l]);
 				}
@@ -124,6 +110,45 @@ public class NearestNeighbour extends Basic{
 		return map;
 	}
 	
+	private static char[][] updatePathMatrix(int robotRow, int robotCol) {
+		 
+		 //Transform Hash Map to char matrix
+		 for(String key : _mentalMap.keySet())
+		 {
+			 int row = Integer.parseInt(key.substring(0, 2));
+			 int col = Integer.parseInt(key.substring(2, 4));
+			 if(_mentalMap.get(key).equals(CellState.VISITED))
+			 {
+				 _pathMatrix[row][col] = '1';
+			 }
+			 if(_mentalMap.get(key).equals(CellState.FREE))
+		     {
+				_pathMatrix[row][col] = '2';
+			 }
+			 if(_mentalMap.get(key).equals(CellState.OCCUPIED))
+			 {
+				 _pathMatrix[row][col] = '0';
+	 		 }
+		 }
+		 
+		 //Set all unknown cells as obstacles '0'
+		 for(int i = 0; i < 64; i++)
+		 {
+			 for(int j = 0; j < 64; j++)
+			 {
+				 if(_pathMatrix[i][j] == 0)
+				 {
+					 _pathMatrix[i][j] = '0';
+				 }
+			 }		
+		 }	
+		 
+		 //Set position of robot as source
+		 _pathMatrix[robotRow][robotCol] = 'S';
+		 
+		 return _pathMatrix;
+	}
+
 	private static List<Coordinates2D> getNeighbours(int[][] wavefrontMatrix, char[][] pathMatrix, Coordinates2D cell, int i)
 	{
 		int row = cell.getRow();
@@ -164,6 +189,11 @@ public class NearestNeighbour extends Basic{
 		}
 				
 		return neighbourList;
+	}
+	
+	public static char[][] getPathMatrix()
+	{
+		return _pathMatrix;
 	}
 	
 }
