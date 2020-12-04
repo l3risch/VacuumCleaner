@@ -6,7 +6,9 @@ import Algorithms.Basic.CellState;
 import Listener.StartAlgorithm;
 import Objects.Node;
 import Objects.Robot;
+import Performance.Performance;
 import Physics.Coordinates2D;
+import main.TestSeries;
 import main.MainFrame;
 
 public class CPPAlgorithm extends Basic{
@@ -15,8 +17,9 @@ public class CPPAlgorithm extends Basic{
 	protected int _actualRow;
 	protected int _actualCol;
 	protected Coordinates2D[] _encircledArea = new Coordinates2D[16];
+	protected int _iteration = 0;
 
-	
+	public static long _duration;
 	protected Coordinates2D _nn = new Coordinates2D(0, 0);
 	
 	protected int _movesToNN = 1;
@@ -88,10 +91,23 @@ public class CPPAlgorithm extends Basic{
 
 	protected boolean reachedStoppingCriteria() 
 	{
-		if((System.currentTimeMillis() / 1000l) - StartAlgorithm._start > 1)
+		if(TestSeries._series == true)
 		{
-			return true;
-		} else if(Robot.getMovement()._totalDistance > 4000)
+			_duration = (System.currentTimeMillis() / 1000l) - TestSeries._start;
+			if((System.currentTimeMillis() / 1000l) - TestSeries._start > 180)
+			{
+				return true;
+			}
+		} else {
+			
+			_duration = (System.currentTimeMillis() / 1000l) - StartAlgorithm._start;
+			if((System.currentTimeMillis() / 1000l) - StartAlgorithm._start > 180)
+			{
+				return true;
+			} 
+		}
+		
+		if(Robot.getMovement()._totalDistance > 4000)
 		{
 			return true;
 		}  
@@ -105,5 +121,17 @@ public class CPPAlgorithm extends Basic{
 		}
 		
 		return true;
+	}
+	
+	protected void stopNevaluate(String algorithm)
+	{
+		if(TestSeries._series == true)
+		{
+			TestSeries._timer.stop();
+		} else {
+			StartAlgorithm._timer.stop();
+		}
+		Performance perf = new Performance(_frame, _iteration, algorithm);
+		perf.evaluate();
 	}
 }

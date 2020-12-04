@@ -12,6 +12,7 @@ import Objects.Node;
 import Objects.Robot;
 import Performance.Performance;
 import Physics.Coordinates2D;
+import main.TestSeries;
 import main.MainFrame;
 
 
@@ -22,9 +23,10 @@ public class ZigZag extends CPPAlgorithm implements ActionListener {
 	private boolean right = true;
 	
 	
-	public ZigZag(MainFrame frame)
+	public ZigZag(MainFrame frame, int iteration)
 	{
 		_frame = frame;
+		_iteration = iteration;
 	}
 
 	@Override
@@ -81,9 +83,7 @@ public class ZigZag extends CPPAlgorithm implements ActionListener {
 		
 		if(reachedStoppingCriteria())
 		{
-			StartAlgorithm._timer.stop();
-			Performance perf = new Performance(_frame);
-			perf.evaluate();
+			stopNevaluate("ZigZag");
 		}			
 	}
 

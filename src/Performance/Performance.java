@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 
 import Algorithms.Basic;
+import Algorithms.CPPAlgorithm;
 import Algorithms.NearestNeighbour;
 import Objects.Robot;
 import Objects.Table;
@@ -22,14 +23,19 @@ public class Performance extends Basic{
 	private int _obstacleCells = 0;
 	private int _accessableCells = 0;
 	private double _coverage = 0;
-	private MainFrame _frame;
 	
-	public Performance(MainFrame frame)
+	private MainFrame _frame;
+	private int _iteration;
+	private String _algorithm;
+	
+	public Performance(MainFrame frame, int iteration, String algorithm)
 	{
 		_frame = frame;
 		_numberOfTurns = Robot.getMovement()._numberOfTurns;
 		_totalDistance = Robot.getMovement()._totalDistance;
 		_totalMovements= _totalDistance + _numberOfTurns;
+		_iteration = iteration;
+		_algorithm = algorithm;
 	}
 
 	public void evaluate() 
@@ -44,10 +50,11 @@ public class Performance extends Basic{
 		_frame.saveImage();
 	}
 
+
 	private void archive() {
 		FileOutputStream fos;
 		try {
-			fos = new FileOutputStream("./results/log01.txt");
+			fos = new FileOutputStream("./results/" + _algorithm + _iteration + ".txt");
 			OutputStreamWriter osw = new OutputStreamWriter(fos);
 
 		    writeToFile("Local Time:_" + java.time.LocalDateTime.now() + "_____________________\n\n", osw);
@@ -62,6 +69,8 @@ public class Performance extends Basic{
 			writeToFile("\nObstacle Cells: " + _obstacleCells, osw);
 			writeToFile("\nAccessable Cells: " + _accessableCells, osw);
 			writeToFile("\n\nCoverage: " +  _coverage + "%", osw);
+			
+			writeToFile("\n\nDuration: " +  CPPAlgorithm._duration + "s", osw);
 
 			
 		} catch (FileNotFoundException e) {

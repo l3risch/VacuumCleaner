@@ -1,0 +1,15 @@
+Local Time:_2020-12-04T13:20:11.419_____________________
+
+Algorithmus: Random Walk
+
+
+Distance: 1
+Number of turns: 1
+Total Movements: 2
+
+Free Cells: 0
+Visited Cells: 1
+Obstacle Cells: 486
+Accessable Cells: 3610
+
+Coverage: 0.02770083102493075%

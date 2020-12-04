@@ -1,12 +1,11 @@
 /.metadata/
-/.recommenders/
 /Algorithms/
 /Listener/
 /MapGeneration/
 /Objects/
+/Performance/
 /Physics/
 /Rendering/
 /enums/
 /main/
-/Performance.class
-/Performance/
+/.recommenders/

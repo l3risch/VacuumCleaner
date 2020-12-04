@@ -11,6 +11,7 @@ import Performance.Performance;
 import Physics.Coordinates2D;
 import Physics.Movement;
 import Physics.Movement.LastMove;
+import main.TestSeries;
 import main.MainFrame;
 
 public class RandomWalk extends CPPAlgorithm implements ActionListener{
@@ -18,8 +19,9 @@ public class RandomWalk extends CPPAlgorithm implements ActionListener{
 	public boolean _distanceExceeded = false;
 	
 	
-	public RandomWalk(MainFrame frame) {
+	public RandomWalk(MainFrame frame, int iteration) {
 		_frame = frame;
+		_iteration = iteration;
 	}
 
 	@Override
@@ -51,9 +53,7 @@ public class RandomWalk extends CPPAlgorithm implements ActionListener{
 
 		if(reachedStoppingCriteria())
 		{
-			StartAlgorithm._timer.stop();
-			Performance perf = new Performance(_frame);
-			perf.evaluate();
+			stopNevaluate("RandomWalk");
 		}			
 		
 		_frame.repaint();		

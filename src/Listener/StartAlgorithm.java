@@ -32,22 +32,22 @@ public class StartAlgorithm implements ActionListener {
 		
 		_start = System.currentTimeMillis() / 1000l;
 		switch(_frame.getAlgorithm()) {
-		case "Spiral": Spiral spiral = new Spiral(_frame);
+		case "Spiral": Spiral spiral = new Spiral(_frame, 0);
 			_timer = new Timer(50, spiral);
 	        _timer.start();
 	        _timer.setRepeats(true);
 		break;
-		case "Random Walk": RandomWalk random = new RandomWalk(_frame);
+		case "Random Walk": RandomWalk random = new RandomWalk(_frame, 0);
 			_timer = new Timer(50, random);
 	        _timer.start();
 	        _timer.setRepeats(true);
 		break;	
-		case "Custom": CustomAlgorithm custom = new CustomAlgorithm(_frame);
+		case "Custom": CustomAlgorithm custom = new CustomAlgorithm(_frame, 0);
 		_timer = new Timer(50, custom);
         _timer.start();
         _timer.setRepeats(true);
         break;
-		case "ZigZag": ZigZag zigzag = new ZigZag(_frame);
+		case "ZigZag": ZigZag zigzag = new ZigZag(_frame, 0);
 		_timer = new Timer(50, zigzag);
         _timer.start();
         _timer.setRepeats(true);

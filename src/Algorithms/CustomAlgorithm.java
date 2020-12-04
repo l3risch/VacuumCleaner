@@ -13,14 +13,16 @@ import Objects.Table;
 import Performance.Performance;
 import Physics.Coordinates2D;
 import Physics.Movement;
+import main.TestSeries;
 import main.MainFrame;
 
 
 public class CustomAlgorithm extends CPPAlgorithm implements ActionListener {
 
-	public CustomAlgorithm(MainFrame frame)
+	public CustomAlgorithm(MainFrame frame, int iteration)
 	{
 		_frame = frame;
+		_iteration = iteration;
 	}
 
 	@Override
@@ -84,9 +86,7 @@ public class CustomAlgorithm extends CPPAlgorithm implements ActionListener {
 	
 		if(reachedStoppingCriteria())
 		{
-			StartAlgorithm._timer.stop();
-			Performance perf = new Performance(_frame);
-			perf.evaluate();
+			stopNevaluate("Custom");
 		}			
 		
 		

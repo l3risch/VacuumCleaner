@@ -14,14 +14,16 @@ import Objects.Table;
 import Performance.Performance;
 import Physics.Coordinates2D;
 import Physics.Movement;
+import main.TestSeries;
 import main.MainFrame;
 
 
 public class Spiral extends CPPAlgorithm implements ActionListener {
 
-	public Spiral(MainFrame frame)
+	public Spiral(MainFrame frame, int iteration)
 	{
 		_frame = frame;
+		_iteration = iteration;
 	}
 
 	@Override
@@ -85,9 +87,7 @@ public class Spiral extends CPPAlgorithm implements ActionListener {
 		
 		if(reachedStoppingCriteria())
 		{
-			StartAlgorithm._timer.stop();
-			Performance perf = new Performance(_frame);
-			perf.evaluate();
+			stopNevaluate("Spiral");
 		}				
 	}
 

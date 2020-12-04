@@ -41,6 +41,7 @@ public class MainFrame extends JFrame{
 	public static Dimension SCREEN_SIZE;
 	
 	public String _algorithm;
+	public int _iterations;
 	public JComboBox<String> _comboBox_1;
 		
 	public static JFrame _frame;
@@ -188,9 +189,14 @@ public class MainFrame extends JFrame{
 		_contentPane.add(_render);
 				
 		setVisible(true);
-
+		
+		
 	}
 	
+	public Container getContent()
+	{
+		return _contentPane;
+	}
 	public static Table getTable()
 	{
 		return _table;
@@ -204,6 +210,16 @@ public class MainFrame extends JFrame{
 	public Renderer1 getRenderer()
 	{
 		return _render;
+	}
+	
+	public void setAlgorithm(String algorithm)
+	{
+		_algorithm = algorithm;
+	}
+	
+	public void setIterations(int iterations)
+	{
+		_iterations = iterations;
 	}
 	
 	public String getAlgorithm()
@@ -224,6 +240,8 @@ public class MainFrame extends JFrame{
 			e.printStackTrace();
 		}
 	}
+	
+
 }
 
 
