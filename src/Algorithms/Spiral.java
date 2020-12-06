@@ -2,24 +2,21 @@ package Algorithms;
 
 import java.awt.event.ActionEvent;
 
+
 import java.awt.event.ActionListener;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import Listener.StartAlgorithm;
-import Objects.Node;
+import javax.swing.Timer;
+
 import Objects.Robot;
-import Objects.Table;
-import Performance.Performance;
 import Physics.Coordinates2D;
-import Physics.Movement;
-import main.TestSeries;
+import Threads.Thread1;
 import main.MainFrame;
 
 
 public class Spiral extends CPPAlgorithm implements ActionListener {
 
+	
 	public Spiral(MainFrame frame, int iteration)
 	{
 		_frame = frame;
@@ -87,7 +84,8 @@ public class Spiral extends CPPAlgorithm implements ActionListener {
 		
 		if(reachedStoppingCriteria())
 		{
-			stopNevaluate("Spiral");
+			Timer timer = Thread1.getTimer();
+			stopNevaluate("Spiral", timer);
 		}				
 	}
 

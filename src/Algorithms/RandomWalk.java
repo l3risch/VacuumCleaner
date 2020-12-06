@@ -1,16 +1,14 @@
 package Algorithms;
 
 import java.awt.event.ActionEvent;
+
 import java.awt.event.ActionListener;
 
-import Algorithms.Basic.CellState;
+import javax.swing.Timer;
+
 import Listener.StartAlgorithm;
 import Objects.Robot;
-import Objects.Table;
-import Performance.Performance;
-import Physics.Coordinates2D;
-import Physics.Movement;
-import Physics.Movement.LastMove;
+import Threads.Thread1;
 import main.TestSeries;
 import main.MainFrame;
 
@@ -18,10 +16,14 @@ public class RandomWalk extends CPPAlgorithm implements ActionListener{
 
 	public boolean _distanceExceeded = false;
 	
+	private Timer _timer;
+
 	
-	public RandomWalk(MainFrame frame, int iteration) {
+	public RandomWalk(MainFrame frame, int iteration)
+	{
 		_frame = frame;
 		_iteration = iteration;
+		_timer = Thread1.getTimer();
 	}
 
 	@Override
@@ -30,6 +32,7 @@ public class RandomWalk extends CPPAlgorithm implements ActionListener{
 		_actualCol = Robot.getXasCol();
 		_actualRow = Robot.getYasRow();
 		
+		//Not acutally needed but used for measuring coverage
 		_nn = NearestNeighbour.getNearestNeighbour(_actualRow, _actualCol);		
 
 		
@@ -44,16 +47,24 @@ public class RandomWalk extends CPPAlgorithm implements ActionListener{
 
 		if(!accesableField)
 		{
-			StartAlgorithm._timer.stop();
-			Robot.getMovement().turnByDegrees((int)(Math.random()*360));
-			StartAlgorithm._timer.start();
+			if(TestSeries._series == true)
+			{
+				_timer.stop();
+				Robot.getMovement().turnByDegrees((int)(Math.random()*360));
+				_timer.start();
+			} else {
+				
+				StartAlgorithm._timer.stop();
+				Robot.getMovement().turnByDegrees((int)(Math.random()*360));
+				StartAlgorithm._timer.start();
+			}
 		} else {
 			Robot.getMovement().moveForward();
 		}
 
 		if(reachedStoppingCriteria())
 		{
-			stopNevaluate("RandomWalk");
+			stopNevaluate("Random", _timer);
 		}			
 		
 		_frame.repaint();		

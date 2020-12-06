@@ -2,12 +2,15 @@ package Algorithms;
 
 import java.util.List;
 
+import javax.swing.Timer;
+
 import Algorithms.Basic.CellState;
 import Listener.StartAlgorithm;
 import Objects.Node;
 import Objects.Robot;
 import Performance.Performance;
 import Physics.Coordinates2D;
+import Threads.Thread1;
 import main.TestSeries;
 import main.MainFrame;
 
@@ -93,15 +96,15 @@ public class CPPAlgorithm extends Basic{
 	{
 		if(TestSeries._series == true)
 		{
-			_duration = (System.currentTimeMillis() / 1000l) - TestSeries._start;
-			if((System.currentTimeMillis() / 1000l) - TestSeries._start > 180)
+			_duration = (System.currentTimeMillis() / 1000l) - Thread1._start;
+			if(_duration > 5)
 			{
 				return true;
 			}
 		} else {
 			
 			_duration = (System.currentTimeMillis() / 1000l) - StartAlgorithm._start;
-			if((System.currentTimeMillis() / 1000l) - StartAlgorithm._start > 180)
+			if(_duration > 180)
 			{
 				return true;
 			} 
@@ -123,11 +126,11 @@ public class CPPAlgorithm extends Basic{
 		return true;
 	}
 	
-	protected void stopNevaluate(String algorithm)
+	protected void stopNevaluate(String algorithm, Timer timer)
 	{
 		if(TestSeries._series == true)
 		{
-			TestSeries._timer.stop();
+			timer.stop();
 		} else {
 			StartAlgorithm._timer.stop();
 		}

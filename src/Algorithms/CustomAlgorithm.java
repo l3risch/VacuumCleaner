@@ -2,23 +2,21 @@ package Algorithms;
 
 import java.awt.event.ActionEvent;
 
+
 import java.awt.event.ActionListener;
-import java.util.List;
 import java.util.Map;
 
-import Listener.StartAlgorithm;
-import Objects.Node;
+import javax.swing.Timer;
+
 import Objects.Robot;
-import Objects.Table;
-import Performance.Performance;
 import Physics.Coordinates2D;
-import Physics.Movement;
-import main.TestSeries;
+import Threads.Thread1;
 import main.MainFrame;
 
 
 public class CustomAlgorithm extends CPPAlgorithm implements ActionListener {
 
+	
 	public CustomAlgorithm(MainFrame frame, int iteration)
 	{
 		_frame = frame;
@@ -86,7 +84,8 @@ public class CustomAlgorithm extends CPPAlgorithm implements ActionListener {
 	
 		if(reachedStoppingCriteria())
 		{
-			stopNevaluate("Custom");
+			Timer timer = Thread1.getTimer();
+			stopNevaluate("Custom", timer);
 		}			
 		
 		

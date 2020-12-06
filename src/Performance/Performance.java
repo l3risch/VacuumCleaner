@@ -4,15 +4,17 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.Observable;
 
 import Algorithms.Basic;
 import Algorithms.CPPAlgorithm;
 import Algorithms.NearestNeighbour;
 import Objects.Robot;
 import Objects.Table;
+import Threads.Thread1;
 import main.MainFrame;
 
-public class Performance extends Basic{
+public class Performance extends Observable{
 
 	private int _numberOfTurns;
 	private int _totalDistance;
@@ -27,6 +29,8 @@ public class Performance extends Basic{
 	private MainFrame _frame;
 	private int _iteration;
 	private String _algorithm;
+	
+	public Thread1 _t1;
 	
 	public Performance(MainFrame frame, int iteration, String algorithm)
 	{
@@ -47,8 +51,13 @@ public class Performance extends Basic{
 		calculateCoverage();
 		
 		archive();
-		_frame.saveImage();
+		_frame.saveImage(_algorithm, _iteration);
+		
+		_t1 = new Thread1(_iteration, _frame);
+		_t1.clearAlgorithm();
+		_t1.startRandom();
 	}
+
 
 
 	private void archive() {
@@ -131,5 +140,10 @@ public class Performance extends Basic{
 		System.out.println("Obstacle Cells: " + _obstacleCells);
 		System.out.println("Accessable Cells: " + _accessableCells);
 		System.out.println("Coverage: " +  _coverage + "%");
+	}
+
+	public Thread1 getNewThread()
+	{
+		return _t1;
 	}
 }

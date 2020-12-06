@@ -1,12 +1,11 @@
 package main;
 
 import java.awt.Container;
-import java.awt.EventQueue;
 
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
+import Algorithms.CPPAlgorithm;
 import Algorithms.CustomAlgorithm;
 import Algorithms.RandomWalk;
 import Algorithms.Spiral;
@@ -14,20 +13,20 @@ import Algorithms.ZigZag;
 import MapGeneration.MapGenerator;
 import Objects.Robot;
 import Objects.Table;
-import Performance.Performance;
 import Rendering.Renderer1;
+import Threads.Thread1;
 
 public class TestSeries {
 
 	public String _algorithm;
 	public int _iterations;
 	
-	public static Renderer1 _render;
 	private static Container _contentPane;
 	public static Timer _timer;
 	
 	public static long _start;
 
+	private static Renderer1 _render;
 			
 	public static JFrame _frame;
 	
@@ -40,10 +39,27 @@ public class TestSeries {
 			int iterations = 1;
 			_frame = new MainFrame();
 			_contentPane = _frame.getContentPane();
+			_render = ((MainFrame) _frame).getRenderer();
 			for(int i = 0; i < iterations; i++)
 			{
 				setupRandomMap(i);
-				startAlgorithm(i);
+		    	
+				_start = System.currentTimeMillis() / 1000l;
+				Thread1 t1 = new Thread1(i, _frame);
+				t1.start();
+				t1.startZigZag();
+				
+				clearAlgorithm();
+				t1.startRandom();
+				t1.join();
+				clearAlgorithm();
+
+//				_start = System.currentTimeMillis() / 1000l;
+//				ThreadRandom random = new ThreadRandom("Random", i, _frame);
+//				random.start();
+//				random.join();
+			      
+				//startAlgorithm(i);
 				clearMap();
 			}
 		} catch (Exception e) {
@@ -70,43 +86,6 @@ public class TestSeries {
 		_contentPane.repaint();
 	}				
 	
-	
-	private static void startAlgorithm(int iteration) throws InterruptedException 
-	{
-		_start = System.currentTimeMillis() / 1000l;
-		 ZigZag zigzag = new ZigZag((MainFrame) _frame, iteration);
-		_timer = new Timer(50, zigzag);
-        _timer.start();
-        _timer.setRepeats(true);
-             
-        Thread.sleep(180000);
-        clearAlgorithm();
-        
-		_start = System.currentTimeMillis() / 1000l;
-        RandomWalk random = new RandomWalk((MainFrame) _frame, iteration);
-			_timer = new Timer(50, random);
-	        _timer.start();
-	        _timer.setRepeats(true);
-	        
-	    clearAlgorithm();
-
-		_start = System.currentTimeMillis() / 1000l;
-		CustomAlgorithm custom = new CustomAlgorithm((MainFrame) _frame, iteration);
-		_timer = new Timer(50, custom);
-        _timer.start();
-        _timer.setRepeats(true);
-        
-        clearAlgorithm();
-
-		_start = System.currentTimeMillis() / 1000l;
-        Spiral spiral = new Spiral((MainFrame) _frame, iteration);
-		_timer = new Timer(50, zigzag);
-        _timer.start();
-        _timer.setRepeats(true);
-        
-        clearAlgorithm();
-					
-	}
 
 
 	private static void clearAlgorithm()
@@ -122,5 +101,15 @@ public class TestSeries {
 		_render.clearMarks();
 
 		_contentPane.repaint();
+	}
+	
+	public static void setTimer(Timer timer)
+	{
+		_timer = timer;
+	}
+	
+	public static Timer getTimer()
+	{
+		return _timer;
 	}
 }

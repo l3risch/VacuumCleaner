@@ -2,16 +2,15 @@ package Algorithms;
 
 import java.awt.event.ActionEvent;
 
+
 import java.awt.event.ActionListener;
-import java.util.List;
 import java.util.Map;
 
-import Algorithms.Basic.CellState;
-import Listener.StartAlgorithm;
-import Objects.Node;
+import javax.swing.Timer;
+
 import Objects.Robot;
-import Performance.Performance;
 import Physics.Coordinates2D;
+import Threads.Thread1;
 import main.TestSeries;
 import main.MainFrame;
 
@@ -21,7 +20,6 @@ public class ZigZag extends CPPAlgorithm implements ActionListener {
 
 	private int _uTurn = 0;
 	private boolean right = true;
-	
 	
 	public ZigZag(MainFrame frame, int iteration)
 	{
@@ -68,10 +66,10 @@ public class ZigZag extends CPPAlgorithm implements ActionListener {
 			backtrack(actualRow, actualCol);
 
 		} else {
-			if(partiallyFreeDirection(encircledArea, ScanDirection.RIGHT))
+			if(partiallyFreeDirection(encircledArea, ScanDirection.RIGHT) && !_pathCalculated)
 			{
 				performUTurnRight(encircledArea);
-			} else if(partiallyFreeDirection(encircledArea, ScanDirection.LEFT))
+			} else if(partiallyFreeDirection(encircledArea, ScanDirection.LEFT) && !_pathCalculated)
 			{
 				performUTurnLeft(encircledArea);
 			} else {
@@ -83,7 +81,8 @@ public class ZigZag extends CPPAlgorithm implements ActionListener {
 		
 		if(reachedStoppingCriteria())
 		{
-			stopNevaluate("ZigZag");
+			Timer timer = Thread1.getTimer();
+			stopNevaluate("ZigZag", timer);
 		}			
 	}
 
