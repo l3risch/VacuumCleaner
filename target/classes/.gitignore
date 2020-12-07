@@ -1,4 +1,4 @@
-/.metadata/
+/.recommenders/
 /Algorithms/
 /Listener/
 /MapGeneration/
@@ -6,7 +6,6 @@
 /Performance/
 /Physics/
 /Rendering/
+/Threads/
 /enums/
 /main/
-/.recommenders/
-/Threads/

@@ -3,6 +3,8 @@ package Algorithms;
 import java.awt.event.ActionEvent;
 
 import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.Timer;
 
@@ -17,13 +19,14 @@ public class RandomWalk extends CPPAlgorithm implements ActionListener{
 	public boolean _distanceExceeded = false;
 	
 	private Timer _timer;
-
+	
 	
 	public RandomWalk(MainFrame frame, int iteration)
 	{
 		_frame = frame;
 		_iteration = iteration;
 		_timer = Thread1.getTimer();
+		_secondsMap = new HashMap<Integer,Double>();
 	}
 
 	@Override
@@ -32,9 +35,10 @@ public class RandomWalk extends CPPAlgorithm implements ActionListener{
 		_actualCol = Robot.getXasCol();
 		_actualRow = Robot.getYasRow();
 		
-		//Not acutally needed but used for measuring coverage
-		_nn = NearestNeighbour.getNearestNeighbour(_actualRow, _actualCol);		
-
+		if(_actualRow >= 0 && _actualRow <64 && _actualCol >= 0 && _actualCol < 64)
+		{
+			NearestNeighbour.updatePathMatrix(_actualRow, _actualCol);
+		}
 		
 		if(_actualRow >= 0 && _actualCol >= 0)
 		{
@@ -64,12 +68,13 @@ public class RandomWalk extends CPPAlgorithm implements ActionListener{
 
 		if(reachedStoppingCriteria())
 		{
-			stopNevaluate("Random", _timer);
-		}			
+			stopNevaluate("Random", _timer, _secondsMap);
+		}		
+		
+		long passedSeconds = System.currentTimeMillis() - Thread1._start;
+		_secondsMap= updatePathCoverage(_secondsMap, passedSeconds);
 		
 		_frame.repaint();		
-		
-		
 		
 	}
 

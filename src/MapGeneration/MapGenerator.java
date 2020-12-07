@@ -1,8 +1,5 @@
 package MapGeneration;
 
-import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,12 +8,12 @@ import Objects.Table;
 import Physics.Coordinates2D;
 import Objects.Obstacle.Shape;
 import Objects.Robot;
-import main.MainFrame;
 
 public class MapGenerator{
 
 	public static List<Obstacle> _listObs = new ArrayList<Obstacle>();
 
+	public static int _numberObs;
 	
 	public MapGenerator() {
 		createRandomObstacles();
@@ -28,16 +25,19 @@ public class MapGenerator{
 		Table._markedObstacles = new boolean[64][64];
 		
 		//Randomize number of obstacles for this map from one to ten
-		int numberObs = 20 + (int) (Math.random() * 32) ;
+		int _numberObs = 1 + (int) (Math.random() * 20) ;
 		
 		if(_listObs != null)
 		{
 			_listObs.clear();
 		}
-		for(int i = 0; i < numberObs; i++)
-		{
-			_listObs.add(createRandomObstacle());
-		}
+		do {
+			Obstacle randomObstacle = createRandomObstacle();
+			if((randomObstacle.getWidth() + randomObstacle.getHeight()) > 0)
+			{
+				_listObs.add(randomObstacle);
+			}
+		} while(_listObs.size() <= _numberObs);
 		
 		Table.setRandomMap(_listObs);
 	}

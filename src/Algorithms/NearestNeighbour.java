@@ -110,25 +110,28 @@ public class NearestNeighbour extends Basic{
 		return map;
 	}
 	
-	private static char[][] updatePathMatrix(int robotRow, int robotCol) {
+	static char[][] updatePathMatrix(int robotRow, int robotCol) {
 		 
 		 //Transform Hash Map to char matrix
 		 for(String key : _mentalMap.keySet())
 		 {
 			 int row = Integer.parseInt(key.substring(0, 2));
 			 int col = Integer.parseInt(key.substring(2, 4));
-			 if(_mentalMap.get(key).equals(CellState.VISITED))
-			 {
-				 _pathMatrix[row][col] = '1';
+			 if(row >= 0 && row < 64 && col >= 0 && col < 64)
+			 { 
+				 if(_mentalMap.get(key).equals(CellState.VISITED))
+				 {
+					 _pathMatrix[row][col] = '1';
+				 }
+				 if(_mentalMap.get(key).equals(CellState.FREE))
+			     {
+					_pathMatrix[row][col] = '2';
+				 }
+				 if(_mentalMap.get(key).equals(CellState.OCCUPIED))
+				 {
+					 _pathMatrix[row][col] = '0';
+		 		 }
 			 }
-			 if(_mentalMap.get(key).equals(CellState.FREE))
-		     {
-				_pathMatrix[row][col] = '2';
-			 }
-			 if(_mentalMap.get(key).equals(CellState.OCCUPIED))
-			 {
-				 _pathMatrix[row][col] = '0';
-	 		 }
 		 }
 		 
 		 //Set all unknown cells as obstacles '0'

@@ -7,8 +7,13 @@ import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
+import Algorithms.CPPAlgorithm;
+import Algorithms.CustomAlgorithm;
+import Algorithms.NearestNeighbour;
 import Algorithms.RandomWalk;
+import Algorithms.Spiral;
 import Algorithms.ZigZag;
+import MapGeneration.MapGenerator;
 import Objects.Robot;
 import Objects.Table;
 import Rendering.Renderer1;
@@ -25,6 +30,13 @@ public class Thread1 extends Thread {
 	private static Container _contentPane;
     
 	public static long _start;
+	
+	private ZigZag _zigzag;
+	private Spiral _spiral;
+	private CustomAlgorithm _custom;
+	private RandomWalk _random;
+	
+	public static String _cpp;
 
     public Thread1(int iteration, JFrame frame)
     {
@@ -34,46 +46,82 @@ public class Thread1 extends Thread {
     	_contentPane = _frame.getContentPane();
 		_render = ((MainFrame) _frame).getRenderer();
     }
+   
     
-    
-//    @Override
-//    public void run() {
-//		 ZigZag zigzag = new ZigZag((MainFrame) _frame, _iteration);
-//		_timer = new Timer(50, zigzag);
-//		TestSeries.setTimer(_timer);
-//       _timer.start();
-//       _timer.setRepeats(true);       
-//     }
-     
-//     public void start () {
-//        System.out.println("Starting " +  _algorithm );
-//        if (t == null) {
-//           t = new Thread (this, _algorithm);
-//           t.start ();
-//        }
-//     }
+    public void startSpiral()
+    {
+    	_start = System.currentTimeMillis();
+     	_spiral = new Spiral((MainFrame) _frame, _iteration);
+     	_cpp = "Spiral";
+ 		_timer = new Timer(50, _spiral);
+
+        _timer.start();
+        _timer.setRepeats(true);   
+        
+        throw new RuntimeException("Stopping the thread " + _cpp);
+    }
     
     public void startZigZag()
     {
-		_start = System.currentTimeMillis() / 1000l;
+		NearestNeighbour._pathMatrix = new char[64][64];
+     	_timer.stop();
+		_start = System.currentTimeMillis();
+   	 	_zigzag = new ZigZag((MainFrame) _frame, _iteration);
+     	_cpp = "ZigZag";
+   	 	
+    	for(ActionListener listener : _timer.getActionListeners())
+     	{
+       	 	_timer.removeActionListener(listener);
+     	}
 
-    	 ZigZag zigzag = new ZigZag((MainFrame) _frame, _iteration);
- 		_timer = new Timer(50, zigzag);
-        _timer.start();
+    	 _timer.addActionListener(_zigzag);
+
+    	_timer.start();
         _timer.setRepeats(true);       
         
-        throw new RuntimeException("Stopping the thread");
+        throw new RuntimeException("Stopping the thread " + _cpp);
+    }
+    
+    public void startCustom()
+    {
+		NearestNeighbour._pathMatrix = new char[64][64];
+     	_timer.stop();
+		_start = System.currentTimeMillis();
+   	 	_custom = new CustomAlgorithm((MainFrame) _frame, _iteration);
+     	_cpp = "Custom";
+
+    	for(ActionListener listener : _timer.getActionListeners())
+     	{
+       	 	_timer.removeActionListener(listener);
+     	}
+
+    	 _timer.addActionListener(_custom);
+
+    	_timer.start();
+        _timer.setRepeats(true);       
+        
+        throw new RuntimeException("Stopping the thread " + _cpp);
     }
     
     public void startRandom()
     {
-    	_start = System.currentTimeMillis() / 1000l;
-    	 RandomWalk random = new RandomWalk((MainFrame) _frame, _iteration);
-     	_timer = null;
- 		_timer = new Timer(50, random);
-        _timer.start();
-        _timer.setRepeats(true);   
+		NearestNeighbour._pathMatrix = new char[64][64];
+     	_timer.stop();
+		_start = System.currentTimeMillis();
+   	 	_random = new RandomWalk((MainFrame) _frame, _iteration);
+     	_cpp = "Random";
 
+    	for(ActionListener listener : _timer.getActionListeners())
+     	{
+       	 	_timer.removeActionListener(listener);
+     	}
+
+    	 _timer.addActionListener(_random);
+
+    	_timer.start();
+        _timer.setRepeats(true);       
+        
+        throw new RuntimeException("Stopping the thread " + _cpp);
     }
      
      public static Timer getTimer()
@@ -89,5 +137,38 @@ public class Thread1 extends Thread {
  		_contentPane.repaint();
  	}
  	
+ 	public void clearMap()
+ 	{
+ 		_render.clearMarks();
+
+ 		_contentPane.repaint();
+ 	}
+ 	
+	public void startIteration(Thread1 t1, int i) 
+	{
+		NearestNeighbour._pathMatrix = new char[64][64];
+		setupRandomMap(i);
+    	
+		t1.start();
+		t1.startSpiral();
+	}
+
+
+	public void setupRandomMap(int iteration) 
+	{
+		if(Table._listObs != null)
+		{
+			Table._listObs.clear();
+		}
+		
+		Robot.setRandomStartingPos();
+		if(iteration > 0)
+		{
+			_render.clearMarks();
+		}
+		new MapGenerator();
+
+		_contentPane.repaint();
+	}	
 
 }

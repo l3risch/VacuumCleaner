@@ -1,6 +1,8 @@
 package Algorithms;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.Timer;
 
@@ -30,7 +32,9 @@ public class CPPAlgorithm extends Basic{
 	protected boolean _pathCalculated = false;
 	
 	protected boolean _nnVisited = true;
-
+	
+	public Map<Integer, Double> _secondsMap;
+	
 	protected void backtrack(int actualRow, int actualCol) {
 //		_nn = NearestNeighbour.getNearestNeighbour(actualRow, actualCol);		
 
@@ -96,24 +100,24 @@ public class CPPAlgorithm extends Basic{
 	{
 		if(TestSeries._series == true)
 		{
-			_duration = (System.currentTimeMillis() / 1000l) - Thread1._start;
-			if(_duration > 5)
+			_duration = (System.currentTimeMillis() / 1000l) - (Thread1._start/ 1000l);
+			if(_duration > 10)
 			{
 				return true;
 			}
 		} else {
 			
-			_duration = (System.currentTimeMillis() / 1000l) - StartAlgorithm._start;
-			if(_duration > 180)
+			_duration = (System.currentTimeMillis() / 1000l) - (StartAlgorithm._start/ 1000l);
+			if(_duration > 120)
 			{
 				return true;
 			} 
 		}
 		
-		if(Robot.getMovement()._totalDistance > 4000)
-		{
-			return true;
-		}  
+//		if(Robot.getMovement()._totalDistance > 4000)
+//		{
+//			return true;
+//		}  
 		
 		for(String key : _mentalMap.keySet())
 		{
@@ -126,7 +130,7 @@ public class CPPAlgorithm extends Basic{
 		return true;
 	}
 	
-	protected void stopNevaluate(String algorithm, Timer timer)
+	protected void stopNevaluate(String algorithm, Timer timer, Map<Integer, Double> secondsMap)
 	{
 		if(TestSeries._series == true)
 		{
@@ -134,7 +138,29 @@ public class CPPAlgorithm extends Basic{
 		} else {
 			StartAlgorithm._timer.stop();
 		}
-		Performance perf = new Performance(_frame, _iteration, algorithm);
+
+		Performance perf = new Performance(_frame, _iteration, algorithm, secondsMap);
 		perf.evaluate();
+	}
+	
+	protected Map<Integer, Double> updatePathCoverage(Map<Integer, Double> secondsMap, long passedSeconds)
+	{
+		double coverage;
+		
+		for(int sec = 0; sec < 120; sec++)
+		{
+			double milSec = sec*1000;
+			double nextMilSec = (sec + 1) * 1000;
+			if(passedSeconds > milSec && passedSeconds < nextMilSec)
+			{
+				if(!secondsMap.containsKey(sec))
+				{
+					coverage = Performance.computeCoverage();
+					secondsMap.put(sec, coverage);
+				}
+			}
+		}
+		
+		return secondsMap;
 	}
 }

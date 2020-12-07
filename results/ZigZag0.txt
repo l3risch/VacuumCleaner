@@ -1,17 +1,31 @@
-Local Time:_2020-12-06T22:41:08.095_____________________
+Local Time:_2020-12-07T19:08:35.041_____________________
 
 Algorithmus: Random Walk
 
 
-Distance: 88
-Number of turns: 12
-Total Movements: 100
+Distance: 183
+Number of turns: 16
+Total Movements: 199
+Number of Obstacles: 0
 
-Free Cells: 64
-Visited Cells: 351
-Obstacle Cells: 585
-Accessable Cells: 3511
+Free Cells: 181
+Visited Cells: 4577
+Obstacle Cells: 945
+Accessable Cells: 3151
 
-Coverage: 9.997151808601538%
+Coverage: 145.25547445255472%
 
-Duration: 6s
+Duration: 11s
+
+________________________________________
+Achieved overage at specific execution time in seconds0 : 0.031735956839098696%
+1 : 2.4436686766105997%
+2 : 4.601713741669311%
+3 : 6.728022849888925%
+4 : 8.886067914947636%
+5 : 11.044112980006346%
+6 : 13.075214217708664%
+7 : 15.233259282767374%
+8 : 17.423040304665186%
+9 : 19.454141542367502%
+10 : 21.612186607426214%

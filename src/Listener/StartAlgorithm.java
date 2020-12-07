@@ -30,7 +30,7 @@ public class StartAlgorithm implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-		_start = System.currentTimeMillis() / 1000l;
+		_start = System.currentTimeMillis();
 		switch(_frame.getAlgorithm()) {
 		case "Spiral": Spiral spiral = new Spiral(_frame, 0);
 			_timer = new Timer(50, spiral);

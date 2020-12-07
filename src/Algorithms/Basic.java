@@ -500,14 +500,17 @@ public class Basic {
 		 {
 			 int row = Integer.parseInt(key.substring(0, 2));
 			 int col = Integer.parseInt(key.substring(2, 4));
-			 if(_mentalMap.get(key).equals(CellState.FREE) || _mentalMap.get(key).equals(CellState.VISITED))
-			 {
-				 _matrix[row][col] = '1';
+			 if(row >= 0 && row < 64 && col >= 0 && col < 64)
+			 { 
+				 if(_mentalMap.get(key).equals(CellState.FREE) || _mentalMap.get(key).equals(CellState.VISITED))
+				 {
+					 _matrix[row][col] = '1';
+				 }
+				 if(_mentalMap.get(key).equals(CellState.OCCUPIED))
+				 {
+					 _matrix[row][col] = '0';
+		 		 }
 			 }
-			 if(_mentalMap.get(key).equals(CellState.OCCUPIED))
-			 {
-				 _matrix[row][col] = '0';
-	 		 }
 		 }
 		 
 		 //Set all unknown cells as obstacles '0'

@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 
 
 import java.awt.event.ActionListener;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.Timer;
@@ -25,6 +26,7 @@ public class ZigZag extends CPPAlgorithm implements ActionListener {
 	{
 		_frame = frame;
 		_iteration = iteration;
+		_secondsMap = new HashMap<Integer,Double>();
 	}
 
 	@Override
@@ -82,8 +84,11 @@ public class ZigZag extends CPPAlgorithm implements ActionListener {
 		if(reachedStoppingCriteria())
 		{
 			Timer timer = Thread1.getTimer();
-			stopNevaluate("ZigZag", timer);
-		}			
+			stopNevaluate("ZigZag", timer, _secondsMap);
+		}		
+		
+		long passedSeconds = System.currentTimeMillis() - Thread1._start;
+		_secondsMap= updatePathCoverage(_secondsMap, passedSeconds);
 	}
 
 
