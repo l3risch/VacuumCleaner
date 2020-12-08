@@ -26,7 +26,6 @@ public class MapGenerator{
 		
 		//Randomize number of obstacles for this map from one to ten
 		int _numberObs = 1 + (int) (Math.random() * 20) ;
-		
 		if(_listObs != null)
 		{
 			_listObs.clear();
@@ -38,6 +37,7 @@ public class MapGenerator{
 				_listObs.add(randomObstacle);
 			}
 		} while(_listObs.size() <= _numberObs);
+
 		
 		Table.setRandomMap(_listObs);
 	}
@@ -71,7 +71,7 @@ public class MapGenerator{
 			int dif = Math.abs(maxY - y);
 			height = 10 + 10 * (int) (Math.random() * (dif/10));
 		} else {
-			//Make sure width of an obstacle is not > 150 px
+			//Make sure height of an obstacle is not > 150 px
 			height = 10 + 10 * (int) (Math.random() * 15);
 		}
 		
@@ -156,6 +156,11 @@ public class MapGenerator{
 				obs = new Obstacle(0, 0, 0, 0, Shape.RECTANGLE);
 			}	
 			
+			if(obs.getX() >= obstacle.getX() && (obs.getX()+obs.getHeight()) <= (obstacle.getX()+obstacle.getHeight()) &&
+					obs.getY() >= obstacle.getY() && (obs.getY()+obs.getWidth()) <= (obstacle.getY()+obstacle.getWidth()))
+			{
+				obs = new Obstacle(0, 0, 0, 0, Shape.RECTANGLE);
+			}
 			
 		}
 		

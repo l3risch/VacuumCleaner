@@ -18,6 +18,8 @@ public class Table {
 	
 	public static boolean[][] _markedPath;
 	public static boolean[][] _markedObstacles;
+	
+	public static int _numberObs;
 
 		
 	public Table()
@@ -145,6 +147,7 @@ public class Table {
 		}
 		
 		markObstacles();
+		_numberObs = listObs.size();
 		 
 	}
 	public static void markPath(int row, int col)

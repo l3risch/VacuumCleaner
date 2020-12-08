@@ -34,6 +34,7 @@ public class CPPAlgorithm extends Basic{
 	protected boolean _nnVisited = true;
 	
 	public Map<Integer, Double> _secondsMap;
+	protected Performance _perf;
 	
 	protected void backtrack(int actualRow, int actualCol) {
 //		_nn = NearestNeighbour.getNearestNeighbour(actualRow, actualCol);		
@@ -130,7 +131,7 @@ public class CPPAlgorithm extends Basic{
 		return true;
 	}
 	
-	protected void stopNevaluate(String algorithm, Timer timer, Map<Integer, Double> secondsMap)
+	protected void stopNevaluate(String algorithm, Timer timer, Map<Integer, Double> secondsMap, Performance perf)
 	{
 		if(TestSeries._series == true)
 		{
@@ -139,11 +140,10 @@ public class CPPAlgorithm extends Basic{
 			StartAlgorithm._timer.stop();
 		}
 
-		Performance perf = new Performance(_frame, _iteration, algorithm, secondsMap);
 		perf.evaluate();
 	}
 	
-	protected Map<Integer, Double> updatePathCoverage(Map<Integer, Double> secondsMap, long passedSeconds)
+	protected Map<Integer, Double> updatePathCoverage(Map<Integer, Double> secondsMap, long passedSeconds, Performance perf)
 	{
 		double coverage;
 		
@@ -155,12 +155,23 @@ public class CPPAlgorithm extends Basic{
 			{
 				if(!secondsMap.containsKey(sec))
 				{
-					coverage = Performance.computeCoverage();
+					coverage = perf.computeCoverage();
 					secondsMap.put(sec, coverage);
 				}
 			}
 		}
-		
+//		System.out.println("\n");
+//		for(int i = 0; i < 64; i++)
+//		{
+//			StringBuilder sb = new StringBuilder();
+//			for(int j = 0; j < 64; j++)
+//			{
+//				sb.append(NearestNeighbour._pathMatrix[i][j]);
+//			}
+//			System.out.println(sb);
+//		}
+//		System.out.println("\n");
+
 		return secondsMap;
 	}
 }

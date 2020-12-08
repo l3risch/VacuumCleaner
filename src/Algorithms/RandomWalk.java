@@ -10,6 +10,7 @@ import javax.swing.Timer;
 
 import Listener.StartAlgorithm;
 import Objects.Robot;
+import Performance.Performance;
 import Threads.Thread1;
 import main.TestSeries;
 import main.MainFrame;
@@ -27,6 +28,7 @@ public class RandomWalk extends CPPAlgorithm implements ActionListener{
 		_iteration = iteration;
 		_timer = Thread1.getTimer();
 		_secondsMap = new HashMap<Integer,Double>();
+		_perf = new Performance(_frame, _iteration, "Random", _secondsMap);
 	}
 
 	@Override
@@ -68,11 +70,11 @@ public class RandomWalk extends CPPAlgorithm implements ActionListener{
 
 		if(reachedStoppingCriteria())
 		{
-			stopNevaluate("Random", _timer, _secondsMap);
+			stopNevaluate("Random", _timer, _secondsMap, _perf);
 		}		
 		
 		long passedSeconds = System.currentTimeMillis() - Thread1._start;
-		_secondsMap= updatePathCoverage(_secondsMap, passedSeconds);
+		_secondsMap= updatePathCoverage(_secondsMap, passedSeconds, _perf);
 		
 		_frame.repaint();		
 		

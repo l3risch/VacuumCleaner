@@ -2,12 +2,12 @@ package Threads;
 
 
 import java.awt.Container;
+
 import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
-import Algorithms.CPPAlgorithm;
 import Algorithms.CustomAlgorithm;
 import Algorithms.NearestNeighbour;
 import Algorithms.RandomWalk;
@@ -18,7 +18,6 @@ import Objects.Robot;
 import Objects.Table;
 import Rendering.Renderer1;
 import main.MainFrame;
-import main.TestSeries;
 
 public class Thread1 extends Thread {
 	
@@ -50,6 +49,7 @@ public class Thread1 extends Thread {
     
     public void startSpiral()
     {
+		NearestNeighbour._pathMatrix = new char[64][64];
     	_start = System.currentTimeMillis();
      	_spiral = new Spiral((MainFrame) _frame, _iteration);
      	_cpp = "Spiral";
@@ -146,7 +146,6 @@ public class Thread1 extends Thread {
  	
 	public void startIteration(Thread1 t1, int i) 
 	{
-		NearestNeighbour._pathMatrix = new char[64][64];
 		setupRandomMap(i);
     	
 		t1.start();

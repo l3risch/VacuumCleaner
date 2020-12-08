@@ -41,12 +41,9 @@ public class Performance extends Observable{
 	public Performance(MainFrame frame, int iteration, String algorithm, Map<Integer, Double> secondsMap)
 	{
 		_frame = frame;
-		_numberOfTurns = Robot.getMovement()._numberOfTurns;
-		_totalDistance = Robot.getMovement()._totalDistance;
-		_totalMovements= _totalDistance + _numberOfTurns;
 		_iteration = iteration;
 		_algorithm = algorithm;
-		_obstacles = MapGenerator._numberObs;
+		_obstacles = Table._numberObs;
 		_secondsMap = secondsMap;
 	}
 
@@ -132,8 +129,8 @@ public class Performance extends Observable{
 			
 			writeToFile("\n\nDuration: " +  CPPAlgorithm._duration + "s", osw);
 			
-			writeToFile("\n\n________________________________________\nAchieved overage at specific execution time in seconds\n", osw);
-			
+			writeToFile("\n\n________________________________________\nAchieved coverage at specific execution time in seconds\n", osw);
+			_visitedCells = 0;
 			for(int key : _secondsMap.keySet())
 			{
 				writeToFile(key + " : " + _secondsMap.get(key) + "%\n", osw);
@@ -157,18 +154,10 @@ public class Performance extends Observable{
 	private void computeStats() 
 	{
 		char[][] pathMatrix = NearestNeighbour.getPathMatrix();
-//		System.out.println("\n");
-//		for(int k = 0; k < 64; k++)
-//		{
-//			StringBuilder sb = new StringBuilder();
-//			for(int l = 0; l < 64; l++)
-//			{
-//				sb.append(pathMatrix[k][l] +  " ");
-//			}
-//			System.out.println(sb);
-//		}
-//		System.out.println("\n");
 
+		_numberOfTurns = Robot.getMovement()._numberOfTurns;
+		_totalDistance = Robot.getMovement()._totalDistance;
+		_totalMovements= _totalDistance + _numberOfTurns;
 
 		for(int i = 0; i<64; i++)
 		{
@@ -200,7 +189,7 @@ public class Performance extends Observable{
 		return _t1;
 	}
 	
-	public static double computeCoverage()
+	public double computeCoverage()
 	{
 		char[][] pathMatrix = NearestNeighbour.getPathMatrix();
 		int visitedCells = 0;
