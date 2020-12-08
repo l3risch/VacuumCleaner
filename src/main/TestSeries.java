@@ -30,7 +30,7 @@ public class TestSeries {
 	{
 		try {
 			_series = true;
-			_iterations = 2;
+			_iterations = 10;
 			_frame = new MainFrame();
 
 			Thread1 t1 = new Thread1(_iteration, _frame);

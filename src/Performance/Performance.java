@@ -47,11 +47,11 @@ public class Performance extends Observable{
 		_secondsMap = secondsMap;
 	}
 
-	public void evaluate() 
+	public void evaluate(int timeLimit) 
 	{
 		computeStats();
 		
-		archive();
+		archive(timeLimit);
 		_frame.saveImage(_algorithm, _iteration);
 		
 		if(Thread1._cpp == "Random")
@@ -106,14 +106,14 @@ public class Performance extends Observable{
 		}		
 	}
 
-	private void archive() {
+	private void archive(int timeLimit) {
 		FileOutputStream fos;
 		try {
 			fos = new FileOutputStream("./results/" + _algorithm + _iteration + ".txt");
 			OutputStreamWriter osw = new OutputStreamWriter(fos);
 
 		    writeToFile("Local Time:_" + java.time.LocalDateTime.now() + "_____________________\n\n", osw);
-		    writeToFile("Algorithmus: " + _frame.getAlgorithm() + "\n\n", osw);
+		    writeToFile("Algorithm: " + _frame.getAlgorithm() + " with time limit: " + timeLimit + "\n\n", osw);
 
 			writeToFile("\nDistance: " + _totalDistance, osw);
 			writeToFile("\nNumber of turns: " + _numberOfTurns, osw);

@@ -36,6 +36,8 @@ public class CPPAlgorithm extends Basic{
 	public Map<Integer, Double> _secondsMap;
 	protected Performance _perf;
 	
+	private int _timeLimit = 120;
+	
 	protected void backtrack(int actualRow, int actualCol) {
 //		_nn = NearestNeighbour.getNearestNeighbour(actualRow, actualCol);		
 
@@ -102,14 +104,14 @@ public class CPPAlgorithm extends Basic{
 		if(TestSeries._series == true)
 		{
 			_duration = (System.currentTimeMillis() / 1000l) - (Thread1._start/ 1000l);
-			if(_duration > 10)
+			if(_duration > _timeLimit)
 			{
 				return true;
 			}
 		} else {
 			
 			_duration = (System.currentTimeMillis() / 1000l) - (StartAlgorithm._start/ 1000l);
-			if(_duration > 120)
+			if(_duration > _timeLimit)
 			{
 				return true;
 			} 
@@ -128,6 +130,17 @@ public class CPPAlgorithm extends Basic{
 			}
 		}
 		
+		for(int i = 0; i < 64; i++)
+		{
+			for(int j = 0; j < 64; j++)
+			{
+				if(NearestNeighbour._pathMatrix[i][j]=='2')
+				{
+					return false;
+				}
+			}
+		}
+		
 		return true;
 	}
 	
@@ -140,14 +153,14 @@ public class CPPAlgorithm extends Basic{
 			StartAlgorithm._timer.stop();
 		}
 
-		perf.evaluate();
+		perf.evaluate(_timeLimit);
 	}
 	
 	protected Map<Integer, Double> updatePathCoverage(Map<Integer, Double> secondsMap, long passedSeconds, Performance perf)
 	{
 		double coverage;
 		
-		for(int sec = 0; sec < 120; sec++)
+		for(int sec = 0; sec < _timeLimit; sec++)
 		{
 			double milSec = sec*1000;
 			double nextMilSec = (sec + 1) * 1000;
@@ -160,17 +173,6 @@ public class CPPAlgorithm extends Basic{
 				}
 			}
 		}
-//		System.out.println("\n");
-//		for(int i = 0; i < 64; i++)
-//		{
-//			StringBuilder sb = new StringBuilder();
-//			for(int j = 0; j < 64; j++)
-//			{
-//				sb.append(NearestNeighbour._pathMatrix[i][j]);
-//			}
-//			System.out.println(sb);
-//		}
-//		System.out.println("\n");
 
 		return secondsMap;
 	}

@@ -1,32 +1,21 @@
-Local Time:_2020-12-08T14:49:02.058_____________________
+Local Time:_2020-12-08T15:14:15.484_____________________
 
-Algorithmus: Random Walk
+Algorithm: Spiral with time limit: 120
 
 
-Distance: 178
-Number of turns: 18
-Total Movements: 196
-Number of Obstacles: 19
+Distance: 1010
+Number of turns: 75
+Total Movements: 1085
+Number of Obstacles: 5
 
-Free Cells: 120
-Visited Cells: 720
-Obstacle Cells: 870
-Accessable Cells: 3226
+Free Cells: 0
+Visited Cells: 3731
+Obstacle Cells: 365
+Accessable Cells: 3731
 
-Coverage: 22.31866088034718%
+Coverage: 100.0%
 
-Duration: 11s
+Duration: 71s
 
 ________________________________________
 Achieved coverage at specific execution time in seconds
-0 : 0.030998140111593304%
-1 : 2.3558586484810915%
-2 : 4.370737755734655%
-3 : 6.3236205827650345%
-4 : 8.431494110353379%
-5 : 10.446373217606943%
-6 : 12.430254184748915%
-7 : 14.383137011779294%
-8 : 16.491010539367636%
-9 : 18.474891506509607%
-10 : 20.45877247365158%
