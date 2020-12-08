@@ -29,6 +29,8 @@ public class RandomWalk extends CPPAlgorithm implements ActionListener{
 		_timer = Thread1.getTimer();
 		_secondsMap = new HashMap<Integer,Double>();
 		_perf = new Performance(_frame, _iteration, "Random", _secondsMap);
+		_revisitedCells = 0;
+		
 	}
 
 	@Override
@@ -70,7 +72,7 @@ public class RandomWalk extends CPPAlgorithm implements ActionListener{
 
 		if(reachedStoppingCriteria())
 		{
-			stopNevaluate("Random", _timer, _secondsMap, _perf);
+			stopNevaluate("Random", _timer, _perf);
 		}		
 		
 		long passedSeconds = System.currentTimeMillis() - Thread1._start;

@@ -9,6 +9,7 @@ import java.util.Map;
 
 import javax.swing.Timer;
 
+import Algorithms.Basic.CellState;
 import Objects.Robot;
 import Performance.Performance;
 import Physics.Coordinates2D;
@@ -29,6 +30,8 @@ public class ZigZag extends CPPAlgorithm implements ActionListener {
 		_iteration = iteration;
 		_secondsMap = new HashMap<Integer,Double>();
 		_perf = new Performance(_frame, _iteration, "ZigZag", _secondsMap);
+		_revisitedCells = 0;
+
 	}
 
 	@Override
@@ -86,7 +89,7 @@ public class ZigZag extends CPPAlgorithm implements ActionListener {
 		if(reachedStoppingCriteria())
 		{
 			Timer timer = Thread1.getTimer();
-			stopNevaluate("ZigZag", timer, _secondsMap, _perf);
+			stopNevaluate("ZigZag", timer, _perf);
 		}		
 		
 		long passedSeconds = System.currentTimeMillis() - Thread1._start;

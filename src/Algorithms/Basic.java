@@ -21,6 +21,9 @@ public class Basic {
 	
 	protected static char[][] _matrix = new char[64][64];
 	
+	public static int _revisitedCells;
+
+	
 	static boolean isFrontAccesable(int row, int col)
 	{
 		Coordinates2D[] scannedArea = getScannedArea(row, col, ScanDirection.FRONT);
@@ -452,17 +455,24 @@ public class Basic {
 			}
 		}
 		
+		int freeCells = 0;
 		//Update already visited cells
 		for(int i = 0; i < 4; i++)
 		{
 			for(int j = 0; j < 4; j++)
 			{
-				
+
 				String mapKey = generateKey(robotCoordinates[i][j].getRow(), robotCoordinates[i][j].getCol());
+				if(mentalMap.get(mapKey)== CellState.FREE)
+				{
+					freeCells++;
+				}
 				mentalMap.put(mapKey, CellState.VISITED);
-	
+
 			}
+
 		}
+		_revisitedCells += (4-freeCells);
 	}
 
 	
@@ -502,7 +512,11 @@ public class Basic {
 			 int col = Integer.parseInt(key.substring(2, 4));
 			 if(row >= 0 && row < 64 && col >= 0 && col < 64)
 			 { 
-				 if(_mentalMap.get(key).equals(CellState.FREE) || _mentalMap.get(key).equals(CellState.VISITED))
+				 if(_mentalMap.get(key).equals(CellState.FREE)) 
+				 {
+					 _matrix[row][col] = '1';
+				 }
+				 if(_mentalMap.get(key).equals(CellState.VISITED))
 				 {
 					 _matrix[row][col] = '1';
 				 }

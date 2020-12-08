@@ -1,14 +1,8 @@
 package main;
 
-import java.awt.Container;
-
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
-import MapGeneration.MapGenerator;
-import Objects.Robot;
-import Objects.Table;
-import Rendering.Renderer1;
 import Threads.Thread1;
 
 public class TestSeries {
@@ -25,7 +19,9 @@ public class TestSeries {
 	public static boolean _series = false;
 	
 	public static int _iteration = 0;
-		
+	
+	public static int _obstacles = 0;
+
 	public static void main(String[] args) 
 	{
 		try {
@@ -35,7 +31,7 @@ public class TestSeries {
 
 			Thread1 t1 = new Thread1(_iteration, _frame);
 
-			t1.startIteration(t1, _iteration);
+			t1.startIteration(_iteration, _obstacles);
 				
 		} catch (Exception e) {
 			e.printStackTrace();

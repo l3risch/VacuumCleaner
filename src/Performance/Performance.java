@@ -17,7 +17,7 @@ import Threads.Thread1;
 import main.MainFrame;
 import main.TestSeries;
 
-public class Performance extends Observable{
+public class Performance extends Basic{
 
 	private int _numberOfTurns;
 	private int _totalDistance;
@@ -37,6 +37,7 @@ public class Performance extends Observable{
 	private Map<Integer, Double> _secondsMap;
 	
 	public Thread1 _t1;
+	
 	
 	public Performance(MainFrame frame, int iteration, String algorithm, Map<Integer, Double> secondsMap)
 	{
@@ -66,13 +67,14 @@ public class Performance extends Observable{
 
 	private void nextIteration() 
 	{
-		int i = TestSeries._iteration ++;
+		TestSeries._iteration++;
+		int i = TestSeries._iteration;
 		if(i < TestSeries._iterations) 
 		{
 			_t1 = new Thread1(i, _frame);
-			_t1.clearAlgorithm();					
-			_t1.setupRandomMap(i);
-			_t1.startSpiral();
+			_t1.clearAlgorithm();	
+			TestSeries._obstacles++;
+			_t1.startIteration(i, TestSeries._obstacles);
 		} else {
 		    System.exit(0);
 		}
@@ -123,6 +125,9 @@ public class Performance extends Observable{
 			
 			writeToFile("\n\nFree Cells: " + _freeCells, osw);
 			writeToFile("\nVisited Cells: " + _visitedCells, osw);
+			
+			//Substract 4 from the set of revisitedCells due to initialization error
+			writeToFile("\nRevisited Cells: " + (_revisitedCells-4), osw);
 			writeToFile("\nObstacle Cells: " + _obstacleCells, osw);
 			writeToFile("\nAccessable Cells: " + _accessableCells, osw);
 			writeToFile("\n\nCoverage: " +  _coverage + "%", osw);

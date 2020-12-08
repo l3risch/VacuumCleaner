@@ -304,7 +304,6 @@ public class DijkstraAlgorithm extends Basic{
 					{
 						currentNode.addDestination(node);
 					}
-	            	
 				}
 			}	
 		}

@@ -25,6 +25,7 @@ public class CustomAlgorithm extends CPPAlgorithm implements ActionListener {
 		_iteration = iteration;
 		_secondsMap = new HashMap<Integer,Double>();
 		_perf = new Performance(_frame, _iteration, "Custom", _secondsMap);
+		_revisitedCells = 0;
 	}
 
 	@Override
@@ -89,7 +90,7 @@ public class CustomAlgorithm extends CPPAlgorithm implements ActionListener {
 		if(reachedStoppingCriteria())
 		{
 			Timer timer = Thread1.getTimer();
-			stopNevaluate("Custom", timer, _secondsMap, _perf);
+			stopNevaluate("Custom", timer, _perf);
 		}			
 		
 		long passedSeconds = System.currentTimeMillis() - Thread1._start;

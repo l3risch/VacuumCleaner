@@ -36,7 +36,7 @@ public class CPPAlgorithm extends Basic{
 	public Map<Integer, Double> _secondsMap;
 	protected Performance _perf;
 	
-	private int _timeLimit = 120;
+	private int _timeLimit = 5;
 	
 	protected void backtrack(int actualRow, int actualCol) {
 //		_nn = NearestNeighbour.getNearestNeighbour(actualRow, actualCol);		
@@ -144,7 +144,7 @@ public class CPPAlgorithm extends Basic{
 		return true;
 	}
 	
-	protected void stopNevaluate(String algorithm, Timer timer, Map<Integer, Double> secondsMap, Performance perf)
+	protected void stopNevaluate(String algorithm, Timer timer, Performance perf)
 	{
 		if(TestSeries._series == true)
 		{

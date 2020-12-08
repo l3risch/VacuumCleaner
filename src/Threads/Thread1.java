@@ -21,7 +21,7 @@ import main.MainFrame;
 
 public class Thread1 extends Thread {
 	
-    private int _iteration;
+    public int _iteration;
     public static Timer _timer;
     private static JFrame _frame;
     
@@ -144,16 +144,15 @@ public class Thread1 extends Thread {
  		_contentPane.repaint();
  	}
  	
-	public void startIteration(Thread1 t1, int i) 
+	public void startIteration(int i, int obstacles) 
 	{
-		setupRandomMap(i);
-    	
-		t1.start();
-		t1.startSpiral();
+		setupRandomMap(i, obstacles);
+		this.start();
+		this.startSpiral();
 	}
 
 
-	public void setupRandomMap(int iteration) 
+	public void setupRandomMap(int iteration, int obstacles) 
 	{
 		if(Table._listObs != null)
 		{
@@ -165,7 +164,7 @@ public class Thread1 extends Thread {
 		{
 			_render.clearMarks();
 		}
-		new MapGenerator();
+		new MapGenerator(obstacles);
 
 		_contentPane.repaint();
 	}	

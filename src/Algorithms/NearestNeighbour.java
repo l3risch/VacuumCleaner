@@ -122,6 +122,7 @@ public class NearestNeighbour extends Basic{
 				 if(_mentalMap.get(key).equals(CellState.VISITED))
 				 {
 					 _pathMatrix[row][col] = '1';
+					 
 				 }
 				 if(_mentalMap.get(key).equals(CellState.FREE))
 			     {

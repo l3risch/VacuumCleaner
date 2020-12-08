@@ -24,6 +24,7 @@ public class Spiral extends CPPAlgorithm implements ActionListener {
 		_iteration = iteration;
 		_secondsMap = new HashMap<Integer,Double>();
 		_perf = new Performance(_frame, _iteration, "Spiral", _secondsMap);
+		_revisitedCells = 0;
 
 	}
 
@@ -89,7 +90,7 @@ public class Spiral extends CPPAlgorithm implements ActionListener {
 		if(reachedStoppingCriteria())
 		{
 			Timer timer = Thread1.getTimer();
-			stopNevaluate("Spiral", timer, _secondsMap, _perf);
+			stopNevaluate("Spiral", timer, _perf);
 		}	
 		
 		long passedSeconds = System.currentTimeMillis() - Thread1._start;

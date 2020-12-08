@@ -15,28 +15,31 @@ public class MapGenerator{
 
 	public static int _numberObs;
 	
-	public MapGenerator() {
-		createRandomObstacles();
+	public MapGenerator(int numberObs) {
+		createRandomObstacles(numberObs);
 	}
 
-	public void createRandomObstacles() 
+	public void createRandomObstacles(int numberObs) 
 	{		
 		Table._markedPath = new boolean[64][64];
 		Table._markedObstacles = new boolean[64][64];
 		
 		//Randomize number of obstacles for this map from one to ten
-		int _numberObs = 1 + (int) (Math.random() * 20) ;
+		//int _numberObs = 1 + (int) (Math.random() * 20) ;
+		
+		
 		if(_listObs != null)
 		{
 			_listObs.clear();
 		}
-		do {
+		while(_listObs.size() < numberObs)
+		{
 			Obstacle randomObstacle = createRandomObstacle();
 			if((randomObstacle.getWidth() + randomObstacle.getHeight()) > 0)
 			{
 				_listObs.add(randomObstacle);
 			}
-		} while(_listObs.size() <= _numberObs);
+		}
 
 		
 		Table.setRandomMap(_listObs);
