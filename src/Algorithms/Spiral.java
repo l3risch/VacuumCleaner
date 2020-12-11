@@ -9,11 +9,13 @@ import java.util.Map;
 
 import javax.swing.Timer;
 
+import Listener.StartAlgorithm;
 import Objects.Robot;
 import Performance.Performance;
 import Physics.Coordinates2D;
 import Threads.Thread1;
 import main.MainFrame;
+import main.TestSeries;
 
 
 public class Spiral extends CPPAlgorithm implements ActionListener {
@@ -82,7 +84,19 @@ public class Spiral extends CPPAlgorithm implements ActionListener {
 			backtrack(_actualRow, _actualCol);
 
 		} else {
-			Robot.getMovement().moveForward();
+			if(freeDirection(encircledArea, ScanDirection.LEFT) && !_pathCalculated)
+			{
+				Robot.getMovement().turnLeft();
+				Robot.getMovement().moveForward();
+			}
+			else if(freeDirection(encircledArea, ScanDirection.RIGHT) && !_pathCalculated)
+			{
+				Robot.getMovement().turnRight();
+				Robot.getMovement().moveForward();
+			} else if(freeDirection(encircledArea, ScanDirection.FRONT) && !_pathCalculated)
+			{
+				Robot.getMovement().moveForward();
+			}
 			_pathCalculated = false;
 			_movesToNN = 0;
 		}
@@ -92,8 +106,15 @@ public class Spiral extends CPPAlgorithm implements ActionListener {
 			Timer timer = Thread1.getTimer();
 			stopNevaluate("Spiral", timer, _perf);
 		}	
+
+		long passedSeconds;
 		
-		long passedSeconds = System.currentTimeMillis() - Thread1._start;
+		if(TestSeries._series == true)
+		{
+			passedSeconds = System.currentTimeMillis() - Thread1._start;
+		} else {
+			passedSeconds = System.currentTimeMillis() - StartAlgorithm._start;
+		}
 		_secondsMap= updatePathCoverage(_secondsMap, passedSeconds, _perf);
 	}
 

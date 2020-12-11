@@ -22,6 +22,7 @@ public class NearestNeighbour extends Basic{
 	private static Map<String, CellState> _mentalMap = new HashMap<String, CellState>();
 	private static Coordinates2D _robotPos;
 	public static char[][] _pathMatrix = new char[64][64];
+	public static int[][] _wavefrontMatrix;
 	
 	public static Coordinates2D getNearestNeighbour(int row, int col)
 	{
@@ -61,8 +62,8 @@ public class NearestNeighbour extends Basic{
 		_pathMatrix = updatePathMatrix(robotRow, robotCol);
 		
 		
-		int[][] wavefrontMatrix = new int[64][64];
-		wavefrontMatrix[startPoint.getRow()][startPoint.getCol()] = 1;
+		_wavefrontMatrix = new int[64][64];
+		_wavefrontMatrix[startPoint.getRow()][startPoint.getCol()] = 1;
 		
 		Queue<Coordinates2D> queue = new LinkedList<Coordinates2D>();
 		queue.add(startPoint);
@@ -72,8 +73,8 @@ public class NearestNeighbour extends Basic{
 		while(!queue.isEmpty()) 
 		{
 			Coordinates2D currentCell = queue.poll();
-			i = wavefrontMatrix[currentCell.getRow()][currentCell.getCol()];
-			List<Coordinates2D> neighbourList = getNeighbours(wavefrontMatrix, _pathMatrix, currentCell, i);
+			i = _wavefrontMatrix[currentCell.getRow()][currentCell.getCol()];
+			List<Coordinates2D> neighbourList = getNeighbours(_wavefrontMatrix, _pathMatrix, currentCell, i);
 
 			queue.addAll(neighbourList);
 		}
@@ -83,12 +84,12 @@ public class NearestNeighbour extends Basic{
 //			StringBuilder sb = new StringBuilder();
 //			for(int l = 0; l < 64; l++)
 //			{
-//				if(wavefrontMatrix[k][l] < 10 )
+//				if(_wavefrontMatrix[k][l] < 10 )
 //				{
-//					sb.append(" "+ wavefrontMatrix[k][l] +  " ");
+//					sb.append(" "+ _wavefrontMatrix[k][l] +  " ");
 //
 //				} else {
-//					sb.append(wavefrontMatrix[k][l] +  " ");
+//					sb.append(_wavefrontMatrix[k][l] +  " ");
 //				}
 //			}
 //			System.out.println(sb);
@@ -102,7 +103,7 @@ public class NearestNeighbour extends Basic{
 			{
 				if(_pathMatrix[k][l] == '2')
 				{
-					map.put(new Coordinates2D(k, l), wavefrontMatrix[k][l]);
+					map.put(new Coordinates2D(k, l), _wavefrontMatrix[k][l]);
 				}
 			}
 		}

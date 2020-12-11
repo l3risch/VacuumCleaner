@@ -9,11 +9,13 @@ import java.util.Map;
 
 import javax.swing.Timer;
 
+import Listener.StartAlgorithm;
 import Objects.Robot;
 import Performance.Performance;
 import Physics.Coordinates2D;
 import Threads.Thread1;
 import main.MainFrame;
+import main.TestSeries;
 
 
 public class CustomAlgorithm extends CPPAlgorithm implements ActionListener {
@@ -93,7 +95,14 @@ public class CustomAlgorithm extends CPPAlgorithm implements ActionListener {
 			stopNevaluate("Custom", timer, _perf);
 		}			
 		
-		long passedSeconds = System.currentTimeMillis() - Thread1._start;
+		long passedSeconds;
+		
+		if(TestSeries._series == true)
+		{
+			passedSeconds = System.currentTimeMillis() - Thread1._start;
+		} else {
+			passedSeconds = System.currentTimeMillis() - StartAlgorithm._start;
+		}
 		_secondsMap= updatePathCoverage(_secondsMap, passedSeconds, _perf);
 		
 	}

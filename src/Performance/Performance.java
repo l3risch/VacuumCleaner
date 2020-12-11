@@ -52,7 +52,11 @@ public class Performance extends Basic{
 	{
 		computeStats();
 		
-		archive(timeLimit);
+		try {
+			archive(timeLimit);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		_frame.saveImage(_algorithm, _iteration);
 		
 		if(Thread1._cpp == "Random")
@@ -108,7 +112,7 @@ public class Performance extends Basic{
 		}		
 	}
 
-	private void archive(int timeLimit) {
+	private void archive(int timeLimit) throws IOException {
 		FileOutputStream fos;
 		try {
 			fos = new FileOutputStream("./results/" + _algorithm + _iteration + ".txt");
@@ -126,24 +130,29 @@ public class Performance extends Basic{
 			writeToFile("\n\nFree Cells: " + _freeCells, osw);
 			writeToFile("\nVisited Cells: " + _visitedCells, osw);
 			
-			//Substract 4 from the set of revisitedCells due to initialization error
+			//Substract 4 from the set of revisited Cells due to initialization error
 			writeToFile("\nRevisited Cells: " + (_revisitedCells-4), osw);
 			writeToFile("\nObstacle Cells: " + _obstacleCells, osw);
 			writeToFile("\nAccessable Cells: " + _accessableCells, osw);
-			writeToFile("\n\nCoverage: " +  _coverage + "%", osw);
+			writeToFile("\n\nCoverage: " +  _coverage, osw);
 			
-			writeToFile("\n\nDuration: " +  CPPAlgorithm._duration + "s", osw);
+			writeToFile("\n\nDuration: " +  CPPAlgorithm._duration , osw);
+			writeToFile("\nTimes Dijkstra executed: " +  _dijkstraExecutions, osw);
 			
 			writeToFile("\n\n________________________________________\nAchieved coverage at specific execution time in seconds\n", osw);
-			_visitedCells = 0;
+
 			for(int key : _secondsMap.keySet())
 			{
-				writeToFile(key + " : " + _secondsMap.get(key) + "%\n", osw);
+				writeToFile(key + " : " + _secondsMap.get(key) + "\n", osw);
 			}
 			
+			fos.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+		
+		_visitedCells = 0;
+		_dijkstraExecutions = 0;
 	}
 	
 	private static void writeToFile(String message, OutputStreamWriter osw){
@@ -151,7 +160,6 @@ public class Performance extends Basic{
 	        osw.write(message);
 	        osw.flush();
 	    } catch (IOException e) {
-	        // TODO Auto-generated catch block
 	        e.printStackTrace();
 	    }
 	}
@@ -184,9 +192,12 @@ public class Performance extends Basic{
 		}
 		
 		_accessableCells = (64*64) - _obstacleCells;
-		_coverage = ((double)_visitedCells/(double)_accessableCells) * 100;
-
-		System.out.println("Coverage: " +  _coverage + "%");
+		_coverage = ((double)_visitedCells/(double)_accessableCells) ;
+		if(_coverage > 1)
+		{
+			_coverage = 1;
+		}
+		System.out.println("Coverage: " +  _coverage);
 	}
 
 	public Thread1 getNewThread()

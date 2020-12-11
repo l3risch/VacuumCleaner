@@ -83,7 +83,7 @@ public class MainFrame extends JFrame{
 		/**
 		 * Choose Map
 		 */
-		String mapList[] = {"1", "2", "3"};
+		String mapList[] = {"1", "2", "3", "4", "5", "6", "7"};
 		JComboBox<String> comboBox_2 = new JComboBox<String>(mapList);
 		c.insets = new Insets(0,10,10,10); 
 		c.gridwidth = 2;

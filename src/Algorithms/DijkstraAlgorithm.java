@@ -33,7 +33,9 @@ public class DijkstraAlgorithm extends Basic{
 		 _nodeList.clear();
 		 _nn = nn;
 		 _matrix = updateMatrix();
-		 
+//		 _matrix = NearestNeighbour._pathMatrix;
+
+			
 		 //Adjust obstacles to match with robot size by extending each obstacle by 3 cells in width and height
 		 List<Coordinates2D> rowList = new ArrayList<Coordinates2D>();
 		 List<Coordinates2D> colList = new ArrayList<Coordinates2D>();
@@ -52,6 +54,7 @@ public class DijkstraAlgorithm extends Basic{
 				 }
 			 }		
 		 }
+		 
 		 
 		 for(Coordinates2D coor : rowList)
 		 {
@@ -91,16 +94,7 @@ public class DijkstraAlgorithm extends Basic{
 				_matrix[_nn.getRow()][_nn.getCol()] = 'D';
 			}
 			
-//			 for(int i = 0; i < 64; i++)
-//			 {
-//				 StringBuilder sb = new StringBuilder();
-//				 for(int j = 0; j < 64; j++)
-//				 {
-//					 sb.append(_matrix[i][j]);
-//				 }
-//				 System.out.println(sb);
-//			 }
-//			System.out.println("\n\n");
+
 		} else {
 			_matrix[_nn.getRow()][_nn.getCol()] = 'D';
 		}
@@ -110,18 +104,19 @@ public class DijkstraAlgorithm extends Basic{
 		
 		if(exists)
 	    {
-		  List<Node> dijkstraPath = computeDijkstraPath();
-		  //adjustedPath = adjustDijkstraPath(dijkstraPath);
-//		  System.out.println("Disjktra");
-//		  for(Node node: dijkstraPath)
-//		  {
-//			  System.out.println(node.x + ", "+ node.y);
-//		  }
-		  
+		  List<Node> dijkstraPath = computeDijkstraPath();		  
 		  return dijkstraPath;
 	    } else {
-	    	return null;
-	    }
+	    	
+	    	_matrix = NearestNeighbour._pathMatrix;
+			_nodeList.clear();
+			_matrix[robotRow][robotCol] = 'S';
+			_matrix[_nn.getRow()][_nn.getCol()] = 'D';
+			pathExists(_matrix, robotRow, robotCol);
+			List<Node> dijkstraPath = computeDijkstraPath();
+			
+	   	    return dijkstraPath;
+		  }
     }
 	 
 

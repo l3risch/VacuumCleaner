@@ -43,6 +43,14 @@ public class Table {
 		break;
 		case "3": setType3();
 		break;
+		case "4": setType4();
+		break;
+		case "5": setType5();
+		break;
+		case "6": setType6();
+		break;
+		case "7": setType7();
+		break;
 		}
 	}
 
@@ -131,7 +139,151 @@ public class Table {
 	}
 	
 
+	private static void setType4() {
+		Robot.setStartingPos(14, 20);
+
+		_rows = 64;
+		_cols = 64;
+		_markedPath = new boolean[_rows][_cols];
+		_markedObstacles = new boolean[_rows][_cols];
+		
+		Obstacle obs1 = new Obstacle(150, 340, 50, 40, Shape.RECTANGLE);
+		
+		Obstacle obs2 = new Obstacle(530, 360, 140, 90, Shape.RECTANGLE);
+		
+		Obstacle obs3 = new Obstacle(280, 540, 140, 140, Shape.RECTANGLE);
+		
+		_listObs = new ArrayList<Obstacle>();
+		
+		_listObs.add(obs1);
+		_listObs.add(obs2);
+		_listObs.add(obs3);
+
+		
+		markObstacles();
+	}
 	
+	
+	private static void setType5() {
+		Robot.setStartingPos(17, 25);
+
+		_rows = 64;
+		_cols = 64;
+		_markedPath = new boolean[_rows][_cols];
+		_markedObstacles = new boolean[_rows][_cols];
+		
+		Obstacle obs1 = new Obstacle(540, 750, 40, 30, Shape.RECTANGLE);
+		Obstacle obs2 = new Obstacle(170, 270, 110, 10, Shape.RECTANGLE);
+		Obstacle obs3 = new Obstacle(440, 220, 100, 150, Shape.RECTANGLE);
+		Obstacle obs4 = new Obstacle(400, 350, 90, 110, Shape.RECTANGLE);
+		Obstacle obs5 = new Obstacle(660, 640, 10, 40, Shape.RECTANGLE);
+		Obstacle obs6 = new Obstacle(280, 550, 80, 10, Shape.RECTANGLE);
+		Obstacle obs7 = new Obstacle(270, 420, 90, 140, Shape.RECTANGLE);
+		Obstacle obs8 = new Obstacle(490, 660, 10, 30, Shape.RECTANGLE);
+		Obstacle obs9 = new Obstacle(460, 560, 40, 150, Shape.RECTANGLE);
+		Obstacle obs10 = new Obstacle(230, 140, 120, 80, Shape.RECTANGLE);
+		Obstacle obs11 = new Obstacle(660, 280, 20, 100, Shape.RECTANGLE);
+		Obstacle obs12 = new Obstacle(250, 320, 100, 140, Shape.RECTANGLE);
+		Obstacle obs13 = new Obstacle(470, 360, 80, 80, Shape.RECTANGLE);
+		Obstacle obs14 = new Obstacle(220, 760, 60, 10, Shape.RECTANGLE);
+		Obstacle obs15 = new Obstacle(660, 650, 20, 50, Shape.RECTANGLE);
+		
+		_listObs = new ArrayList<Obstacle>();
+		
+		_listObs.add(obs1);
+		_listObs.add(obs2);
+		_listObs.add(obs3);
+		_listObs.add(obs4);
+		_listObs.add(obs5);
+		_listObs.add(obs6);
+		_listObs.add(obs7);
+		_listObs.add(obs8);
+		_listObs.add(obs9);
+		_listObs.add(obs10);
+		_listObs.add(obs11);
+		_listObs.add(obs12);
+		_listObs.add(obs13);
+		_listObs.add(obs14);
+		_listObs.add(obs15);
+		
+		markObstacles();
+	}
+	
+	private static void setType6() {
+		Robot.setStartingPos(45, 30);
+
+		_rows = 64;
+		_cols = 64;
+		_markedPath = new boolean[_rows][_cols];
+		_markedObstacles = new boolean[_rows][_cols];
+		
+		Obstacle obs1 = new Obstacle(660, 420, 30, 150, Shape.RECTANGLE);
+		Obstacle obs2 = new Obstacle(190, 640, 80, 10, Shape.RECTANGLE);
+		Obstacle obs3 = new Obstacle(520, 410, 80, 150, Shape.RECTANGLE);
+		Obstacle obs4 = new Obstacle(370, 270, 150, 40, Shape.RECTANGLE);
+		Obstacle obs5 = new Obstacle(570, 740, 110, 40, Shape.RECTANGLE);
+		Obstacle obs6 = new Obstacle(270, 520, 40, 140, Shape.RECTANGLE);
+		Obstacle obs7 = new Obstacle(520, 260, 140, 10, Shape.RECTANGLE);
+		Obstacle obs8 = new Obstacle(460, 420, 120, 10, Shape.RECTANGLE);
+		Obstacle obs9 = new Obstacle(170, 190, 130, 90, Shape.RECTANGLE);
+		Obstacle obs10 = new Obstacle(570, 720, 110, 60, Shape.RECTANGLE);
+		
+		_listObs = new ArrayList<Obstacle>();
+		
+		_listObs.add(obs1);
+		_listObs.add(obs2);
+		_listObs.add(obs3);
+		_listObs.add(obs4);
+		_listObs.add(obs5);
+		_listObs.add(obs6);
+		_listObs.add(obs7);
+		_listObs.add(obs8);
+		_listObs.add(obs9);
+		_listObs.add(obs10);
+	
+		markObstacles();
+	}
+	
+	private static void setType7() {
+		Robot.setStartingPos(25, 57);
+
+		_rows = 64;
+		_cols = 64;
+		_markedPath = new boolean[_rows][_cols];
+		_markedObstacles = new boolean[_rows][_cols];
+		
+		Obstacle obs1 = new Obstacle(560, 500, 100, 20, Shape.RECTANGLE);
+		Obstacle obs2 = new Obstacle(470, 320, 130, 130, Shape.RECTANGLE);
+		Obstacle obs3 = new Obstacle(200, 280, 140, 50, Shape.RECTANGLE);
+		Obstacle obs4 = new Obstacle(660, 560, 40, 50, Shape.RECTANGLE);
+		Obstacle obs5 = new Obstacle(330, 600, 50, 70, Shape.RECTANGLE);
+		Obstacle obs6 = new Obstacle(140, 670, 60, 20, Shape.RECTANGLE);
+		Obstacle obs7 = new Obstacle(150, 600, 80, 130, Shape.RECTANGLE);
+		Obstacle obs8 = new Obstacle(440, 310, 130, 130, Shape.RECTANGLE);
+		Obstacle obs9 = new Obstacle(380, 290, 140, 120, Shape.RECTANGLE);
+		Obstacle obs10 = new Obstacle(310, 410, 90, 110, Shape.RECTANGLE);
+		Obstacle obs11 = new Obstacle(290, 300, 110, 120, Shape.RECTANGLE);
+		Obstacle obs12 = new Obstacle(450, 560, 140, 70, Shape.RECTANGLE);
+
+
+		
+		_listObs = new ArrayList<Obstacle>();
+		
+		_listObs.add(obs1);
+		_listObs.add(obs2);
+		_listObs.add(obs3);
+		_listObs.add(obs4);
+		_listObs.add(obs5);
+		_listObs.add(obs6);
+		_listObs.add(obs7);
+		_listObs.add(obs8);
+		_listObs.add(obs9);
+		_listObs.add(obs10);
+		_listObs.add(obs11);
+		_listObs.add(obs12);
+		
+		markObstacles();
+	}
 	
 	public static void setRandomMap(List<Obstacle> listObs)
 	{

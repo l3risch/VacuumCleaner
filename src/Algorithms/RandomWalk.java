@@ -75,7 +75,14 @@ public class RandomWalk extends CPPAlgorithm implements ActionListener{
 			stopNevaluate("Random", _timer, _perf);
 		}		
 		
-		long passedSeconds = System.currentTimeMillis() - Thread1._start;
+		long passedSeconds;
+		
+		if(TestSeries._series == true)
+		{
+			passedSeconds = System.currentTimeMillis() - Thread1._start;
+		} else {
+			passedSeconds = System.currentTimeMillis() - StartAlgorithm._start;
+		}
 		_secondsMap= updatePathCoverage(_secondsMap, passedSeconds, _perf);
 		
 		_frame.repaint();		

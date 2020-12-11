@@ -23,6 +23,7 @@ public class Basic {
 	
 	public static int _revisitedCells;
 
+	protected static int _dijkstraExecutions = 0;
 	
 	static boolean isFrontAccesable(int row, int col)
 	{
@@ -505,6 +506,7 @@ public class Basic {
 	
 	protected static char[][] updateMatrix()
 	{
+		_dijkstraExecutions++;
 		 //Transform Hash Map to char matrix
 		 for(String key : _mentalMap.keySet())
 		 {
