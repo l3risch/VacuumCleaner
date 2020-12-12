@@ -1,7 +1,16 @@
 package main;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 import javax.swing.JFrame;
 import javax.swing.Timer;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import Threads.Thread1;
 
@@ -22,11 +31,12 @@ public class TestSeries {
 	
 	public static int _obstacles = 0;
 
-	public static void main(String[] args) 
+	public static void main(String[] args) throws FileNotFoundException, IOException 
 	{
+		
 		try {
 			_series = true;
-			_iterations = 10;
+			_iterations = 20;
 			_frame = new MainFrame();
 
 			Thread1 t1 = new Thread1(_iteration, _frame);
@@ -38,9 +48,6 @@ public class TestSeries {
 		}
 
 	}
-	
-	
-			
 	
 
 

@@ -1,7 +1,11 @@
 /.recommenders/
 /Algorithms/
-/Performance/
-/Threads/
+/Listener/
 /MapGeneration/
 /Objects/
+/Performance/
+/Physics/
+/Rendering/
+/Threads/
+/enums/
 /main/

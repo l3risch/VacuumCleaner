@@ -36,7 +36,7 @@ public class CPPAlgorithm extends Basic{
 	public Map<Integer, Double> _secondsMap;
 	protected Performance _perf;
 	
-	private int _timeLimit = 900;
+	private int _timeLimit = 120;
 	
 	protected void backtrack(int actualRow, int actualCol) {
 //		_nn = NearestNeighbour.getNearestNeighbour(actualRow, actualCol);		
@@ -46,11 +46,6 @@ public class CPPAlgorithm extends Basic{
 			//Calculate shortest route to nearest neighbour
 			_shortestPath = DijkstraAlgorithm.computePath(actualRow, actualCol, _nn);
 			_pathCalculated = true;
-			
-			for(Node node : _shortestPath)
-			{
-				System.out.println(node.x + ", " + node.y);
-			}
 		}
 
 		else
@@ -60,7 +55,6 @@ public class CPPAlgorithm extends Basic{
 			if(!DijkstraAlgorithm.nnReached(actualRow, actualCol))
 			{
 				Node currentNode = _shortestPath.get(_movesToNN);
-				System.out.println(_movesToNN);
 				if(_movesToNN < _shortestPath.size() - 1)
 				{
 					Node nextNode = _shortestPath.get(_movesToNN+1);

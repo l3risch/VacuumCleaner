@@ -132,8 +132,8 @@ public class Movement {
 	
 	public void setRandomStartingPosition()
 	{
-		_x = 100 + 10 * (int) (Math.random() * 60);
-		_y = 140 + 10 * (int) (Math.random() * 60);
+		_x = 120 + 10 * (int) (Math.random() * 56);
+		_y = 160 + 10 * (int) (Math.random() * 56);
 		_ang = 270;
 		//_ang = 90 * (int) (Math.random() * 4);
 	}

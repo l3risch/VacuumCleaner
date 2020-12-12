@@ -82,26 +82,6 @@ public class Thread1 extends Thread {
         throw new RuntimeException("Stopping the thread " + _cpp);
     }
     
-    public void startCustom()
-    {
-		NearestNeighbour._pathMatrix = new char[64][64];
-     	_timer.stop();
-		_start = System.currentTimeMillis();
-   	 	_custom = new CustomAlgorithm((MainFrame) _frame, _iteration);
-     	_cpp = "Custom";
-
-    	for(ActionListener listener : _timer.getActionListeners())
-     	{
-       	 	_timer.removeActionListener(listener);
-     	}
-
-    	 _timer.addActionListener(_custom);
-
-    	_timer.start();
-        _timer.setRepeats(true);       
-        
-        throw new RuntimeException("Stopping the thread " + _cpp);
-    }
     
     public void startRandom()
     {

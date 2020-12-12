@@ -245,25 +245,34 @@ public class Table {
 	}
 	
 	private static void setType7() {
-		Robot.setStartingPos(25, 57);
+		Robot.setStartingPos(4, 32);
 
 		_rows = 64;
 		_cols = 64;
 		_markedPath = new boolean[_rows][_cols];
 		_markedObstacles = new boolean[_rows][_cols];
 		
-		Obstacle obs1 = new Obstacle(560, 500, 100, 20, Shape.RECTANGLE);
-		Obstacle obs2 = new Obstacle(470, 320, 130, 130, Shape.RECTANGLE);
-		Obstacle obs3 = new Obstacle(200, 280, 140, 50, Shape.RECTANGLE);
-		Obstacle obs4 = new Obstacle(660, 560, 40, 50, Shape.RECTANGLE);
-		Obstacle obs5 = new Obstacle(330, 600, 50, 70, Shape.RECTANGLE);
-		Obstacle obs6 = new Obstacle(140, 670, 60, 20, Shape.RECTANGLE);
-		Obstacle obs7 = new Obstacle(150, 600, 80, 130, Shape.RECTANGLE);
-		Obstacle obs8 = new Obstacle(440, 310, 130, 130, Shape.RECTANGLE);
-		Obstacle obs9 = new Obstacle(380, 290, 140, 120, Shape.RECTANGLE);
-		Obstacle obs10 = new Obstacle(310, 410, 90, 110, Shape.RECTANGLE);
-		Obstacle obs11 = new Obstacle(290, 300, 110, 120, Shape.RECTANGLE);
-		Obstacle obs12 = new Obstacle(450, 560, 140, 70, Shape.RECTANGLE);
+		Obstacle obs1 = new Obstacle(350, 550, 80, 50, Shape.RECTANGLE);
+		Obstacle obs2 = new Obstacle(190, 350, 70, 70, Shape.RECTANGLE);
+		Obstacle obs3 = new Obstacle(520, 360, 20, 20, Shape.RECTANGLE);
+		Obstacle obs4 = new Obstacle(500, 380, 50, 40, Shape.RECTANGLE);
+		Obstacle obs5 = new Obstacle(430, 350, 20, 140, Shape.RECTANGLE);
+		Obstacle obs6 = new Obstacle(410, 380, 40, 120, Shape.RECTANGLE);
+		Obstacle obs7 = new Obstacle(590, 290, 110, 90, Shape.RECTANGLE);
+		Obstacle obs8 = new Obstacle(190, 700, 100, 20, Shape.RECTANGLE);
+		Obstacle obs9 = new Obstacle(420, 540, 130, 60, Shape.RECTANGLE);
+		Obstacle obs10 = new Obstacle(400, 310, 30, 120, Shape.RECTANGLE);
+		Obstacle obs11 = new Obstacle(240, 480, 10, 100, Shape.RECTANGLE);
+		Obstacle obs12 = new Obstacle(340, 350, 20, 90, Shape.RECTANGLE);
+		Obstacle obs13 = new Obstacle(660, 300, 10, 110, Shape.RECTANGLE);
+		Obstacle obs14 = new Obstacle(230, 560, 130, 10, Shape.RECTANGLE);
+		Obstacle obs15 = new Obstacle(240, 370, 120, 70, Shape.RECTANGLE);
+		Obstacle obs16 = new Obstacle(620, 670, 60, 50, Shape.RECTANGLE);
+		Obstacle obs17 = new Obstacle(210, 180, 50, 50, Shape.RECTANGLE);
+		Obstacle obs18 = new Obstacle(400, 660, 130, 70, Shape.RECTANGLE);
+		Obstacle obs19 = new Obstacle(620, 330, 60, 90, Shape.RECTANGLE);
+		Obstacle obs20 = new Obstacle(240, 340, 60, 80, Shape.RECTANGLE);
+
 
 
 		
@@ -281,7 +290,15 @@ public class Table {
 		_listObs.add(obs10);
 		_listObs.add(obs11);
 		_listObs.add(obs12);
-		
+		_listObs.add(obs13);
+		_listObs.add(obs14);
+		_listObs.add(obs15);
+		_listObs.add(obs16);
+		_listObs.add(obs17);
+		_listObs.add(obs18);
+		_listObs.add(obs19);
+		_listObs.add(obs20);
+
 		markObstacles();
 	}
 	
