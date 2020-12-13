@@ -1,5 +1,0 @@
-Starting Pos.: 45 ,50
-Obstacle obs1 = new Obstacle(320, 580, 120, 80, Shape.RECTANGLE);
-Obstacle obs1 = new Obstacle(610, 180, 130, 100, Shape.RECTANGLE);
-Obstacle obs1 = new Obstacle(590, 700, 60, 40, Shape.RECTANGLE);
-Obstacle obs1 = new Obstacle(600, 630, 40, 80, Shape.RECTANGLE);

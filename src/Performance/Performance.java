@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 
@@ -44,8 +46,19 @@ public class Performance extends Basic{
 	
 	private Map<Integer, Double> _secondsMap;
 	
-	private XSSFSheet _sheet;
-	private XSSFWorkbook _workbook;
+	private static XSSFSheet _sheetSpiral;
+	private static XSSFSheet _sheetZigZag;
+	private static XSSFSheet _sheetRandom;
+
+	private static XSSFWorkbook _workbook;
+	
+	private static Object[][] _spiral;
+	private static Object[][] _zigzag;
+	private static Object[][] _random;
+
+	private List<Object> _statList;
+	private List<String> _statNameList;
+
 	
 	public Thread1 _t1;
 	
@@ -59,18 +72,18 @@ public class Performance extends Basic{
 		_secondsMap = secondsMap;
 	}
 
-	public void evaluate(int timeLimit) 
+	public void evaluate(int timeLimit) throws IOException 
 	{
 		computeStats();
 		
-		try {
-			archive(timeLimit);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		generateStatNameList();
+		generateStatList();
+
+		archive(timeLimit);
+
 		_frame.saveImage(_algorithm, _iteration);
 		
-		if(Thread1._cpp == "ZigZag")
+		if(Thread1._cpp == "Random")
 		{
 			nextIteration();
 		} else {
@@ -80,7 +93,7 @@ public class Performance extends Basic{
 
 
 
-	private void nextIteration() 
+	private void nextIteration() throws FileNotFoundException, IOException 
 	{
 		TestSeries._iteration++;
 		int i = TestSeries._iteration;
@@ -91,6 +104,7 @@ public class Performance extends Basic{
 			TestSeries._obstacles++;
 			_t1.startIteration(i, TestSeries._obstacles);
 		} else {
+			printExcel(_iteration);
 		    System.exit(0);
 		}
 	}
@@ -105,30 +119,23 @@ public class Performance extends Basic{
 					_t1 = new Thread1(_iteration, _frame);
 					_t1.clearAlgorithm();
 					_t1.startZigZag();
-					_t1.clearMap();
 				break;
 	
-//				case "ZigZag" :
-//				_t1 = new Thread1(_iteration, _frame);
-//				_t1.startRandom();
-//				_t1.clearMap();
-//				break;
-				
-//				case "Custom" :
-//				_t1 = new Thread1(_iteration, _frame);
-//				_t1.clearAlgorithm();
-//				_t1.startRandom();
-//				_t1.clearMap();
-//				break;
+				case "ZigZag" :
+				_t1 = new Thread1(_iteration, _frame);
+				_t1.clearAlgorithm();
+				_t1.startRandom();
+				_t1.clearMap();
+				break;
+			
 			}
 		}		
 	}
 
 	private void archive(int timeLimit) throws IOException {
 		     
-        exportToExcel();     
         updateExcelCols(_iteration);
-         
+        
 	        
 		FileOutputStream fos;
 		try {
@@ -248,108 +255,163 @@ public class Performance extends Basic{
 		return coverage;
 	}
 	
-	private void exportToExcel()
+	public static void initExcel(Object[][] spiral, Object[][] zigzag, Object[][] random)
 	{
+		 _spiral = spiral;
+		 _zigzag = zigzag;
+		 _random = random;
 		 _workbook = new XSSFWorkbook();
-         _sheet = _workbook.createSheet("Stats");
-
-         
-         Row row = _sheet.createRow(1);
-         Cell cell = row.createCell(1);
-         cell.setCellValue("Distance");
-         row = _sheet.createRow(2);
-         cell = row.createCell(1);
-         cell.setCellValue("Number of Turns");     
-         row = _sheet.createRow(3);
-         cell = row.createCell(1);
-         cell.setCellValue("Total Movements");    
-         row = _sheet.createRow(4);
-         cell = row.createCell(1);
-         cell.setCellValue("Number of Obstacles");    
-         row = _sheet.createRow(5);
-         cell = row.createCell(1);
-         cell.setCellValue("Free Cells");    
-         row = _sheet.createRow(6);
-         cell = row.createCell(1);
-         cell.setCellValue("Visited Cells");    
-         row = _sheet.createRow(7);
-         cell = row.createCell(1);
-         cell.setCellValue("Revisited Cells");    
-         row = _sheet.createRow(8);
-         cell = row.createCell(1);
-         cell.setCellValue("Fraction of Revisited Cells");    
-         row = _sheet.createRow(9);
-         cell = row.createCell(1);
-         cell.setCellValue("Obstacle Cells");    
-         row = _sheet.createRow(10);
-         cell = row.createCell(1);
-         cell.setCellValue("Accessable Cells");    
-         row = _sheet.createRow(11);
-         cell = row.createCell(1);
-         cell.setCellValue("Time Dijkstra executed");    
-         row = _sheet.createRow(13);
-         cell = row.createCell(1);
-         cell.setCellValue("Duration"); 
-         row = _sheet.createRow(14);
-         cell = row.createCell(1);
-         cell.setCellValue("Coverage");    
-         
-                 
+         _sheetSpiral = _workbook.createSheet("spiral");
+         _sheetZigZag = _workbook.createSheet("zigzag");
+         _sheetRandom = _workbook.createSheet("random");
 	}
 	
 	private void updateExcelCols(int iteration) throws FileNotFoundException, IOException
 	{
-		int currentCol = 2 + iteration;
-		Row row = _sheet.createRow(1);
-        Cell cell = row.createCell(currentCol);
-        cell.setCellValue(_totalDistance);    
-        row = _sheet.createRow(2);
-        cell = row.createCell(currentCol);
-        cell.setCellValue(_numberOfTurns);    
-        row = _sheet.createRow(3);
-        cell = row.createCell(currentCol);
-        cell.setCellValue(_totalMovements);    
-        row = _sheet.createRow(4);
-        cell = row.createCell(currentCol);
-        cell.setCellValue(_obstacles);    
-        row = _sheet.createRow(5);
-        cell = row.createCell(currentCol);
-        cell.setCellValue(_freeCells);    
-        row = _sheet.createRow(6);
-        cell = row.createCell(currentCol);
-        cell.setCellValue(_visitedCells);    
-        row = _sheet.createRow(7);
-        cell = row.createCell(currentCol);
-        cell.setCellValue((_revisitedCells-4));  
-        row = _sheet.createRow(8);
-        cell = row.createCell(currentCol);
-        cell.setCellValue(_fracRevisited);    
-        row = _sheet.createRow(9);
-        cell = row.createCell(currentCol);
-        cell.setCellValue(_obstacleCells);    
-        row = _sheet.createRow(10);
-        cell = row.createCell(currentCol);
-        cell.setCellValue(_accessableCells);    
-        row = _sheet.createRow(11);
-        cell = row.createCell(currentCol);
-        cell.setCellValue(_dijkstraExecutions);    
-        row = _sheet.createRow(13);
-        cell = row.createCell(currentCol);
-        cell.setCellValue(CPPAlgorithm._duration);    
-        row = _sheet.createRow(14);
-        cell = row.createCell(currentCol);
-        cell.setCellValue(_coverage);  
-        
-        try (FileOutputStream outputStream = new FileOutputStream("./results/evaluation_java.xlsx")) {
-            _workbook.write(outputStream);
-        }
-        
-        try {
+		switch(Thread1._cpp)
+		{
+			case "Spiral" : 
+				for(int i = 0; i < 13; i ++)
+				{
+					_spiral[i][0] = _statNameList.get(i);
+					_spiral[i][iteration+1] = _statList.get(i);
+				}
+			break;
+
+			case "ZigZag" :
+				for(int i = 0; i < 13; i ++)
+				{
+					_zigzag[i][0] = _statNameList.get(i);
+					_zigzag[i][iteration+1] = _statList.get(i);
+				}
+			break;
+		
+			case "Random" :
+				for(int i = 0; i < 13; i ++)
+				{
+					_random[i][0] = _statNameList.get(i);
+					_random[i][iteration+1] = _statList.get(i);
+				}
+			break;
+		}
+		
+	}
+	
+	private void printExcel(int iteration) throws FileNotFoundException, IOException
+	{
+        int rowCount = 0;
+
+		for(Object[] arow : _spiral)
+		{
+            Row row = _sheetSpiral.createRow(++rowCount);
+            
+            int columnCount = 1;
+            
+			for (Object field : arow) {
+                Cell cell = row.createCell(++columnCount);
+                if (field instanceof Double) {
+                    cell.setCellValue((Double) field);
+                } else if (field instanceof Integer) {
+                    cell.setCellValue((Integer) field);
+                } else if (field instanceof String) {
+                    cell.setCellValue((String) field);
+                } else if (field instanceof Long) {
+                    cell.setCellValue((Long) field);
+                }                               
+            }		
+		}
+	    
+		rowCount = 0;
+		
+		for(Object[] arow : _zigzag)
+		{
+            Row row = _sheetZigZag.createRow(++rowCount);
+            
+            int columnCount = 1;
+            
+			for (Object field : arow) {
+                Cell cell = row.createCell(++columnCount);
+                if (field instanceof Double) {
+                    cell.setCellValue((Double) field);
+                } else if (field instanceof Integer) {
+                    cell.setCellValue((Integer) field);
+                } else if (field instanceof String) {
+                    cell.setCellValue((String) field);
+                } else if (field instanceof Long) {
+                    cell.setCellValue((Long) field);
+                }                               
+            }		
+		}
+		
+		rowCount = 0;
+		
+		for(Object[] arow : _random)
+		{
+            Row row = _sheetRandom.createRow(++rowCount);
+            
+            int columnCount = 1;
+            
+			for (Object field : arow) {
+                Cell cell = row.createCell(++columnCount);
+                if (field instanceof Double) {
+                    cell.setCellValue((Double) field);
+                } else if (field instanceof Integer) {
+                    cell.setCellValue((Integer) field);
+                } else if (field instanceof String) {
+                    cell.setCellValue((String) field);
+                } else if (field instanceof Long) {
+                    cell.setCellValue((Long) field);
+                }                               
+            }		
+		}
+		
+	    try (FileOutputStream outputStream = new FileOutputStream("./results/evaluation_java.xlsx")) {
+	        _workbook.write(outputStream);
+	    }
+	    
+	    try {
 			_workbook.close();
 		} catch (IOException e) {
-
+	
 		}
-
+	}
+    
+	
+	private void generateStatNameList()
+	{
+		_statNameList = new ArrayList<String>();
+		_statNameList.add("Distance");
+		_statNameList.add("Number of Turns");
+		_statNameList.add("Number of Movements");
+		_statNameList.add("Number of Obstacles");
+		_statNameList.add("Free Cells");
+		_statNameList.add("Visited Cells");
+		_statNameList.add("Revisited Cells");
+		_statNameList.add("Fraction of Revisited Cells");
+		_statNameList.add("Obstacle Cells");
+		_statNameList.add("Accessable Cells");
+		_statNameList.add("Dijkstra Executions");
+		_statNameList.add("Duration");
+		_statNameList.add("Coverage");
+	}
+	
+	
+	private void generateStatList()
+	{
+		_statList = new ArrayList<Object>();
+		_statList.add(_totalDistance);
+		_statList.add(_numberOfTurns);
+		_statList.add(_totalMovements);
+		_statList.add(_obstacles);
+		_statList.add(_freeCells);
+		_statList.add(_visitedCells);
+		_statList.add((_revisitedCells-4));
+		_statList.add(_fracRevisited);
+		_statList.add(_obstacleCells);
+		_statList.add(_accessableCells);
+		_statList.add(_dijkstraExecutions);
+		_statList.add(CPPAlgorithm._duration);
+		_statList.add(_coverage);
 	}
 	
 	

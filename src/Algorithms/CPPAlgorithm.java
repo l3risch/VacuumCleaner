@@ -1,5 +1,6 @@
 package Algorithms;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +37,7 @@ public class CPPAlgorithm extends Basic{
 	public Map<Integer, Double> _secondsMap;
 	protected Performance _perf;
 	
-	private int _timeLimit = 120;
+	private int _timeLimit = 5;
 	
 	protected void backtrack(int actualRow, int actualCol) {
 //		_nn = NearestNeighbour.getNearestNeighbour(actualRow, actualCol);		
@@ -152,7 +153,14 @@ public class CPPAlgorithm extends Basic{
 			StartAlgorithm._timer.stop();
 		}
 
-		perf.evaluate(_timeLimit);
+		try 
+		{
+			perf.evaluate(_timeLimit);
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	protected Map<Integer, Double> updatePathCoverage(Map<Integer, Double> secondsMap, long passedSeconds, Performance perf)
