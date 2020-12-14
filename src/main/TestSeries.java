@@ -12,6 +12,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import Algorithms.CPPAlgorithm;
 import Performance.Performance;
 import Threads.Thread1;
 
@@ -36,17 +37,23 @@ public class TestSeries {
 	private static Object[][] _zigzag;
 	private static Object[][] _random;
 
+	private static Object[][] _spiralCumulative;
+	private static Object[][] _zigzagCumulative;
+	private static Object[][] _randomCumulative;
 
 	public static void main(String[] args) throws FileNotFoundException, IOException 
 	{
-		_iterations = 2;
+		_iterations = 20;
 
 		_spiral = new Object[13][_iterations+1];
 		_zigzag = new Object[13][_iterations+1];
 		_random = new Object[13][_iterations+1];
 
+		_spiralCumulative = new Object[CPPAlgorithm._timeLimit+1][_iterations+1];
+		_zigzagCumulative = new Object[CPPAlgorithm._timeLimit+1][_iterations+1];
+		_randomCumulative = new Object[CPPAlgorithm._timeLimit+1][_iterations+1];
 		
-		Performance.initExcel(_spiral, _zigzag, _random);
+		Performance.initExcel(_spiral, _zigzag, _random, _spiralCumulative, _zigzagCumulative, _randomCumulative);
 
 		try {
 			_series = true;

@@ -1,0 +1,17 @@
+Starting Pos.: 35 ,32
+Obstacle obs1 = new Obstacle(600, 500, 50, 50, Shape.RECTANGLE);
+Obstacle obs1 = new Obstacle(460, 260, 60, 10, Shape.RECTANGLE);
+Obstacle obs1 = new Obstacle(210, 490, 100, 10, Shape.RECTANGLE);
+Obstacle obs1 = new Obstacle(490, 480, 110, 70, Shape.RECTANGLE);
+Obstacle obs1 = new Obstacle(150, 450, 70, 60, Shape.RECTANGLE);
+Obstacle obs1 = new Obstacle(270, 640, 50, 60, Shape.RECTANGLE);
+Obstacle obs1 = new Obstacle(500, 430, 140, 150, Shape.RECTANGLE);
+Obstacle obs1 = new Obstacle(570, 550, 50, 100, Shape.RECTANGLE);
+Obstacle obs1 = new Obstacle(220, 210, 110, 140, Shape.RECTANGLE);
+Obstacle obs1 = new Obstacle(290, 690, 20, 30, Shape.RECTANGLE);
+Obstacle obs1 = new Obstacle(290, 760, 80, 20, Shape.RECTANGLE);
+Obstacle obs1 = new Obstacle(560, 240, 90, 130, Shape.RECTANGLE);
+Obstacle obs1 = new Obstacle(720, 430, 20, 150, Shape.RECTANGLE);
+Obstacle obs1 = new Obstacle(180, 260, 40, 100, Shape.RECTANGLE);
+Obstacle obs1 = new Obstacle(520, 480, 150, 120, Shape.RECTANGLE);
+Obstacle obs1 = new Obstacle(140, 330, 150, 10, Shape.RECTANGLE);

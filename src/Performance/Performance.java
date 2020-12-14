@@ -38,7 +38,6 @@ public class Performance extends Basic{
 	private int _accessableCells = 0;
 	private double _coverage = 0;
 	private int _obstacles = 0;
-	private double _fracRevisited = 0;
 	
 	private MainFrame _frame;
 	private int _iteration;
@@ -49,16 +48,23 @@ public class Performance extends Basic{
 	private static XSSFSheet _sheetSpiral;
 	private static XSSFSheet _sheetZigZag;
 	private static XSSFSheet _sheetRandom;
+	
+	private static XSSFSheet _sheetSpiralCumulative;
+	private static XSSFSheet _sheetZigZagCumulative;
+	private static XSSFSheet _sheetRandomCumulative;
 
 	private static XSSFWorkbook _workbook;
 	
 	private static Object[][] _spiral;
 	private static Object[][] _zigzag;
 	private static Object[][] _random;
+	
+	private static Object[][] _spiralCumulative;
+	private static Object[][] _zigzagCumulative;
+	private static Object[][] _randomCumulative;
 
 	private List<Object> _statList;
 	private List<String> _statNameList;
-
 	
 	public Thread1 _t1;
 	
@@ -214,9 +220,7 @@ public class Performance extends Basic{
 		{
 			_coverage = 1;
 		}
-		
-		_fracRevisited = _revisitedCells/_visitedCells;
-		
+				
 		System.out.println("Coverage: " +  _coverage);
 	}
 
@@ -255,15 +259,22 @@ public class Performance extends Basic{
 		return coverage;
 	}
 	
-	public static void initExcel(Object[][] spiral, Object[][] zigzag, Object[][] random)
+	public static void initExcel(Object[][] spiral, Object[][] zigzag, Object[][] random, Object[][] spiralCumulative, Object[][] zigzagCumulative, Object[][] randomCumulative)
 	{
 		 _spiral = spiral;
 		 _zigzag = zigzag;
 		 _random = random;
+		 _spiralCumulative = spiralCumulative;
+		 _zigzagCumulative = zigzagCumulative;
+		 _randomCumulative = randomCumulative;
+		 
 		 _workbook = new XSSFWorkbook();
          _sheetSpiral = _workbook.createSheet("spiral");
          _sheetZigZag = _workbook.createSheet("zigzag");
          _sheetRandom = _workbook.createSheet("random");
+         _sheetSpiralCumulative = _workbook.createSheet("spiral_cumulative");
+         _sheetZigZagCumulative = _workbook.createSheet("zigzag_cumulative");
+         _sheetRandomCumulative = _workbook.createSheet("random_cumulative");
 	}
 	
 	private void updateExcelCols(int iteration) throws FileNotFoundException, IOException
@@ -271,26 +282,53 @@ public class Performance extends Basic{
 		switch(Thread1._cpp)
 		{
 			case "Spiral" : 
-				for(int i = 0; i < 13; i ++)
+				_spiral[0][0] = "Stats for";
+				_spiral[0][iteration+1] = _algorithm + iteration;
+				for(int i = 0; i < 12; i ++)
 				{
-					_spiral[i][0] = _statNameList.get(i);
-					_spiral[i][iteration+1] = _statList.get(i);
+					_spiral[i+1][0] = _statNameList.get(i);
+					_spiral[i+1][iteration+1] = _statList.get(i);
+				}
+				_spiralCumulative[0][0] = "Coverage at second";
+				_spiralCumulative[0][iteration+1] = _algorithm + iteration;
+				for(int key : _secondsMap.keySet())
+				{
+					_spiralCumulative[key+1][0] = key;
+					_spiralCumulative[key+1][iteration+1] = _secondsMap.get(key);
 				}
 			break;
 
 			case "ZigZag" :
-				for(int i = 0; i < 13; i ++)
+				_zigzag[0][0] = "Stats for";
+				_zigzag[0][iteration+1] = _algorithm + iteration;
+				for(int i = 0; i < 12; i ++)
 				{
-					_zigzag[i][0] = _statNameList.get(i);
-					_zigzag[i][iteration+1] = _statList.get(i);
+					_zigzag[i+1][0] = _statNameList.get(i);
+					_zigzag[i+1][iteration+1] = _statList.get(i);
+				}
+				_zigzagCumulative[0][0] = "Coverage at second";
+				_zigzagCumulative[0][iteration+1] = _algorithm + iteration;
+				for(int key : _secondsMap.keySet())
+				{
+					_zigzagCumulative[key+1][0] = key;
+					_zigzagCumulative[key+1][iteration+1] = _secondsMap.get(key);
 				}
 			break;
 		
 			case "Random" :
-				for(int i = 0; i < 13; i ++)
+				_random[0][0] = "Stats for";
+				_random[0][iteration+1] = _algorithm + iteration;
+				for(int i = 0; i < 12; i ++)
 				{
-					_random[i][0] = _statNameList.get(i);
-					_random[i][iteration+1] = _statList.get(i);
+					_random[i+1][0] = _statNameList.get(i);
+					_random[i+1][iteration+1] = _statList.get(i);
+				}
+				_randomCumulative[0][0] = "Coverage at second";
+				_randomCumulative[0][iteration+1] = _algorithm + iteration;
+				for(int key : _secondsMap.keySet())
+				{
+					_randomCumulative[key+1][0] = key;
+					_randomCumulative[key+1][iteration+1] = _secondsMap.get(key);
 				}
 			break;
 		}
@@ -322,6 +360,26 @@ public class Performance extends Basic{
 		}
 	    
 		rowCount = 0;
+
+		for(Object[] arow : _spiralCumulative)
+		{
+            Row row = _sheetSpiralCumulative.createRow(++rowCount);
+            
+            int columnCount = 1;
+            
+			for (Object field : arow) {
+                Cell cell = row.createCell(++columnCount);
+                if (field instanceof Double) {
+                    cell.setCellValue((Double) field);
+                } else if (field instanceof Integer) {
+                    cell.setCellValue((Integer) field);
+                } else if (field instanceof String) {
+                    cell.setCellValue((String) field);
+                }                           
+            }		
+		}
+		
+		rowCount = 0;
 		
 		for(Object[] arow : _zigzag)
 		{
@@ -340,6 +398,26 @@ public class Performance extends Basic{
                 } else if (field instanceof Long) {
                     cell.setCellValue((Long) field);
                 }                               
+            }		
+		}
+		 
+		rowCount = 0;
+
+		for(Object[] arow : _zigzagCumulative)
+		{
+            Row row = _sheetZigZagCumulative.createRow(++rowCount);
+            
+            int columnCount = 1;
+            
+			for (Object field : arow) {
+                Cell cell = row.createCell(++columnCount);
+                if (field instanceof Double) {
+                    cell.setCellValue((Double) field);
+                } else if (field instanceof Integer) {
+                    cell.setCellValue((Integer) field);
+                } else if (field instanceof String) {
+                    cell.setCellValue((String) field);
+                } 
             }		
 		}
 		
@@ -362,6 +440,26 @@ public class Performance extends Basic{
                 } else if (field instanceof Long) {
                     cell.setCellValue((Long) field);
                 }                               
+            }		
+		}
+		 
+		rowCount = 0;
+
+		for(Object[] arow : _randomCumulative)
+		{
+            Row row = _sheetRandomCumulative.createRow(++rowCount);
+            
+            int columnCount = 1;
+            
+			for (Object field : arow) {
+                Cell cell = row.createCell(++columnCount);
+                if (field instanceof Double) {
+                    cell.setCellValue((Double) field);
+                } else if (field instanceof Integer) {
+                    cell.setCellValue((Integer) field);
+                } else if (field instanceof String) {
+                    cell.setCellValue((String) field);
+                }               
             }		
 		}
 		
@@ -387,7 +485,6 @@ public class Performance extends Basic{
 		_statNameList.add("Free Cells");
 		_statNameList.add("Visited Cells");
 		_statNameList.add("Revisited Cells");
-		_statNameList.add("Fraction of Revisited Cells");
 		_statNameList.add("Obstacle Cells");
 		_statNameList.add("Accessable Cells");
 		_statNameList.add("Dijkstra Executions");
@@ -406,7 +503,6 @@ public class Performance extends Basic{
 		_statList.add(_freeCells);
 		_statList.add(_visitedCells);
 		_statList.add((_revisitedCells-4));
-		_statList.add(_fracRevisited);
 		_statList.add(_obstacleCells);
 		_statList.add(_accessableCells);
 		_statList.add(_dijkstraExecutions);
