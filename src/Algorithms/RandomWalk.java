@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.swing.Timer;
 
+import Algorithms.Basic.CellState;
 import Listener.StartAlgorithm;
 import Objects.Robot;
 import Performance.Performance;
@@ -20,6 +21,7 @@ public class RandomWalk extends CPPAlgorithm implements ActionListener{
 	public boolean _distanceExceeded = false;
 	
 	private Timer _timer;
+	private long _maxDuration;
 	
 	
 	public RandomWalk(MainFrame frame, int iteration)
@@ -30,7 +32,17 @@ public class RandomWalk extends CPPAlgorithm implements ActionListener{
 		_secondsMap = new HashMap<Integer,Double>();
 		_perf = new Performance(_frame, _iteration, "Random", _secondsMap);
 		_revisitedCells = 0;
-		
+	}
+	
+	public RandomWalk(MainFrame frame, int iteration, long duration)
+	{
+		_frame = frame;
+		_iteration = iteration;
+		_timer = Thread1.getTimer();
+		_secondsMap = new HashMap<Integer,Double>();
+		_perf = new Performance(_frame, _iteration, "Random", _secondsMap);
+		_revisitedCells = 0;
+		_maxDuration = duration;
 	}
 
 	@Override
@@ -87,6 +99,47 @@ public class RandomWalk extends CPPAlgorithm implements ActionListener{
 		
 		_frame.repaint();		
 		
+	}
+
+	@Override
+	protected boolean reachedStoppingCriteria() 
+	{
+		if(TestSeries._series == true)
+		{
+			_duration = (System.currentTimeMillis() / 1000l) - (Thread1._start/ 1000l);
+			if(_duration > _maxDuration)
+			{
+				return true;
+			}
+		} else {
+			
+			_duration = (System.currentTimeMillis() / 1000l) - (StartAlgorithm._start/ 1000l);
+			if(_duration > _timeLimit)
+			{
+				return true;
+			} 
+		}
+		
+		for(String key : _mentalMap.keySet())
+		{
+			if(_mentalMap.get(key).equals(CellState.FREE))
+			{
+				return false;
+			}
+		}
+		
+		for(int i = 0; i < 64; i++)
+		{
+			for(int j = 0; j < 64; j++)
+			{
+				if(NearestNeighbour._pathMatrix[i][j]=='2')
+				{
+					return false;
+				}
+			}
+		}
+		
+		return true;
 	}
 
 }

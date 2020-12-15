@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
@@ -38,6 +39,7 @@ public class Performance extends Basic{
 	private int _accessableCells = 0;
 	private double _coverage = 0;
 	private int _obstacles = 0;
+	private long _duration = 0;
 	
 	private MainFrame _frame;
 	private int _iteration;
@@ -78,8 +80,10 @@ public class Performance extends Basic{
 		_secondsMap = secondsMap;
 	}
 
-	public void evaluate(int timeLimit) throws IOException 
+	public void evaluate(int timeLimit, long duration) throws IOException 
 	{
+		_duration = duration;
+		Thread1._durationsList.add(_duration);
 		computeStats();
 		
 		generateStatNameList();
@@ -130,7 +134,10 @@ public class Performance extends Basic{
 				case "ZigZag" :
 				_t1 = new Thread1(_iteration, _frame);
 				_t1.clearAlgorithm();
-				_t1.startRandom();
+				
+				long minDuration = Collections.min(Thread1._durationsList);
+				_t1.startRandom(minDuration);
+				
 				_t1.clearMap();
 				break;
 			
@@ -165,7 +172,7 @@ public class Performance extends Basic{
 			writeToFile("\nObstacle Cells: " + _obstacleCells, osw);
 			writeToFile("\nAccessable Cells: " + _accessableCells, osw);
 			writeToFile("\nTimes Dijkstra executed: " +  _dijkstraExecutions, osw);
-			writeToFile("\n\nDuration: " +  CPPAlgorithm._duration , osw);
+			writeToFile("\n\nDuration: " +  _duration , osw);
 
 			writeToFile("\n\nCoverage: " +  _coverage, osw);
 			
@@ -506,7 +513,7 @@ public class Performance extends Basic{
 		_statList.add(_obstacleCells);
 		_statList.add(_accessableCells);
 		_statList.add(_dijkstraExecutions);
-		_statList.add(CPPAlgorithm._duration);
+		_statList.add(_duration);
 		_statList.add(_coverage);
 	}
 	
@@ -519,4 +526,5 @@ public class Performance extends Basic{
 	        e.printStackTrace();
 	    }
 	}
+
 }

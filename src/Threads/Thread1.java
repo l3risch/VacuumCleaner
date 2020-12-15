@@ -4,6 +4,8 @@ package Threads;
 import java.awt.Container;
 
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.Timer;
@@ -32,10 +34,11 @@ public class Thread1 extends Thread {
 	
 	private ZigZag _zigzag;
 	private Spiral _spiral;
-	private CustomAlgorithm _custom;
 	private RandomWalk _random;
 	
 	public static String _cpp;
+
+	public static List<Long> _durationsList;
 
     public Thread1(int iteration, JFrame frame)
     {
@@ -83,12 +86,12 @@ public class Thread1 extends Thread {
     }
     
     
-    public void startRandom()
+    public void startRandom(long duration)
     {
 		NearestNeighbour._pathMatrix = new char[64][64];
      	_timer.stop();
 		_start = System.currentTimeMillis();
-   	 	_random = new RandomWalk((MainFrame) _frame, _iteration);
+   	 	_random = new RandomWalk((MainFrame) _frame, _iteration, duration);
      	_cpp = "Random";
 
     	for(ActionListener listener : _timer.getActionListeners())
@@ -126,6 +129,7 @@ public class Thread1 extends Thread {
  	
 	public void startIteration(int i, int obstacles) 
 	{
+		_durationsList = new ArrayList<Long>();
 		setupRandomMap(i, obstacles);
 		this.start();
 		this.startSpiral();

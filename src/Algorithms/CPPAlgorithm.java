@@ -37,7 +37,7 @@ public class CPPAlgorithm extends Basic{
 	public Map<Integer, Double> _secondsMap;
 	protected Performance _perf;
 	
-	public static int _timeLimit = 120;
+	public static int _timeLimit = 5;
 	
 	protected void backtrack(int actualRow, int actualCol) {
 //		_nn = NearestNeighbour.getNearestNeighbour(actualRow, actualCol);		
@@ -155,7 +155,7 @@ public class CPPAlgorithm extends Basic{
 
 		try 
 		{
-			perf.evaluate(_timeLimit);
+			perf.evaluate(_timeLimit, _duration);
 		} 
 		catch (IOException e) 
 		{
