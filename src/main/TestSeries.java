@@ -43,7 +43,7 @@ public class TestSeries {
 
 	public static void main(String[] args) throws FileNotFoundException, IOException 
 	{
-		_iterations = 2;
+		_iterations = 10;
 
 		_spiral = new Object[13][_iterations+1];
 		_zigzag = new Object[13][_iterations+1];
