@@ -1,7 +1,5 @@
 package Performance;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -10,17 +8,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Observable;
-
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import Algorithms.Basic;
-import Algorithms.CPPAlgorithm;
 import Algorithms.NearestNeighbour;
-import MapGeneration.MapGenerator;
 import Objects.Robot;
 import Objects.Table;
 import Threads.Thread1;
@@ -91,7 +85,7 @@ public class Performance extends Basic{
 
 		archive(timeLimit);
 
-		_frame.saveImage(_algorithm, _iteration);
+		_frame.saveImage(_algorithm, _iteration, _obstacles);
 		
 		if(Thread1._cpp == "Random")
 		{
@@ -111,11 +105,18 @@ public class Performance extends Basic{
 		{
 			_t1 = new Thread1(i, _frame);
 			_t1.clearAlgorithm();	
-			TestSeries._obstacles++;
 			_t1.startIteration(i, TestSeries._obstacles);
 		} else {
+			TestSeries._iteration = 10;
+			i = 10;
+			
 			printExcel(_iteration);
-		    System.exit(0);
+
+			_t1 = new Thread1(i, _frame);
+			_t1.clearAlgorithm();	
+			TestSeries._obstacles++;
+			_t1.startIteration(i, TestSeries._obstacles);
+			
 		}
 	}
 
@@ -135,8 +136,8 @@ public class Performance extends Basic{
 				_t1 = new Thread1(_iteration, _frame);
 				_t1.clearAlgorithm();
 				
-				long minDuration = Collections.min(Thread1._durationsList);
-				_t1.startRandom(minDuration);
+				long maxDuration = Collections.max(Thread1._durationsList);
+				_t1.startRandom(maxDuration-1);
 				
 				_t1.clearMap();
 				break;
@@ -147,12 +148,13 @@ public class Performance extends Basic{
 
 	private void archive(int timeLimit) throws IOException {
 		     
-        updateExcelCols(_iteration);
+		int nextCol = (TestSeries._obstacles*10 + _iteration) - 9;
+        updateExcelCols(nextCol, _iteration);
         
 	        
 		FileOutputStream fos;
 		try {
-			fos = new FileOutputStream("./results/" + _algorithm + _iteration + ".txt");
+			fos = new FileOutputStream("./results/" + _algorithm + "_" + _obstacles + "_" + _iteration + ".txt");
 			OutputStreamWriter osw = new OutputStreamWriter(fos);
 
 		    writeToFile("Local Time:_" + java.time.LocalDateTime.now() + "_____________________\n\n", osw);
@@ -284,58 +286,59 @@ public class Performance extends Basic{
          _sheetRandomCumulative = _workbook.createSheet("random_cumulative");
 	}
 	
-	private void updateExcelCols(int iteration) throws FileNotFoundException, IOException
+	private void updateExcelCols(int nextCol, int iteration) throws FileNotFoundException, IOException
 	{
 		switch(Thread1._cpp)
 		{
 			case "Spiral" : 
 				_spiral[0][0] = "Stats for";
-				_spiral[0][iteration+1] = _algorithm + iteration;
+				_spiral[0][nextCol] = _algorithm + iteration;
 				for(int i = 0; i < 12; i ++)
 				{
 					_spiral[i+1][0] = _statNameList.get(i);
-					_spiral[i+1][iteration+1] = _statList.get(i);
+					_spiral[i+1][nextCol] = _statList.get(i);
 				}
 				_spiralCumulative[0][0] = "Coverage at second";
-				_spiralCumulative[0][iteration+1] = _algorithm + iteration;
+				_spiralCumulative[0][nextCol] = _algorithm + iteration;
 				for(int key : _secondsMap.keySet())
 				{
 					_spiralCumulative[key+1][0] = key;
-					_spiralCumulative[key+1][iteration+1] = _secondsMap.get(key);
+					_spiralCumulative[key+1][nextCol] = _secondsMap.get(key);
 				}
 			break;
 
 			case "ZigZag" :
 				_zigzag[0][0] = "Stats for";
-				_zigzag[0][iteration+1] = _algorithm + iteration;
+				_zigzag[0][nextCol] = _algorithm + iteration;
 				for(int i = 0; i < 12; i ++)
 				{
 					_zigzag[i+1][0] = _statNameList.get(i);
-					_zigzag[i+1][iteration+1] = _statList.get(i);
+					_zigzag[i+1][nextCol] = _statList.get(i);
+
 				}
 				_zigzagCumulative[0][0] = "Coverage at second";
-				_zigzagCumulative[0][iteration+1] = _algorithm + iteration;
+				_zigzagCumulative[0][nextCol] = _algorithm + iteration;
 				for(int key : _secondsMap.keySet())
 				{
 					_zigzagCumulative[key+1][0] = key;
-					_zigzagCumulative[key+1][iteration+1] = _secondsMap.get(key);
+					_zigzagCumulative[key+1][nextCol] = _secondsMap.get(key);
 				}
 			break;
 		
 			case "Random" :
 				_random[0][0] = "Stats for";
-				_random[0][iteration+1] = _algorithm + iteration;
+				_random[0][nextCol] = _algorithm + iteration;
 				for(int i = 0; i < 12; i ++)
 				{
 					_random[i+1][0] = _statNameList.get(i);
-					_random[i+1][iteration+1] = _statList.get(i);
+					_random[i+1][nextCol] = _statList.get(i);
 				}
 				_randomCumulative[0][0] = "Coverage at second";
-				_randomCumulative[0][iteration+1] = _algorithm + iteration;
+				_randomCumulative[0][nextCol] = _algorithm + iteration;
 				for(int key : _secondsMap.keySet())
 				{
 					_randomCumulative[key+1][0] = key;
-					_randomCumulative[key+1][iteration+1] = _secondsMap.get(key);
+					_randomCumulative[key+1][nextCol] = _secondsMap.get(key);
 				}
 			break;
 		}
@@ -474,11 +477,11 @@ public class Performance extends Basic{
 	        _workbook.write(outputStream);
 	    }
 	    
-	    try {
-			_workbook.close();
-		} catch (IOException e) {
-	
-		}
+//	    try {
+//			_workbook.close();
+//		} catch (IOException e) {
+//	
+//		}
 	}
     
 	

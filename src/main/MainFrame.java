@@ -228,13 +228,13 @@ public class MainFrame extends JFrame{
 		return _algorithm;
 	}
 	
-	public void saveImage(String algorithm, int iteration)
+	public void saveImage(String algorithm, int iteration, int obstacles)
 	{
 		Container c = getContentPane();
 		BufferedImage im = new BufferedImage(c.getWidth(), c.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		c.paint(im.getGraphics());
 		try {
-			ImageIO.write(im, "PNG", new File("./results/" + algorithm + iteration + ".png"));
+			ImageIO.write(im, "PNG", new File("./results/" + algorithm + "_" + obstacles + "_" + iteration + ".png"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

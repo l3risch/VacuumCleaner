@@ -148,7 +148,7 @@ public class Thread1 extends Thread {
 		{
 			_render.clearMarks();
 		}
-		new MapGenerator(iteration);
+		new MapGenerator(iteration, obstacles);
 
 		_contentPane.repaint();
 	}	

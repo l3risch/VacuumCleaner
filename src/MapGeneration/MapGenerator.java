@@ -21,10 +21,10 @@ public class MapGenerator{
 	
 	public static FileOutputStream _fos;
 	
-	public MapGenerator(int iteration) {
+	public MapGenerator(int iteration, int obstacles) {
 		
 		try {
-			createRandomObstacles(iteration);
+			createRandomObstacles(iteration, obstacles);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -40,14 +40,14 @@ public class MapGenerator{
 		}
 	}
 
-	public void createRandomObstacles(int iteration) throws FileNotFoundException
+	public void createRandomObstacles(int iteration, int obstacles) throws FileNotFoundException
 	{		
 		Table._markedPath = new boolean[64][64];
 		Table._markedObstacles = new boolean[64][64];
 		
 		//Randomize number of obstacles for this map from one to ten
 		//int _numberObs = 1 + (int) (Math.random() * 20) ;
-		int _numberObs = 0;
+		int _numberObs = obstacles;
 		
 		if(_listObs != null)
 		{
@@ -62,7 +62,7 @@ public class MapGenerator{
 			}
 		}
 
-		_fos = new FileOutputStream("./results/obstacles_" + iteration + ".txt");
+		_fos = new FileOutputStream("./results/obstacles_" + obstacles + "_" + iteration + ".txt");
 		OutputStreamWriter osw = new OutputStreamWriter(_fos);
 		writeToFile("Starting Pos.: " + Robot._startingPos.getRow() + " ," + Robot._startingPos.getCol() + "\n", osw);
 		for(Obstacle obs : _listObs)

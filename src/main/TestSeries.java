@@ -29,7 +29,7 @@ public class TestSeries {
 	
 	public static boolean _series = false;
 	
-	public static int _iteration = 0;
+	public static int _iteration = 10;
 	
 	public static int _obstacles = 0;
 	
@@ -43,15 +43,15 @@ public class TestSeries {
 
 	public static void main(String[] args) throws FileNotFoundException, IOException 
 	{
-		_iterations = 10;
+		_iterations = 20;
 
-		_spiral = new Object[13][_iterations+1];
-		_zigzag = new Object[13][_iterations+1];
-		_random = new Object[13][_iterations+1];
+		_spiral = new Object[13][210+1];
+		_zigzag = new Object[13][210+1];
+		_random = new Object[13][210+1];
 
-		_spiralCumulative = new Object[CPPAlgorithm._timeLimit+1][_iterations+1];
-		_zigzagCumulative = new Object[CPPAlgorithm._timeLimit+1][_iterations+1];
-		_randomCumulative = new Object[CPPAlgorithm._timeLimit+1][_iterations+1];
+		_spiralCumulative = new Object[CPPAlgorithm._timeLimit+1][210+1];
+		_zigzagCumulative = new Object[CPPAlgorithm._timeLimit+1][210+1];
+		_randomCumulative = new Object[CPPAlgorithm._timeLimit+1][210+1];
 		
 		Performance.initExcel(_spiral, _zigzag, _random, _spiralCumulative, _zigzagCumulative, _randomCumulative);
 
