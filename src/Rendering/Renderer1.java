@@ -250,10 +250,13 @@ public class Renderer1 extends JPanel{
 		{
 			for(int j = 0; j < 4; j++)
 			{
-				if(_opacity[coordinates[i][j].getRow()][coordinates[i][j].getCol()] < 235)
+				if(coordinates[i][j].getRow() > 0 && coordinates[i][j].getRow() < 64 && coordinates[i][j].getCol() > 0 && coordinates[i][j].getCol() < 64)
 				{
-				_opacity[coordinates[i][j].getRow()][coordinates[i][j].getCol()] = _opacity[coordinates[i][j].getRow()][coordinates[i][j].getCol()] + 20;
-			
+					if(_opacity[coordinates[i][j].getRow()][coordinates[i][j].getCol()] < 235)
+					{
+					_opacity[coordinates[i][j].getRow()][coordinates[i][j].getCol()] = _opacity[coordinates[i][j].getRow()][coordinates[i][j].getCol()] + 20;
+				
+					}
 				}
 			}
 		}		
