@@ -31,7 +31,7 @@ public class TestSeries {
 	
 	public static int _iteration = 10;
 	
-	public static int _obstacles = 0;
+	public static int _obstacles = 10;
 	
 	private static Object[][] _spiral;
 	private static Object[][] _zigzag;
@@ -43,7 +43,7 @@ public class TestSeries {
 
 	public static void main(String[] args) throws FileNotFoundException, IOException 
 	{
-		_iterations = 20;
+		_iterations = 11;
 
 		_spiral = new Object[13][210+1];
 		_zigzag = new Object[13][210+1];

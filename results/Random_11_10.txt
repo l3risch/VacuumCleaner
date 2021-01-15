@@ -1,0 +1,28 @@
+Local Time:_2021-01-15T10:29:04.016_____________________
+
+Algorithm: Random Walk with time limit: 5
+
+
+Distance: 91
+Number of turns: 22
+Total Movements: 113
+Number of Obstacles: 11
+
+Free Cells: 147
+Visited Cells: 393
+Revisited Cells: 80
+Obstacle Cells: 677
+Accessable Cells: 3419
+Times Dijkstra executed: 0
+
+Duration: 6
+
+Coverage: 0.11494589061128985
+
+________________________________________
+Achieved coverage at specific execution time in seconds
+0 : 0.029248318221702253
+1 : 2.6615969581749046
+2 : 4.094764551038315
+3 : 6.551623281661305
+4 : 8.979233694062591

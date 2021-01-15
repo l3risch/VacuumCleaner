@@ -19,7 +19,7 @@ import main.TestSeries;
 
 
 public class Spiral extends CPPAlgorithm implements ActionListener {
-	
+	int i = 0;
 	public Spiral(MainFrame frame, int iteration)
 	{
 		_frame = frame;
@@ -44,6 +44,11 @@ public class Spiral extends CPPAlgorithm implements ActionListener {
 	
 	private void determineRoute(int actualRow, int actualCol, Coordinates2D[] encircledArea, Map<String, CellState> mentalMap) {
 		
+		if(i==0)
+		{
+			Robot.getMovement().moveForward();
+		}
+		i++;
 		_nn = NearestNeighbour.getNearestNeighbour(actualRow, actualCol);		
 
 		if(actualRow >= 0 && actualCol >= 0)
@@ -54,7 +59,7 @@ public class Spiral extends CPPAlgorithm implements ActionListener {
 		if(totallyFreeDirection(encircledArea, ScanDirection.LEFT) && !_pathCalculated)
 		{
 			Robot.getMovement().turnLeft();
-			Robot.getMovement().moveForward();
+//			Robot.getMovement().moveForward();
 			
 		} else if(totallyFreeDirection(encircledArea, ScanDirection.FRONT) && !_pathCalculated)
 		{
@@ -63,12 +68,12 @@ public class Spiral extends CPPAlgorithm implements ActionListener {
 		} else if(totallyFreeDirection(encircledArea, ScanDirection.RIGHT) && !_pathCalculated)
 		{
 			Robot.getMovement().turnRight();
-			Robot.getMovement().moveForward();
+//			Robot.getMovement().moveForward();
 			
 		} else if(partiallyFreeDirection(encircledArea, ScanDirection.LEFT) && !_pathCalculated)
 		{
 			Robot.getMovement().turnLeft();
-			Robot.getMovement().moveForward();
+//			Robot.getMovement().moveForward();
 			
 		} else if(partiallyFreeDirection(encircledArea, ScanDirection.FRONT) && !_pathCalculated)
 		{
@@ -77,7 +82,7 @@ public class Spiral extends CPPAlgorithm implements ActionListener {
 		} else if(partiallyFreeDirection(encircledArea, ScanDirection.RIGHT) && !_pathCalculated)
 		{
 			Robot.getMovement().turnRight();
-			Robot.getMovement().moveForward();
+//			Robot.getMovement().moveForward();
 			
 		} else if(totallyCovered(encircledArea))
 		{
