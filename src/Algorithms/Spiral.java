@@ -49,6 +49,7 @@ public class Spiral extends CPPAlgorithm implements ActionListener {
 			Robot.getMovement().moveForward();
 		}
 		i++;
+		
 		_nn = NearestNeighbour.getNearestNeighbour(actualRow, actualCol);		
 
 		if(actualRow >= 0 && actualCol >= 0)
@@ -59,7 +60,6 @@ public class Spiral extends CPPAlgorithm implements ActionListener {
 		if(totallyFreeDirection(encircledArea, ScanDirection.LEFT) && !_pathCalculated)
 		{
 			Robot.getMovement().turnLeft();
-//			Robot.getMovement().moveForward();
 			
 		} else if(totallyFreeDirection(encircledArea, ScanDirection.FRONT) && !_pathCalculated)
 		{
@@ -68,12 +68,10 @@ public class Spiral extends CPPAlgorithm implements ActionListener {
 		} else if(totallyFreeDirection(encircledArea, ScanDirection.RIGHT) && !_pathCalculated)
 		{
 			Robot.getMovement().turnRight();
-//			Robot.getMovement().moveForward();
 			
 		} else if(partiallyFreeDirection(encircledArea, ScanDirection.LEFT) && !_pathCalculated)
 		{
 			Robot.getMovement().turnLeft();
-//			Robot.getMovement().moveForward();
 			
 		} else if(partiallyFreeDirection(encircledArea, ScanDirection.FRONT) && !_pathCalculated)
 		{
@@ -82,7 +80,6 @@ public class Spiral extends CPPAlgorithm implements ActionListener {
 		} else if(partiallyFreeDirection(encircledArea, ScanDirection.RIGHT) && !_pathCalculated)
 		{
 			Robot.getMovement().turnRight();
-//			Robot.getMovement().moveForward();
 			
 		} else if(totallyCovered(encircledArea))
 		{

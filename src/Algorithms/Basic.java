@@ -67,7 +67,13 @@ public class Basic {
 
 				if(robotRow >= 0 && robotRow < 64 && robotCol >= 0 && robotCol < 64)
 				{
+					if(i < 3 && i > 1 && j < 3 && j > 1)
+					{
+						Table.markLine(robotRow, robotCol);
+					}
+					
 					Table.markPath(robotRow, robotCol);
+
 				}
 				//Copy old array into new array
 				newArrayPosition[i][j] = Coordinates2D.copyOf(oldArrayPosition[i][j]);

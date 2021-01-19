@@ -200,6 +200,19 @@ public class Renderer1 extends JPanel{
 		
  		}
 		
+		for(int row = 0; row < 64; row++)
+		{
+			for(int col = 0; col < 64; col++)
+			{
+				if(Table.getLine(row, col))
+				{
+					_g.setColor(new Color(0,0,0,0));
+					_g.fillRect(col * 10 + 100, row * 10 + 140, 10, 10);
+					_g.setColor(Color.BLACK);
+				}
+
+			}
+		}
 		//Clear nearest free cell
 //		Coordinates2D nn = NearestNeighbour.getNearestNeighbour(Robot.getYasRow(), Robot.getXasCol());
 //		_g.setColor(new Color(0,0,0,0));
@@ -237,6 +250,21 @@ public class Renderer1 extends JPanel{
 			}
 		
  		}
+		
+		for(int row = 0; row < 64; row++)
+		{
+			for(int col = 0; col < 64; col++)
+			{
+				if(Table.getLine(row, col))
+				{
+					Color color = new Color(55, 35, 152);
+					_g.setColor(color);
+					_g.fillRect(col * 10 + 100, row * 10 + 140, 10, 10);
+					_g.setColor(Color.BLACK);
+				}
+
+			}
+		}
 		
 //		paintNearestCell();
 

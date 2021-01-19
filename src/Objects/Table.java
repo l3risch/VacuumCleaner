@@ -17,6 +17,8 @@ public class Table {
 	public static List<Obstacle> _listObs = null;
 	
 	public static boolean[][] _markedPath;
+	public static boolean[][] _markedLine;
+
 	public static boolean[][] _markedObstacles;
 	
 	public static int _numberObs;
@@ -30,6 +32,7 @@ public class Table {
 		_rows = 64;
 		_cols = 64;
 		_markedPath = new boolean[_rows][_cols];
+		_markedLine = new boolean[_rows][_cols];
 		_markedObstacles = new boolean[_rows][_cols];
 	}
 
@@ -372,6 +375,17 @@ public class Table {
 	public static void clearMarkedPath()
 	{
 		 _markedPath = new boolean[_rows][_cols];
+	}
+
+
+	public static void markLine(int row, int col) 
+	{
+		_markedLine[row][col] = true;
+	}
+	
+	public static boolean getLine(int row, int col)
+	{
+		return _markedLine[row][col];
 	}
 
 }

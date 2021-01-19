@@ -77,8 +77,15 @@ public class Performance extends Basic{
 	public void evaluate(int timeLimit, long duration) throws IOException 
 	{
 		_duration = duration;
-		Thread1._durationsList.add(_duration);
+		//Thread1._durationsList.add(_duration);
 		computeStats();
+		
+		double rev = _revisitedCells / _visitedCells;
+		double rev2 =  _revisitedCells / _accessableCells;
+		
+		System.out.println("Total Distance: " + _totalDistance);
+		System.out.println("Revisited Cells 1: " + rev);
+		System.out.println("Revisited Cells 2: " + rev2);
 		
 		generateStatNameList();
 		generateStatList();
@@ -518,6 +525,7 @@ public class Performance extends Basic{
 		_statList.add(_dijkstraExecutions);
 		_statList.add(_duration);
 		_statList.add(_coverage);
+
 	}
 	
 	
