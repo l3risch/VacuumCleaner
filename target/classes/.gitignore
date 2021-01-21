@@ -1,4 +1,3 @@
-/.recommenders/
 /Algorithms/
 /Listener/
 /MapGeneration/
@@ -9,3 +8,4 @@
 /Threads/
 /enums/
 /main/
+/.recommenders/
