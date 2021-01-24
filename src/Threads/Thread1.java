@@ -10,7 +10,6 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
-import Algorithms.CustomAlgorithm;
 import Algorithms.NearestNeighbour;
 import Algorithms.RandomWalk;
 import Algorithms.Spiral;
@@ -36,8 +35,6 @@ public class Thread1 extends Thread {
 	private Spiral _spiral;
 	private RandomWalk _random;
 	
-	public static String _cpp;
-
 	public static List<Long> _durationsList;
 
     public Thread1(int iteration, JFrame frame)
@@ -55,13 +52,12 @@ public class Thread1 extends Thread {
 		NearestNeighbour._pathMatrix = new char[64][64];
     	_start = System.currentTimeMillis();
      	_spiral = new Spiral((MainFrame) _frame, _iteration);
-     	_cpp = "Spiral";
  		_timer = new Timer(50, _spiral);
 
         _timer.start();
         _timer.setRepeats(true);   
         
-        throw new RuntimeException("Stopping the thread " + _cpp);
+        throw new RuntimeException("Stopping the thread Spiral");
     }
     
     public void startZigZag()
@@ -70,7 +66,6 @@ public class Thread1 extends Thread {
      	_timer.stop();
 		_start = System.currentTimeMillis();
    	 	_zigzag = new ZigZag((MainFrame) _frame, _iteration);
-     	_cpp = "ZigZag";
    	 	
     	for(ActionListener listener : _timer.getActionListeners())
      	{
@@ -82,7 +77,7 @@ public class Thread1 extends Thread {
     	_timer.start();
         _timer.setRepeats(true);       
         
-        throw new RuntimeException("Stopping the thread " + _cpp);
+        throw new RuntimeException("Stopping the thread ZigZag");
     }
     
     
@@ -92,7 +87,6 @@ public class Thread1 extends Thread {
      	_timer.stop();
 		_start = System.currentTimeMillis();
    	 	_random = new RandomWalk((MainFrame) _frame, _iteration, duration);
-     	_cpp = "Random";
 
     	for(ActionListener listener : _timer.getActionListeners())
      	{
@@ -104,7 +98,8 @@ public class Thread1 extends Thread {
     	_timer.start();
         _timer.setRepeats(true);       
         
-        throw new RuntimeException("Stopping the thread " + _cpp);
+        _iteration++;
+        throw new RuntimeException("Stopping the thread Random");
     }
      
      public static Timer getTimer()

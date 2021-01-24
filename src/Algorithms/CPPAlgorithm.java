@@ -36,7 +36,7 @@ public class CPPAlgorithm extends Basic{
 	
 	public Map<Integer, Double> _secondsMap;
 	protected Performance _perf;
-	protected String _cpp;
+	public static String _cpp;
 	
 	public static int _timeLimit = 180;
 	
@@ -145,23 +145,23 @@ public class CPPAlgorithm extends Basic{
 		return true;
 	}
 	
-	protected void stopNevaluate(String algorithm, Timer timer, Performance perf)
+	protected void stopNevaluate(String algorithm, Timer timer, Performance perf) 
 	{
-		if(TestSeries._series == true)
-		{
-			timer.stop();
-		} else {
-			StartAlgorithm._timer.stop();
-		}
-
 		try 
 		{
-			perf.evaluate(_timeLimit, _duration);
-		} 
-		catch (IOException e) 
-		{
+			if(TestSeries._series == true)
+			{
+				timer.stop();
+				perf.evaluateSeries(_timeLimit, _duration);
+			} else {
+				StartAlgorithm._timer.stop();
+				perf.evaluateSolo(_timeLimit);
+			}
+		}  catch (IOException e) {
+
 			e.printStackTrace();
 		}
+
 	}
 	
 	protected Map<Integer, Double> updatePathCoverage(Map<Integer, Double> secondsMap, long passedSeconds, Performance perf)

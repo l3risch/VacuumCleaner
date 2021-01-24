@@ -14,6 +14,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import Algorithms.Basic;
+import Algorithms.CPPAlgorithm;
 import Algorithms.NearestNeighbour;
 import Objects.Robot;
 import Objects.Table;
@@ -76,13 +77,11 @@ public class Performance extends Basic{
 		_secondsMap = secondsMap;
 	}
 
-	public void evaluate(int timeLimit, long duration) throws IOException 
+	public void evaluateSeries(int timeLimit, long duration) throws IOException 
 	{
 		_duration = duration;
-		if(TestSeries._series == true)
-		{
-			Thread1._durationsList.add(_duration);
-		}
+		Thread1._durationsList.add(_duration);
+		
 		computeStats();
 		
 		generateStatNameList();
@@ -92,12 +91,20 @@ public class Performance extends Basic{
 
 		_frame.saveImage(_algorithm, _iteration, _obstacles);
 		
-		if(Thread1._cpp == "Random")
+		if(CPPAlgorithm._cpp == "Random")
 		{
 			nextIteration();
 		} else {
 			nextAlgorithm();
 		}
+	}
+	
+
+	public void evaluateSolo(int timeLimit) throws IOException 
+	{
+		computeStats();
+
+		archive(timeLimit);
 	}
 
 
@@ -112,48 +119,42 @@ public class Performance extends Basic{
 			_t1.clearAlgorithm();	
 			_t1.startIteration(i, TestSeries._obstacles);
 		} else {
-			TestSeries._iteration = 10;
-			i = 10;
+			TestSeries._iteration = TestSeries._iterations;
+			i = TestSeries._iterations;
 			
 			printExcel(_iteration);
 
-			_t1 = new Thread1(i, _frame);
-			_t1.clearAlgorithm();	
-			TestSeries._obstacles++;
-			_t1.startIteration(i, TestSeries._obstacles);
+			System.exit(0);
 			
 		}
 	}
 
 	private void nextAlgorithm() 
 	{
-		if(TestSeries._series == true)
+		switch(CPPAlgorithm._cpp)
 		{
-			switch(Thread1._cpp)
-			{
-				case "Spiral" : 
-					_t1 = new Thread1(_iteration, _frame);
-					_t1.clearAlgorithm();
-					_t1.startZigZag();
-				break;
-	
-				case "ZigZag" :
+			case "Spiral" : 
 				_t1 = new Thread1(_iteration, _frame);
 				_t1.clearAlgorithm();
-				
-				long maxDuration = Collections.max(Thread1._durationsList);
-				_t1.startRandom(maxDuration-1);
-				
-				_t1.clearMap();
-				break;
+				_t1.startZigZag();
+			break;
+
+			case "ZigZag" :
+			_t1 = new Thread1(_iteration, _frame);
+			_t1.clearAlgorithm();
 			
-			}
-		}		
+			long maxDuration = Collections.max(Thread1._durationsList);
+			_t1.startRandom(maxDuration-1);
+			
+			_t1.clearMap();
+			break;
+		
+		}	
 	}
 
 	private void archive(int timeLimit) throws IOException {
 		     
-		int nextCol = (TestSeries._obstacles*10 + _iteration) - 9;
+		int nextCol =  _iteration;
         updateExcelCols(nextCol, _iteration);
         
 	        
@@ -293,7 +294,7 @@ public class Performance extends Basic{
 	
 	private void updateExcelCols(int nextCol, int iteration) throws FileNotFoundException, IOException
 	{
-		switch(Thread1._cpp)
+		switch(CPPAlgorithm._cpp)
 		{
 			case "Spiral" : 
 				_spiral[0][0] = "Stats for";
@@ -358,7 +359,7 @@ public class Performance extends Basic{
 		{
             Row row = _sheetSpiral.createRow(++rowCount);
             
-            int columnCount = 1;
+            int columnCount = 0;
             
 			for (Object field : arow) {
                 Cell cell = row.createCell(++columnCount);
@@ -380,7 +381,7 @@ public class Performance extends Basic{
 		{
             Row row = _sheetSpiralCumulative.createRow(++rowCount);
             
-            int columnCount = 1;
+            int columnCount = 0;
             
 			for (Object field : arow) {
                 Cell cell = row.createCell(++columnCount);
@@ -400,7 +401,7 @@ public class Performance extends Basic{
 		{
             Row row = _sheetZigZag.createRow(++rowCount);
             
-            int columnCount = 1;
+            int columnCount = 0;
             
 			for (Object field : arow) {
                 Cell cell = row.createCell(++columnCount);
@@ -422,7 +423,7 @@ public class Performance extends Basic{
 		{
             Row row = _sheetZigZagCumulative.createRow(++rowCount);
             
-            int columnCount = 1;
+            int columnCount = 0;
             
 			for (Object field : arow) {
                 Cell cell = row.createCell(++columnCount);
@@ -442,7 +443,7 @@ public class Performance extends Basic{
 		{
             Row row = _sheetRandom.createRow(++rowCount);
             
-            int columnCount = 1;
+            int columnCount = 0;
             
 			for (Object field : arow) {
                 Cell cell = row.createCell(++columnCount);
@@ -464,7 +465,7 @@ public class Performance extends Basic{
 		{
             Row row = _sheetRandomCumulative.createRow(++rowCount);
             
-            int columnCount = 1;
+            int columnCount = 0;
             
 			for (Object field : arow) {
                 Cell cell = row.createCell(++columnCount);
