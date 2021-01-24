@@ -27,6 +27,7 @@ public class ZigZag extends CPPAlgorithm implements ActionListener {
 	
 	public ZigZag(MainFrame frame, int iteration)
 	{
+		_cpp = "ZigZag";
 		_frame = frame;
 		_iteration = iteration;
 		_secondsMap = new HashMap<Integer,Double>();

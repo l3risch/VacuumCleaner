@@ -22,6 +22,7 @@ public class Spiral extends CPPAlgorithm implements ActionListener {
 	int i = 0;
 	public Spiral(MainFrame frame, int iteration)
 	{
+		_cpp = "Spiral";
 		_frame = frame;
 		_iteration = iteration;
 		_secondsMap = new HashMap<Integer,Double>();

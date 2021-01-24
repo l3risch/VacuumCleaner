@@ -1,11 +1,4 @@
-/Algorithms/
-/Listener/
-/MapGeneration/
-/Objects/
-/Performance/
-/Physics/
-/Rendering/
-/Threads/
-/enums/
-/main/
 /.recommenders/
+/main/
+/Algorithms/
+/Performance/

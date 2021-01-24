@@ -36,6 +36,7 @@ public class RandomWalk extends CPPAlgorithm implements ActionListener{
 	
 	public RandomWalk(MainFrame frame, int iteration, long duration)
 	{
+		_cpp = "Random";
 		_frame = frame;
 		_iteration = iteration;
 		_timer = Thread1.getTimer();

@@ -35,6 +35,8 @@ public class Performance extends Basic{
 	private int _obstacles = 0;
 	private long _duration = 0;
 	
+	private static int _numberStats = 12;
+	
 	private MainFrame _frame;
 	private int _iteration;
 	private String _algorithm;
@@ -77,7 +79,10 @@ public class Performance extends Basic{
 	public void evaluate(int timeLimit, long duration) throws IOException 
 	{
 		_duration = duration;
-		Thread1._durationsList.add(_duration);
+		if(TestSeries._series == true)
+		{
+			Thread1._durationsList.add(_duration);
+		}
 		computeStats();
 		
 		generateStatNameList();
@@ -169,7 +174,7 @@ public class Performance extends Basic{
 			writeToFile("\n\nFree Cells: " + _freeCells, osw);
 			writeToFile("\nVisited Cells: " + _visitedCells, osw);
 			
-			//Substract 4 from the set of revisited Cells due to initialization error
+			//Subtract 4 from the set of revisited Cells due to initialization error
 			writeToFile("\nRevisited Cells: " + (_revisitedCells-4), osw);
 			writeToFile("\nObstacle Cells: " + _obstacleCells, osw);
 			writeToFile("\nAccessable Cells: " + _accessableCells, osw);
@@ -293,7 +298,7 @@ public class Performance extends Basic{
 			case "Spiral" : 
 				_spiral[0][0] = "Stats for";
 				_spiral[0][nextCol] = _algorithm + iteration;
-				for(int i = 0; i < 12; i ++)
+				for(int i = 0; i < _numberStats; i ++)
 				{
 					_spiral[i+1][0] = _statNameList.get(i);
 					_spiral[i+1][nextCol] = _statList.get(i);
@@ -310,7 +315,7 @@ public class Performance extends Basic{
 			case "ZigZag" :
 				_zigzag[0][0] = "Stats for";
 				_zigzag[0][nextCol] = _algorithm + iteration;
-				for(int i = 0; i < 12; i ++)
+				for(int i = 0; i < _numberStats; i ++)
 				{
 					_zigzag[i+1][0] = _statNameList.get(i);
 					_zigzag[i+1][nextCol] = _statList.get(i);
@@ -328,7 +333,7 @@ public class Performance extends Basic{
 			case "Random" :
 				_random[0][0] = "Stats for";
 				_random[0][nextCol] = _algorithm + iteration;
-				for(int i = 0; i < 12; i ++)
+				for(int i = 0; i < _numberStats; i ++)
 				{
 					_random[i+1][0] = _statNameList.get(i);
 					_random[i+1][nextCol] = _statList.get(i);
