@@ -1,11 +1,11 @@
 package Algorithms;
 
-import java.util.ArrayList;
+/**
+ * Parent Class of the CPPAlgorithm class providing the algorithms with methods for scanning of cells and updating the mental map with information about the robot's environment
+ */
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import Algorithms.Basic.CellState;
 import Objects.Robot;
 import Objects.Table;
 import Physics.Coordinates2D;

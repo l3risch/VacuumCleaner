@@ -1,5 +1,8 @@
 package Algorithms;
 
+/**
+ * Class implementing the Spiral pattern
+ */
 import java.awt.event.ActionEvent;
 
 
@@ -19,7 +22,10 @@ import main.TestSeries;
 
 
 public class Spiral extends CPPAlgorithm implements ActionListener {
-	int i = 0;
+	
+	//Number of steps
+	int _i = 0;
+	
 	public Spiral(MainFrame frame, int iteration)
 	{
 		_cpp = "Spiral";
@@ -45,11 +51,12 @@ public class Spiral extends CPPAlgorithm implements ActionListener {
 	
 	private void determineRoute(int actualRow, int actualCol, Coordinates2D[] encircledArea, Map<String, CellState> mentalMap) {
 		
-		if(i==0)
+		//If it's the first step, the robot makes initally one forward movement to avoid being tapped
+		if(_i==0)
 		{
 			Robot.getMovement().moveForward();
 		}
-		i++;
+		_i++;
 		_nn = NearestNeighbour.getNearestNeighbour(actualRow, actualCol);		
 
 		if(actualRow >= 0 && actualCol >= 0)
@@ -60,7 +67,6 @@ public class Spiral extends CPPAlgorithm implements ActionListener {
 		if(totallyFreeDirection(encircledArea, ScanDirection.LEFT) && !_pathCalculated)
 		{
 			Robot.getMovement().turnLeft();
-//			Robot.getMovement().moveForward();
 			
 		} else if(totallyFreeDirection(encircledArea, ScanDirection.FRONT) && !_pathCalculated)
 		{
@@ -69,12 +75,10 @@ public class Spiral extends CPPAlgorithm implements ActionListener {
 		} else if(totallyFreeDirection(encircledArea, ScanDirection.RIGHT) && !_pathCalculated)
 		{
 			Robot.getMovement().turnRight();
-//			Robot.getMovement().moveForward();
 			
 		} else if(partiallyFreeDirection(encircledArea, ScanDirection.LEFT) && !_pathCalculated)
 		{
 			Robot.getMovement().turnLeft();
-//			Robot.getMovement().moveForward();
 			
 		} else if(partiallyFreeDirection(encircledArea, ScanDirection.FRONT) && !_pathCalculated)
 		{
@@ -83,7 +87,6 @@ public class Spiral extends CPPAlgorithm implements ActionListener {
 		} else if(partiallyFreeDirection(encircledArea, ScanDirection.RIGHT) && !_pathCalculated)
 		{
 			Robot.getMovement().turnRight();
-//			Robot.getMovement().moveForward();
 			
 		} else if(totallyCovered(encircledArea))
 		{

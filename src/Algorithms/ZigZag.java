@@ -1,5 +1,8 @@
 package Algorithms;
 
+/**
+ * Class implementing the ZigZag pattern
+ */
 import java.awt.event.ActionEvent;
 
 

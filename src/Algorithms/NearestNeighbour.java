@@ -1,21 +1,16 @@
 package Algorithms;
 
-import java.util.ArrayList;
-import java.util.Collections;
+/**
+ * Class executing the wavefronts to determine the nearest neighbor
+ */
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import enums.Direction;
-
 import java.util.Map;
 import java.util.Queue;
 
-import Algorithms.Basic.CellState;
-import Objects.Node;
-import Objects.Robot;
 import Physics.Coordinates2D;
-import Physics.Movement;
 
 public class NearestNeighbour extends Basic{
 
@@ -24,22 +19,21 @@ public class NearestNeighbour extends Basic{
 	public static char[][] _pathMatrix = new char[64][64];
 	public static int[][] _wavefrontMatrix;
 	
+	
 	public static Coordinates2D getNearestNeighbour(int row, int col)
 	{
 		_mentalMap = getMentalMap();
-		//Coordinates2D[][] robotCoordinates = Robot.getCoordinates(row, col);
 		
 		//The cell that is covered by the robot in the 2nd row and 2nd col is considered as the middle of the robot
 		_robotPos = new Coordinates2D(row, col);
 		
-
 		Map<Coordinates2D, Integer> map = getFreeCells();
 
+		//Initiates nearestCell
 		Coordinates2D nearestCell = new Coordinates2D(0, 0);
 		
 		//Determine nearest Cell
 		double upperBound = 999999;
-		
 		for(Coordinates2D key : map.keySet())
  		{
 			if(map.get(key) < upperBound)
@@ -49,10 +43,13 @@ public class NearestNeighbour extends Basic{
 			}
  		}
 		
-		
 		return nearestCell;
 	}
 	
+	/**
+	 * Determines the free cells out of the pathmatrix
+	 * @return 	Coordinates mapped to Integer distance value 
+	 */
 	private static Map<Coordinates2D, Integer> getFreeCells()
 	{
 		Coordinates2D startPoint = _robotPos;
@@ -68,8 +65,8 @@ public class NearestNeighbour extends Basic{
 		Queue<Coordinates2D> queue = new LinkedList<Coordinates2D>();
 		queue.add(startPoint);
 		
+		//Running queue to process all mapped cells
 		int i;
-
 		while(!queue.isEmpty()) 
 		{
 			Coordinates2D currentCell = queue.poll();
@@ -79,21 +76,6 @@ public class NearestNeighbour extends Basic{
 			queue.addAll(neighbourList);
 		}
 		
-//		for(int k = 0; k < 64; k++)
-//		{
-//			StringBuilder sb = new StringBuilder();
-//			for(int l = 0; l < 64; l++)
-//			{
-//				if(_wavefrontMatrix[k][l] < 10 )
-//				{
-//					sb.append(" "+ _wavefrontMatrix[k][l] +  " ");
-//
-//				} else {
-//					sb.append(_wavefrontMatrix[k][l] +  " ");
-//				}
-//			}
-//			System.out.println(sb);
-//		}
 		
 		Map<Coordinates2D, Integer> map = new HashMap<Coordinates2D, Integer>();
 		
@@ -111,6 +93,12 @@ public class NearestNeighbour extends Basic{
 		return map;
 	}
 	
+	/**
+	 * Determines the pathmatrix for the current robot position with '1' denoting visited cells, '2' denoting free cells and '0' denoting occupied cells
+	 * @param robotRow 	current row of robot position
+	 * @param robotCol 	current col of robot position
+	 * @return updated	 pathmatrix
+	 */
 	static char[][] updatePathMatrix(int robotRow, int robotCol) {
 		 
 		 //Transform Hash Map to char matrix
@@ -154,6 +142,14 @@ public class NearestNeighbour extends Basic{
 		 return _pathMatrix;
 	}
 
+	/**
+	 * This method actually determines the next neighboring cells from the current cell and numbers the cells with a corresponding wavefront number
+	 * @param wavefrontMatrix 	matrix providing the cells with corresponding number from the wavefront
+	 * @param pathMatrix 	matrix providing the cells denoted with '0' (occupied), '1' (visited), '2' (free)
+	 * @param cell	current cell processed by the queue
+	 * @param i 	wavefront number of the current cell
+	 * @return 	list of neighbors provided for the queue to be processed next
+	 */
 	private static List<Coordinates2D> getNeighbours(int[][] wavefrontMatrix, char[][] pathMatrix, Coordinates2D cell, int i)
 	{
 		int row = cell.getRow();
@@ -162,15 +158,6 @@ public class NearestNeighbour extends Basic{
 		
 		wavefrontMatrix[row][col] = i;	
 
-//		for(int k = 0; k < 64; k++)
-//		{
-//			StringBuilder sb = new StringBuilder();
-//			for(int l = 0; l < 64; l++)
-//			{
-//				sb.append(pathMatrix[k][l] +  " ");
-//			}
-//			System.out.println(sb);
-//		}
 		
 		if(row-1 >= 0 && wavefrontMatrix[row - 1][col] == 0 && pathMatrix[row - 1][col] != '0')
 		{
@@ -195,6 +182,7 @@ public class NearestNeighbour extends Basic{
 				
 		return neighbourList;
 	}
+	
 	
 	public static char[][] getPathMatrix()
 	{

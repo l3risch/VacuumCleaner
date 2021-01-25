@@ -1,13 +1,15 @@
 package Algorithms;
 
+/**
+ * Parent Class of the Spiral and ZigZag algorithm. This class combines the backtracking with the motion pattern
+ */
 import java.io.IOException;
-import java.util.HashMap;
+
 import java.util.List;
 import java.util.Map;
 
 import javax.swing.Timer;
 
-import Algorithms.Basic.CellState;
 import Listener.StartAlgorithm;
 import Objects.Node;
 import Objects.Robot;
@@ -41,7 +43,6 @@ public class CPPAlgorithm extends Basic{
 	public static int _timeLimit = 180;
 	
 	protected void backtrack(int actualRow, int actualCol) {
-//		_nn = NearestNeighbour.getNearestNeighbour(actualRow, actualCol);		
 
 		if(!_pathCalculated)
 		{
@@ -60,13 +61,14 @@ public class CPPAlgorithm extends Basic{
 				if(_movesToNN < _shortestPath.size() - 1)
 				{
 					Node nextNode = _shortestPath.get(_movesToNN+1);
-//					System.out.println("Current Node: " + _shortestPath.get(_movesToNN ).x + ", " +_shortestPath.get(_movesToNN).y);
+
+					//Move robot on GUI
 					Robot.getMovement().setX(100 + 10 * currentNode.y);
 					Robot.getMovement().setY(110 + 10 * currentNode.x);
 					
 					if(_movesToNN < _shortestPath.size()-1)
 					{
-						//Determine angle 
+						//Determine angle of robot
 						if(currentNode.x == nextNode.x - 1)
 						{
 							Robot.getMovement()._ang = 90;
@@ -100,6 +102,10 @@ public class CPPAlgorithm extends Basic{
 	}		
 	}
 
+	/**
+	 * Check if stopping criteria is reached
+	 * @return	Stopping criteria is reached if all free cells are covered or a specific amount of time has passed
+	 */
 	protected boolean reachedStoppingCriteria() 
 	{
 		if(TestSeries._series == true)
@@ -117,11 +123,7 @@ public class CPPAlgorithm extends Basic{
 				return true;
 			} 
 		}
-		
-//		if(Robot.getMovement()._totalDistance > 4000)
-//		{
-//			return true;
-//		}  
+
 		
 		for(String key : _mentalMap.keySet())
 		{
@@ -145,6 +147,12 @@ public class CPPAlgorithm extends Basic{
 		return true;
 	}
 	
+	/**
+	 * Stops the current algorithm and starts the evaluation
+	 * @param algorithm		current algorithm
+	 * @param timer 	Timer rendering the robot
+	 * @param perf		Performance instance performing evaluation
+	 */
 	protected void stopNevaluate(String algorithm, Timer timer, Performance perf) 
 	{
 		try 
@@ -164,6 +172,13 @@ public class CPPAlgorithm extends Basic{
 
 	}
 	
+	/**
+	 * Providing coverage cumulative coverage at each second.
+	 * @param secondsMap	Map saving the second and corresponding coverage
+	 * @param passedSeconds		seconds passed by
+	 * @param perf	Performance instance performing evaluation
+	 * @return	Map saving the second and corresponding coverage
+	 */
 	protected Map<Integer, Double> updatePathCoverage(Map<Integer, Double> secondsMap, long passedSeconds, Performance perf)
 	{
 		double coverage;

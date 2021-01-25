@@ -1,25 +1,20 @@
 package Algorithms;
 
+/**
+ * Class to determine shortest path to nearest neighbor
+ */
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
+
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.Set;
 
-import Algorithms.Basic.CellState;
-import Algorithms.Basic.ScanDirection;
 import Objects.Graph;
 import Objects.Node;
 import Objects.Robot;
-import Objects.Table;
 import Physics.Coordinates2D;
-import Physics.Movement;
 
 public class DijkstraAlgorithm extends Basic{
 
@@ -28,12 +23,18 @@ public class DijkstraAlgorithm extends Basic{
 	private static Coordinates2D _nn;
 	public static List<Node> adjustedPath = new LinkedList<Node>();
 
+	/**
+	 * 
+	 * @param robotRow	 row of current robot position
+	 * @param robotCol	 col of current robot position
+	 * @param nn	 nearest neighbor
+	 * @return	 shortest path to nn
+	 */
 	 public static List<Node> computePath(int robotRow, int robotCol, Coordinates2D nn)
 	 {
 		 _nodeList.clear();
 		 _nn = nn;
 		 _matrix = updateMatrix();
-//		 _matrix = NearestNeighbour._pathMatrix;
 
 			
 		 //Adjust obstacles to match with robot size by extending each obstacle by 3 cells in width and height
@@ -75,7 +76,7 @@ public class DijkstraAlgorithm extends Basic{
 		 //Set position of robot as source
 		 _matrix[robotRow][robotCol] = 'S';
 		 
-		 //Set position of nearest neighbour as destination
+		 //Set position of nearest neighbor as destination
 		if(_nn.getRow() < 61 && _nn.getCol() > 2)
 		{
 			if(_matrix[_nn.getRow()+3][_nn.getCol()-3] != '0')
@@ -100,12 +101,14 @@ public class DijkstraAlgorithm extends Basic{
 		}
 
 		
+		//If there is a path compute it
        boolean exists = pathExists(_matrix, robotRow, robotCol);		
-		
 		if(exists)
 	    {
 		  List<Node> dijkstraPath = computeDijkstraPath();		  
 		  return dijkstraPath;
+		  
+		//If there is no path, it means that whether 'S' or 'D' has been overwritten during matrix transformation. So they have to be set first.
 	    } else {
 	    	
 	    	_matrix = NearestNeighbour._pathMatrix;
@@ -120,7 +123,13 @@ public class DijkstraAlgorithm extends Basic{
     }
 	 
 
-
+	/**
+	 * Checks if there is a path from 'S' to 'D'
+	 * @param matrix	matrix providing information about the environment
+	 * @param row	row of current robot position
+	 * @param col	col of current robot position
+	 * @return
+	 */
 	private static boolean pathExists(char[][] matrix, int row, int col) {
 		
 		Node source = new Node(row, col);
@@ -158,7 +167,12 @@ public class DijkstraAlgorithm extends Basic{
 	}
 
 
-
+	/**
+	 * Adds neighbors of current cell to queue
+	 * @param poped
+	 * @param matrix
+	 * @return
+	 */
 	private static List<Node> addNeighbours(Node poped, char[][] matrix) {
 		
 		List<Node> list = new LinkedList<Node>();
@@ -179,6 +193,10 @@ public class DijkstraAlgorithm extends Basic{
 	}
 
 
+	/**
+	 * Computation of a path using Dijkstra
+	 * @return path from 'S' to 'D' as list of nodes
+	 */
 	private static List<Node> computeDijkstraPath() 
 	{
 		Graph graph = new Graph();
@@ -195,11 +213,7 @@ public class DijkstraAlgorithm extends Basic{
 		
 		List<Node> shortestPath = dest.getShortestPath();
 		shortestPath.add(new Node(_nn.getRow(), _nn.getCol()));
-//		System.out.println("Old Path");
-//		for(Node node : shortestPath)
-//		{
-//			System.out.println(node.x + ", " + node.y);
-//		}
+
 		return shortestPath;
 	}
 	
@@ -251,9 +265,14 @@ public class DijkstraAlgorithm extends Basic{
 	    }
 	}
 	
+	/**
+	 * Check if nearest neighbor is reached. If so, stop the backtracking.
+	 * @param robotRow
+	 * @param robotCol
+	 * @return
+	 */
 	public static boolean nnReached(int robotRow, int robotCol)
 	{
-		
 		 Coordinates2D[][] _robotPos = Robot.getCoordinates(robotRow, robotCol);
 
 		 //Set position of nearest neighbour as destination
@@ -270,39 +289,6 @@ public class DijkstraAlgorithm extends Basic{
 		
 		return false;
 		
-	}
-	
-
-	public static Coordinates2D getNearestNeighbour(int row, int col) {
-		
-		Node source = new Node(row, col);
-		Queue<Node> queue = new LinkedList<Node>();
-		
-		queue.add(source);
-
-		while(!queue.isEmpty()) {
-			Node currentNode = queue.poll();
-			if(_matrix[currentNode.x][currentNode.y]!='0')
-			{
-				List<Node> neighbourList = addNeighbours(currentNode, _matrix);
-				queue.addAll(neighbourList);
-			
-				String key = generateKey(currentNode.x, currentNode.y);
-				if(_mentalMap.get(key) == CellState.FREE ) {
-					return new Coordinates2D(currentNode.x, currentNode.y);
-				}
-				else {
-			
-					_matrix[currentNode.x][currentNode.y]='0';
-													
-					for(Node node : neighbourList)
-					{
-						currentNode.addDestination(node);
-					}
-				}
-			}	
-		}
-		return NearestNeighbour.getNearestNeighbour(row, col);
 	}
 
 }

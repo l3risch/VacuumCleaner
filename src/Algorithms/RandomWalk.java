@@ -1,14 +1,14 @@
 package Algorithms;
 
+/**
+ * Class implementing the Random Walk
+ */
 import java.awt.event.ActionEvent;
 
 import java.awt.event.ActionListener;
 import java.util.HashMap;
-import java.util.Map;
-
 import javax.swing.Timer;
 
-import Algorithms.Basic.CellState;
 import Listener.StartAlgorithm;
 import Objects.Robot;
 import Performance.Performance;
@@ -23,7 +23,7 @@ public class RandomWalk extends CPPAlgorithm implements ActionListener{
 	private Timer _timer;
 	private long _maxDuration;
 	
-	
+	//Constructor to start the random walk via interface
 	public RandomWalk(MainFrame frame, int iteration)
 	{
 		_frame = frame;
@@ -34,6 +34,7 @@ public class RandomWalk extends CPPAlgorithm implements ActionListener{
 		_revisitedCells = 0;
 	}
 	
+	//Constructor to start the random walk in a test series
 	public RandomWalk(MainFrame frame, int iteration, long duration)
 	{
 		_cpp = "Random";

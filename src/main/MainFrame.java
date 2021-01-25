@@ -1,8 +1,12 @@
 package main;
+
+/**
+ * GUI class providing the interface for the simulation
+ */
 import java.awt.Container;
+
 import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -11,16 +15,12 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Observable;
-
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-
 import Listener.StartAlgorithm;
 import Listener.StopAlgorithm;
 import MapGeneration.MapGenerator;
@@ -173,7 +173,8 @@ public class MainFrame extends JFrame{
 		c.gridy = 2;
 		c.insets = new Insets(0,10,10,10); 
 		menu.add(startButton, c);
-		//Setze Algorithmus
+		
+		//Set algorithm
 		startButton.addActionListener(new StartAlgorithm(this));
 		
 		JButton stopButton = new JButton("Stop");

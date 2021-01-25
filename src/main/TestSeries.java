@@ -1,16 +1,14 @@
 package main;
 
+/**
+ * Class providing a second main method to run the simulation in a series of tests. Main method should be executed via command line.
+ */
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+
 import java.io.IOException;
 
 import javax.swing.JFrame;
 import javax.swing.Timer;
-
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import Algorithms.CPPAlgorithm;
 import Performance.Performance;
@@ -41,7 +39,14 @@ public class TestSeries {
 	private static Object[][] _spiralCumulative;
 	private static Object[][] _zigzagCumulative;
 	private static Object[][] _randomCumulative;
-
+	
+	
+	/**
+	 * 
+	 * @param args Number of iterations the test should run; Number of obstacles that should be randomly placed into the environment
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
 	public static void main(String[] args) throws FileNotFoundException, IOException 
 	{
 	
