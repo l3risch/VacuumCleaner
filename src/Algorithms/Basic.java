@@ -13,7 +13,7 @@ import Physics.Coordinates2D;
 
 public class Basic {
 	
-	public enum ScanDirection{FRONT, LEFT, BACK, RIGHT};
+	public enum ScanDirection{FRONT, LEFT, RIGHT};
 	
 	public enum CellState{FREE, VISITED, OCCUPIED};
 	
@@ -25,6 +25,12 @@ public class Basic {
 
 	protected static int _dijkstraExecutions = 0;
 	
+	/**
+	 * Checks if cells in front of the robot are accesable
+	 * @param row
+	 * @param col
+	 * @return
+	 */
 	static boolean isFrontAccesable(int row, int col)
 	{
 		Coordinates2D[] scannedArea = getScannedArea(row, col, ScanDirection.FRONT);
@@ -48,7 +54,13 @@ public class Basic {
 		return accesable;
 	}
 
-	
+	/**
+	 * Determining the
+	 * @param row
+	 * @param col
+	 * @param dir
+	 * @return
+	 */
 	static Coordinates2D[] getScannedArea(int row, int col, ScanDirection dir) {
 		
 		Coordinates2D[][] oldArrayPosition = new Coordinates2D[4][4];
@@ -87,10 +99,6 @@ public class Basic {
 				{
 					newArrayPosition[i][j].setRow(newArrayPosition[i][j].getRow() - x);
 					newArrayPosition[i][j].setCol(newArrayPosition[i][j].getCol() + y);
-				} else if (dir == ScanDirection.BACK)
-				{
-					newArrayPosition[i][j].setRow(newArrayPosition[i][j].getRow() - y);
-					newArrayPosition[i][j].setCol(newArrayPosition[i][j].getCol() - x);
 				}
 			}
 		}
@@ -149,19 +157,17 @@ public class Basic {
 	
 	public static Coordinates2D[] getEncircledScannedArea(int row, int col) 
 	{
-		Coordinates2D[] circledArea = new Coordinates2D[16];
+		Coordinates2D[] circledArea = new Coordinates2D[12];
 		
 		Coordinates2D[] front = getScannedArea(row, col, ScanDirection.FRONT);
 		Coordinates2D[] right = getScannedArea(row, col, ScanDirection.RIGHT);
-		Coordinates2D[] back = getScannedArea(row, col, ScanDirection.BACK);
 		Coordinates2D[] left = getScannedArea(row, col, ScanDirection.LEFT);
 
 		for(int i=0; i<4; i++)
 		{
 			circledArea[i] = front[i];
 			circledArea[i+4] = left[i];
-			circledArea[i+8] = back[i];
-			circledArea[i+12] = right[i];
+			circledArea[i+8] = right[i];
 
 		}
 		
@@ -175,14 +181,12 @@ public class Basic {
 		Coordinates2D[] front = new Coordinates2D[4];
 		Coordinates2D[] left = new Coordinates2D[4];
 		Coordinates2D[] right = new Coordinates2D[4];
-		Coordinates2D[] back = new Coordinates2D[4];
 
 		for(int i = 0; i < 4; i++)
 		{
 			front[i] = scannedArea[i];
 			left[i] = scannedArea[i+4];
-			back[i] = scannedArea[i+8];
-			right[i] = scannedArea[i+12];
+			right[i] = scannedArea[i+8];
 		}
 		
 		Coordinates2D[] scanArea = null;
@@ -193,9 +197,6 @@ public class Basic {
 			break;
 		case LEFT:
 			scanArea = left;
-			break;
-		case BACK:
-			scanArea = back;
 			break;
 		case RIGHT:
 			scanArea = right;
@@ -285,17 +286,14 @@ public class Basic {
 		
 		Coordinates2D[] up = new Coordinates2D[4];
 		Coordinates2D[] right = new Coordinates2D[4];
-		Coordinates2D[] down = new Coordinates2D[4];
 		Coordinates2D[] left = new Coordinates2D[4];
 
 		boolean upBlocked = false;
 		boolean rightBlocked = false;
-		boolean belowBlocked = false;
 		boolean leftBlocked = false;
 
 		int upFields = 0;
 		int rightFields = 0;
-		int belowFields = 0;
 		int leftFields = 0;
 
 		
@@ -303,8 +301,7 @@ public class Basic {
 		{
 			up[i] = scannedArea[i];
 			right[i] = scannedArea[i+4];
-			down[i] = scannedArea[i+8];
-			left[i] = scannedArea[i+12];
+			left[i] = scannedArea[i+8];
 
 			if(up[i].getRow() > 63 || up[i].getCol() > 63 || up[i].getRow() < 0 || up[i].getCol() < 0)
 			{
@@ -336,22 +333,7 @@ public class Basic {
 			{
 				rightBlocked = true;
 			}
-			
-			
-			if(down[i].getRow() > 63 || down[i].getCol() > 63 || down[i].getRow() < 0 || down[i].getCol() < 0)
-			{
-				belowBlocked = true;
-			} else if(Table.getMarkedObstacles(down[i].getRow(), down[i].getCol()))
-			{
-				belowBlocked = true;
-			} else if(Table.getPath(down[i].getRow(), down[i].getCol()))
-			{
-				belowFields += 1;
-			}
-			if(belowFields > 3)
-			{
-				belowBlocked = true;
-			}
+
 			
 			
 			if(left[i].getRow() > 63 || left[i].getCol() > 63 || left[i].getRow() < 0 || left[i].getCol() < 0)
@@ -370,7 +352,7 @@ public class Basic {
 			}
 		}
 		
-		if(upBlocked && leftBlocked && rightBlocked && belowBlocked)
+		if(upBlocked && leftBlocked && rightBlocked)
 		{
 			return true;
 		} else {
