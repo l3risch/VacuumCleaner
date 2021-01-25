@@ -19,7 +19,6 @@ import Threads.Thread1;
 public class TestSeries {
 
 	public String _algorithm;
-	public static int _iterations;
 	
 	public static Timer _timer;
 	
@@ -30,6 +29,8 @@ public class TestSeries {
 	public static boolean _series = false;
 	
 	public static int _iteration = 0;
+	public static int _iterations = 10;
+
 	
 	public static int _obstacles = 10;
 	
@@ -43,7 +44,11 @@ public class TestSeries {
 
 	public static void main(String[] args) throws FileNotFoundException, IOException 
 	{
-		_iterations = 2;
+	
+		System.out.println("Iterations: " + args[0] +", Obstacles: " + args[1]);
+
+		_iterations = Integer.parseInt(args[0]);
+		_obstacles = Integer.parseInt(args[1]);
 
 		_spiral = new Object[13][_iterations+1];
 		_zigzag = new Object[13][_iterations+1];

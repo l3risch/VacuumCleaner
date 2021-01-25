@@ -359,7 +359,7 @@ public class Performance extends Basic{
 		{
             Row row = _sheetSpiral.createRow(++rowCount);
             
-            int columnCount = 0;
+            int columnCount = 1;
             
 			for (Object field : arow) {
                 Cell cell = row.createCell(++columnCount);
@@ -381,7 +381,7 @@ public class Performance extends Basic{
 		{
             Row row = _sheetSpiralCumulative.createRow(++rowCount);
             
-            int columnCount = 0;
+            int columnCount = 1;
             
 			for (Object field : arow) {
                 Cell cell = row.createCell(++columnCount);
@@ -401,7 +401,7 @@ public class Performance extends Basic{
 		{
             Row row = _sheetZigZag.createRow(++rowCount);
             
-            int columnCount = 0;
+            int columnCount = 1;
             
 			for (Object field : arow) {
                 Cell cell = row.createCell(++columnCount);
@@ -423,7 +423,7 @@ public class Performance extends Basic{
 		{
             Row row = _sheetZigZagCumulative.createRow(++rowCount);
             
-            int columnCount = 0;
+            int columnCount = 1;
             
 			for (Object field : arow) {
                 Cell cell = row.createCell(++columnCount);
@@ -443,7 +443,7 @@ public class Performance extends Basic{
 		{
             Row row = _sheetRandom.createRow(++rowCount);
             
-            int columnCount = 0;
+            int columnCount = 1;
             
 			for (Object field : arow) {
                 Cell cell = row.createCell(++columnCount);
@@ -465,7 +465,7 @@ public class Performance extends Basic{
 		{
             Row row = _sheetRandomCumulative.createRow(++rowCount);
             
-            int columnCount = 0;
+            int columnCount = 1;
             
 			for (Object field : arow) {
                 Cell cell = row.createCell(++columnCount);
