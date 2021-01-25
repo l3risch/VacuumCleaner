@@ -1,5 +1,8 @@
 package Objects;
 
+/**
+ * Class to define nodes as a component of a graph
+ */
 import java.util.LinkedList;
 import java.util.List;
 

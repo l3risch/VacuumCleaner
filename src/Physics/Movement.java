@@ -1,5 +1,9 @@
 package Physics;
 
+/**
+ * Class implementing the physique of the robot moving in a 2D environment
+ */
+
 import java.util.ArrayList;
 
 import java.util.List;
@@ -14,15 +18,10 @@ public class Movement {
 	public int _totalDistance = 0;
 	public int _numberOfTurns = 0;
 
-	
-	//Ausrichtung nach oben
-	public double _ang;
+		public double _ang;
 	
 	public Direction _dir;
 	
-	public enum LastMove{FORWARD, RIGHT, LEFT};
-	
-	public List<LastMove> _listOfMovements = new ArrayList<LastMove>();
 
 	
 	public Movement()
@@ -44,13 +43,10 @@ public class Movement {
 
 		} else {
 			_y += 10 * Math.sin(Math.toRadians(_ang));	
-		}
-		
-		_listOfMovements.add(LastMove.FORWARD);
-		
-
+		}		
 		_totalDistance++;
 	}
+	
 	
 	public void turnByDegrees(int ang) 
 	{
@@ -63,39 +59,13 @@ public class Movement {
 	public void turnRight()
 	{
 		_ang += 90;
-		
-		switch(_dir) {
-			case UP: _dir = Direction.RIGHT;
-		break;
-			case RIGHT: _dir = Direction.DOWN;
-		break;
-			case DOWN: _dir = Direction.LEFT;
-		break;
-			case LEFT: _dir = Direction.UP;
-		break;
-		}
-		
-		_listOfMovements.add(LastMove.RIGHT);
-		
+				
 		_numberOfTurns++;
 	}
 	
 	public void turnLeft()
 	{
 		_ang -= 90;
-		
-		switch(_dir) {
-			case UP: _dir = Direction.LEFT;
-		break;
-			case RIGHT: _dir = Direction.UP;
-		break;
-			case DOWN: _dir = Direction.RIGHT;
-		break;
-			case LEFT: _dir = Direction.DOWN;
-		break;
-		}
-		
-		_listOfMovements.add(LastMove.LEFT);
 		
 		_numberOfTurns++;
 	}

@@ -1,18 +1,15 @@
 package Listener;
+
+/**
+ * Listener waiting to start the selected algorithm from the MainFrame
+ */
 import java.awt.event.ActionEvent;
 
-
-
-
 import java.awt.event.ActionListener;
-import java.time.LocalTime;
-
 import javax.swing.Timer;
 
 import Algorithms.Spiral;
 import Algorithms.ZigZag;
-import Performance.Performance;
-import Algorithms.CPPAlgorithm;
 import Algorithms.RandomWalk;
 import main.MainFrame;
 

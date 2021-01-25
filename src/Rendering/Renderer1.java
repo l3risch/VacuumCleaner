@@ -1,4 +1,8 @@
 package Rendering;
+
+/**
+ * Class rendering the movements of the robot
+ */
 import java.awt.AlphaComposite;
 
 import java.awt.Color;
@@ -15,21 +19,15 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import Algorithms.Basic;
 import Algorithms.Basic.CellState;
-import Algorithms.NearestNeighbour;
-import Algorithms.DijkstraAlgorithm;
-import Objects.Node;
 import Objects.Obstacle;
 import Objects.Obstacle.Shape;
 import Objects.Robot;
 import Objects.Table;
 import Physics.Coordinates2D;
-import Physics.Movement;
 
 public class Renderer1 extends JPanel{
 			
@@ -199,12 +197,6 @@ public class Renderer1 extends JPanel{
  			}	
 		
  		}
-		
-		//Clear nearest free cell
-//		Coordinates2D nn = NearestNeighbour.getNearestNeighbour(Robot.getYasRow(), Robot.getXasCol());
-//		_g.setColor(new Color(0,0,0,0));
-//		_g.fillRect(nn.getCol() * 10 + 100, nn.getRow() * 10 + 140, 10, 10);
-//		_g.setColor(Color.BLACK);
 		
 		
 		

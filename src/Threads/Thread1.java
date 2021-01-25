@@ -1,6 +1,8 @@
 package Threads;
 
-
+/**
+ * Class for the purpose of automated testing in the case of TestSeries by supporting multi-threading
+ */
 import java.awt.Container;
 
 import java.awt.event.ActionListener;

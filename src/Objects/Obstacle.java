@@ -1,5 +1,11 @@
 package Objects;
 
+/**
+ * Class defining size position and shape of obstacles
+ * Currently Oval shape is not used
+ *
+ */
+
 public class Obstacle {
 
 	public int _x;

@@ -55,11 +55,11 @@ public class Basic {
 	}
 
 	/**
-	 * Determining the
-	 * @param row
-	 * @param col
-	 * @param dir
-	 * @return
+	 * Getting the scanned cells by one of the sensors
+	 * @param row 	row of current robot position
+	 * @param col	col of current robot position
+	 * @param dir 	direction of the sensor
+	 * @return		scanned cells
 	 */
 	static Coordinates2D[] getScannedArea(int row, int col, ScanDirection dir) {
 		
@@ -132,29 +132,16 @@ public class Basic {
 			}
 		}
 
-			
 			return scannedArea;
 	}
 			
-		
-
 	
-	private static boolean isElementContainedInArray(Coordinates2D coordinates2d, Coordinates2D[][] oldArrayPosition) 
-	{
-		for(int i = 0; i < 4; i++)
-		{
-			for(int j = 0; j < 4; j++)
-			{
-				if((coordinates2d.getRow() == oldArrayPosition[i][j].getRow()) && (coordinates2d.getCol() == oldArrayPosition[i][j].getCol()))
-				{
-					return true;
-				}
-			}
-		}
-		
-		return false;
-	}
-	
+	/**
+	 * Getting the scanned cells of all sensors
+	 * @param row 	row of current robot position
+	 * @param col	col of current robot position
+	 * @return		scanned cells
+	 */
 	public static Coordinates2D[] getEncircledScannedArea(int row, int col) 
 	{
 		Coordinates2D[] circledArea = new Coordinates2D[12];
@@ -175,7 +162,12 @@ public class Basic {
 		
 	}
 	
-	
+	/**
+	 * Getting the scanned cells of a specific direction
+	 * @param scannedArea 	encircled scanned area
+	 * @param direction 	direction
+	 * @return
+	 */
 	static Coordinates2D[] determineScanDirections(Coordinates2D[] scannedArea, ScanDirection direction) {
 		
 		Coordinates2D[] front = new Coordinates2D[4];
@@ -208,7 +200,12 @@ public class Basic {
 	}
 	
 	
-	//Direction is partially free, which means no obstacles, walls and the scanned area is partially covered in this direction
+	/**
+	 * Direction is partially free, which means no obstacles, walls and the scanned area is partially covered in this direction
+	 * @param scannedArea 	encircled scanned area
+	 * @param direction 	direction
+	 * @return
+	 */
 	boolean partiallyFreeDirection(Coordinates2D[] scannedArea, ScanDirection direction) {
 		
 		Coordinates2D[] scanArea = determineScanDirections(scannedArea, direction);
@@ -244,7 +241,12 @@ public class Basic {
 		
 	}
 	
-	//Direction is partially covered, which means no obstacles, walls but the scanned area is partially covered in this direction
+	/**
+	 * Direction is partially covered, which means no obstacles, walls but the scanned area has been partially covered by the robot
+	 * @param scannedArea 	encircled scanned area
+	 * @param direction 	direction
+	 * @return
+	 */
 	boolean partiallyCoveredDirection(Coordinates2D[] scannedArea, ScanDirection direction) {
 		
 		Coordinates2D[] scanArea = determineScanDirections(scannedArea, direction);
@@ -281,7 +283,11 @@ public class Basic {
 	}
 
 	
-	//Robot is completely surrounded by Obstacles and visited Cells
+	/**
+	 * Robot is completely surrounded by Obstacles and visited Cells
+	 * @param scannedArea	encircled scanned area
+	 * @return
+	 */
 	boolean totallyCovered(Coordinates2D[] scannedArea) {
 		
 		Coordinates2D[] up = new Coordinates2D[4];
@@ -362,7 +368,13 @@ public class Basic {
 	}
 	
 	
-	//Direction is totaly free, which means no obstacles, walls and also no coverage of the scanned area in this direction
+	/**
+	 * Direction is totally free, which means no obstacles, walls and also no visited cells by the robot in this direction
+	 * @param scannedArea 	encircled scanned area
+	 * @param direction 	direction
+	 * @return
+	 */
+	
 	boolean totallyFreeDirection(Coordinates2D[] scannedArea, ScanDirection direction) {
 		
 		Coordinates2D[] scanArea = determineScanDirections(scannedArea, direction);
@@ -389,7 +401,12 @@ public class Basic {
 		return true;
 	}
 	
-	//Direction is free, which means no obstacles or walls in this scanning direction
+	/**
+	 * Direction is free, which means no obstacles or walls in this scanning direction
+	 * @param scannedArea 	encircled scanned area
+	 * @param direction 	direction
+	 * @return
+	 */
 	static boolean freeDirection(Coordinates2D[] scannedArea, ScanDirection direction) {
 		
 		Coordinates2D[] scanArea = determineScanDirections(scannedArea, direction);
@@ -411,7 +428,12 @@ public class Basic {
 		return true;
 	}
 	
-	//Updates mental map
+	/**
+	 * Updates mental map
+	 * @param row 	row of current robot position
+	 * @param col	col of current robot position
+	 * @param mentalMap
+	 */
 	void updateMap(int row, int col, Map<String, CellState> mentalMap)
 	{
 		Coordinates2D[][] robotCoordinates = Robot.getCoordinates(row, col);
@@ -439,6 +461,7 @@ public class Basic {
 		}
 		
 		int freeCells = 0;
+		
 		//Update already visited cells
 		for(int i = 0; i < 4; i++)
 		{
@@ -486,6 +509,8 @@ public class Basic {
 		return _mentalMap;
 	}
 	
+	
+	
 	protected static char[][] updateMatrix()
 	{
 		_dijkstraExecutions++;
@@ -525,6 +550,22 @@ public class Basic {
 		 
 		 
 		 return _matrix;
+	}
+	
+	private static boolean isElementContainedInArray(Coordinates2D coordinates2d, Coordinates2D[][] oldArrayPosition) 
+	{
+		for(int i = 0; i < 4; i++)
+		{
+			for(int j = 0; j < 4; j++)
+			{
+				if((coordinates2d.getRow() == oldArrayPosition[i][j].getRow()) && (coordinates2d.getCol() == oldArrayPosition[i][j].getCol()))
+				{
+					return true;
+				}
+			}
+		}
+		
+		return false;
 	}
 
 }

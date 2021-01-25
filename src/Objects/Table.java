@@ -1,14 +1,11 @@
 package Objects;
 
+/**
+ * Class defining the environment and implementing some predefined environments to be chosen manually in GUI
+ */
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import Objects.Obstacle.Shape;
-import Physics.Movement;
-import Physics.Sweeper;
-import Rendering.Renderer1;
 
 public class Table {
 
@@ -24,9 +21,7 @@ public class Table {
 		
 	public Table()
 	{
-		/**
-		 * Set configuration for Type1
-		 */
+
 		_rows = 64;
 		_cols = 64;
 		_markedPath = new boolean[_rows][_cols];
@@ -319,11 +314,22 @@ public class Table {
 		_numberObs = listObs.size();
 		 
 	}
+	
+	/**
+	 * Mark path visited by the robot at specific coordinates
+	 * @param row	row of current robot position
+	 * @param col	col of current robot position
+	 */
 	public static void markPath(int row, int col)
 	{
 		_markedPath[row][col] = true;
 	}
 	
+	/**
+	 * Get path visited by the robot for specific coordinates
+	 * @param row	row of current robot position
+	 * @param col	col of current robot position
+	 */
 	public static boolean getPath(int row, int col)
 	{
 		return _markedPath[row][col];
@@ -335,7 +341,9 @@ public class Table {
 		return _listObs;
 	}
 	
-
+	/**
+	 * Mark obstacles set into the environment
+	 */
 	private static void markObstacles() {
 
 		for(Obstacle obs: _listObs)
@@ -364,11 +372,19 @@ public class Table {
 		}
 	}
 	
+	/**
+	 * Check if there is an obstacle at current position
+	 * @param row	row of current robot position
+	 * @param col	col of current robot position
+	 */
 	public static boolean getMarkedObstacles(int row, int col)
 	{
 		return _markedObstacles[row][col];
 	}
 	
+	/**
+	 * Clear the visited path by the robot
+	 */
 	public static void clearMarkedPath()
 	{
 		 _markedPath = new boolean[_rows][_cols];

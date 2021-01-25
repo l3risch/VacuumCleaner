@@ -2,6 +2,7 @@ package main;
 
 /**
  * Class providing a second main method to run the simulation in a series of tests. Main method should be executed via command line.
+ * @author Christian Brzeski
  */
 import java.io.FileNotFoundException;
 

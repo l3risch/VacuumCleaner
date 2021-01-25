@@ -2,6 +2,7 @@ package main;
 
 /**
  * GUI class providing the interface for the simulation
+ * @author Christian Brzeski
  */
 import java.awt.Container;
 

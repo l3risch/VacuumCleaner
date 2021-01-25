@@ -1,5 +1,8 @@
 package Objects;
 
+/**
+ * Class used to define paths within the environment consisting of Nodes
+ */
 import java.util.HashSet;
 import java.util.Set;
 

@@ -1,5 +1,8 @@
 package Performance;
 
+/**
+ * Class evaluating the performance for a algorithm applied on a specific environment
+ */
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -67,7 +70,13 @@ public class Performance extends Basic{
 	
 	public Thread1 _t1;
 	
-	
+	/**
+	 * Constructor 
+	 * @param frame 	GUI
+	 * @param iteration		current iteration of test series
+	 * @param algorithm		algorithm to be evaluated
+	 * @param secondsMap	map containing execution time stamps for each second and the corresponding cumulative coverage
+	 */
 	public Performance(MainFrame frame, int iteration, String algorithm, Map<Integer, Double> secondsMap)
 	{
 		_frame = frame;
@@ -77,6 +86,12 @@ public class Performance extends Basic{
 		_secondsMap = secondsMap;
 	}
 
+	/**
+	 * Evaluation of the test series
+	 * @param timeLimit 	predefined limit after the algorithm stops
+	 * @param duration		execution time of the algorithm
+	 * @throws IOException
+	 */
 	public void evaluateSeries(int timeLimit, long duration) throws IOException 
 	{
 		_duration = duration;
@@ -99,7 +114,10 @@ public class Performance extends Basic{
 		}
 	}
 	
-
+	/**
+	 * Evaluation of a single test executed via GUI
+	 * @param timeLimit 	predefined limit after the algorithm stops
+	 */
 	public void evaluateSolo(int timeLimit) throws IOException 
 	{
 		computeStats();
@@ -108,7 +126,11 @@ public class Performance extends Basic{
 	}
 
 
-
+	/**
+	 * Initiating next iteration if all 3 algorithms have been tested during the test series
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
 	private void nextIteration() throws FileNotFoundException, IOException 
 	{
 		TestSeries._iteration++;
@@ -128,7 +150,10 @@ public class Performance extends Basic{
 			
 		}
 	}
-
+	
+	/**
+	 * Initiating the next algorithm after the beforehand has finished durinf test series
+	 */
 	private void nextAlgorithm() 
 	{
 		switch(CPPAlgorithm._cpp)
@@ -152,6 +177,11 @@ public class Performance extends Basic{
 		}	
 	}
 
+	/**
+	 * Archiving results in txt files and updating the excel file
+	 * @param timeLimit
+	 * @throws IOException
+	 */
 	private void archive(int timeLimit) throws IOException {
 		     
 		int nextCol =  _iteration;
@@ -202,6 +232,9 @@ public class Performance extends Basic{
 	}
 
 
+	/**
+	 * Computation of some performance measures
+	 */
 	private void computeStats() 
 	{
 		char[][] pathMatrix = NearestNeighbour.getPathMatrix();
@@ -244,6 +277,10 @@ public class Performance extends Basic{
 		return _t1;
 	}
 	
+	/**
+	 * Computing total coverage of robot
+	 * @return Coverage as abs value
+	 */
 	public double computeCoverage()
 	{
 		char[][] pathMatrix = NearestNeighbour.getPathMatrix();
@@ -274,6 +311,15 @@ public class Performance extends Basic{
 		return coverage;
 	}
 	
+	/**
+	 * Initiating excel sheets
+	 * @param spiral	Sheet for Spiral algorithm
+	 * @param zigzag	Sheet for ZigZag algorithm
+	 * @param random	Sheet for RandomWalk
+	 * @param spiralCumulative	Sheet for cumulative coverage of Spiral algorithm for each second
+	 * @param zigzagCumulative	Sheet for cumulative coverage of ZigZag algorithm for each second
+	 * @param randomCumulative	Sheet for cumulative coverage of RandomWalk for each second
+	 */
 	public static void initExcel(Object[][] spiral, Object[][] zigzag, Object[][] random, Object[][] spiralCumulative, Object[][] zigzagCumulative, Object[][] randomCumulative)
 	{
 		 _spiral = spiral;
@@ -292,6 +338,13 @@ public class Performance extends Basic{
          _sheetRandomCumulative = _workbook.createSheet("random_cumulative");
 	}
 	
+	/**
+	 * Updating the excel cols 
+	 * @param nextCol
+	 * @param iteration
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
 	private void updateExcelCols(int nextCol, int iteration) throws FileNotFoundException, IOException
 	{
 		switch(CPPAlgorithm._cpp)
@@ -351,6 +404,12 @@ public class Performance extends Basic{
 		
 	}
 	
+	/**
+	 * Archiving results in excel
+	 * @param iteration
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
 	private void printExcel(int iteration) throws FileNotFoundException, IOException
 	{
         int rowCount = 0;
@@ -483,14 +542,12 @@ public class Performance extends Basic{
 	        _workbook.write(outputStream);
 	    }
 	    
-//	    try {
-//			_workbook.close();
-//		} catch (IOException e) {
-//	
-//		}
 	}
     
 	
+	/**
+	 * Generating first column of excel with number of the corresponding performance measurements
+	 */
 	private void generateStatNameList()
 	{
 		_statNameList = new ArrayList<String>();
@@ -509,6 +566,9 @@ public class Performance extends Basic{
 	}
 	
 	
+	/**
+	 * Generating array containing the performance measurements corresponding to the statNameList
+	 */
 	private void generateStatList()
 	{
 		_statList = new ArrayList<Object>();
@@ -527,6 +587,7 @@ public class Performance extends Basic{
 	}
 	
 	
+	//Writing to txt file
 	private static void writeToFile(String message, OutputStreamWriter osw){
 	    try {
 	        osw.write(message);

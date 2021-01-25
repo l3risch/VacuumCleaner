@@ -1,6 +1,10 @@
 package MapGeneration;
 
+/**
+ * Class responsible for the generation of random environments
+ */
 import java.io.FileNotFoundException;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -26,7 +30,6 @@ public class MapGenerator{
 		try {
 			createRandomObstacles(iteration, obstacles);
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -40,6 +43,12 @@ public class MapGenerator{
 		}
 	}
 
+	/**
+	 * Creating random obstacles for test series
+	 * @param iteration		current iteration
+	 * @param obstacles 	number of obstacles set
+	 * @throws FileNotFoundException
+	 */
 	public void createRandomObstacles(int iteration, int obstacles) throws FileNotFoundException
 	{		
 		Table._markedPath = new boolean[64][64];
@@ -74,6 +83,10 @@ public class MapGenerator{
 		
 	}
 	
+	/**
+	 * Creating random obstacles when clicking on 'Random Map' button
+	 * @throws FileNotFoundException
+	 */
 	public void createRandomObstacles() throws FileNotFoundException
 	{
 		Table._markedPath = new boolean[64][64];
@@ -182,6 +195,12 @@ public class MapGenerator{
 
 	}
 
+	
+	/**
+	 * Check if given obstacle blocks path and if it is inside boundaries
+	 * @param obs	given obstacle
+	 * @return
+	 */
 	private Obstacle checkIfBlock(Obstacle obs) {
 		
 		if(obs.getX() > 100 && obs.getX() < 140)
@@ -238,12 +257,12 @@ public class MapGenerator{
 	}
 
 	
+	
 	private static void writeToFile(String message, OutputStreamWriter osw){
 	    try {
 	        osw.write(message);
 	        osw.flush();
 	    } catch (IOException e) {
-	        // TODO Auto-generated catch block
 	        e.printStackTrace();
 	    }
 	}

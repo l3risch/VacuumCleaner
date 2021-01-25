@@ -1,5 +1,10 @@
 package Physics;
 
+/**
+ * Class providing a 2D coordinate system for robot and environment 
+ * @author Christian
+ *
+ */
 public class Coordinates2D {
 	
 	public int _row;

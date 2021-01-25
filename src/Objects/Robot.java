@@ -1,7 +1,10 @@
 package Objects;
+
+/**
+ * Robot implementing movements and turns
+ */
 import Physics.Coordinates2D;
 import Physics.Movement;
-import Rendering.Renderer1;
 
 public class Robot {
 
@@ -20,6 +23,11 @@ public class Robot {
 		setRandomStartingPos();
 	}
 
+	/**
+	 * Setting a predefined starting position for the robot
+	 * @param row 	row of starting position
+	 * @param col	col of starting position
+	 */
 	public static void setStartingPos(int row, int col)
 	{
 		_move = new Movement();
@@ -32,6 +40,9 @@ public class Robot {
 		_startingPos = new Coordinates2D(getYasRow(), getXasCol());
 	}
 	
+	/**
+	 * Setting a random starting position for the robot
+	 */
 	public static void setRandomStartingPos()
 	{
 		_move = new Movement();
