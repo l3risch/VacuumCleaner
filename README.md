@@ -17,4 +17,4 @@ Die Ergebnisse werden hierbei im Ordner results als Textdateien gespeichert, wob
 $algorithm + _ $obstacles + _ $iteration
 
 Ein Spiral Algorithmus der in einer Umgebung mit 10 Hindernissen getestet wird und sich in der 1. Iteration befindet hieße dementsprechend: Spiral_10_1.txt.
-![image](https://github.com/l3risch/VacuumCleaner/assets/40214757/ad5bc523-a0c9-4383-b71c-4905f1564051)
+
